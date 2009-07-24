@@ -1,0 +1,66 @@
+#summary How to Use the Maven Plugin in Your Build Process
+#labels Featured,Phase-Deploy
+
+= Introduction =
+
+If you already use Maven, then making use of modeldata project is simply a matter of adding the buildtools plugin to your pom.
+
+
+= Details =
+
+  # Add the modeldata dependency to your project
+    # Add the dependency repository:
+{{{
+<repositories>
+    <repository>
+        <id>unitt</id>
+        <name>UnitT Repository</name>
+        <url>http://unitt.googlecode.com/svn/repository</url>
+    </repository>
+</repositories>
+}}}
+    # Add the dependency:
+{{{
+<dependencies>
+    <dependency>
+        <groupId>com.unitt</groupId>
+        <artifactId>modeldata</artifactId>
+        <version>1.0.0</version>
+        <type>jar</type>
+    </dependency>
+</dependencies>
+}}}
+  # Add the plugin to your project
+    # Add the plugin repository:
+{{{
+<pluginRepositories>
+    <pluginRepository>
+        <id>unitt</id>
+        <name>UnitT Repository</name>
+        <url>http://unitt.googlecode.com/svn/repository/</url>
+    </pluginRepository>
+</pluginRepositories>
+}}}
+    # Add the plugin:
+{{{
+<build>
+    <plugins>
+        <plugin>
+            <groupId>com.unitt</groupId>
+            <artifactId>buildtools</artifactId>
+            <extensions>true</extensions>
+            <configuration>
+                <attach>true</attach>
+            </configuration>
+            <executions>
+                <execution>
+                    <phase>generate-sources</phase>
+                    <goals>
+                        <goal>modeldata</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+</build>
+}}}
