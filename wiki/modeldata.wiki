@@ -1,0 +1,103 @@
+#summary How to use the modeldata Project
+#labels Featured,Phase-Deploy
+
+= Introduction =
+
+The modeldata project is used to make generating DTOs or UI model objects for GXT a simple build process rather than a manual one. All GXT model objects must implement the ModelData interface. There is an annotation that provides a wrapper but this wrapper defeats the purpose in a lot of the refactoring, encapsulation, and reference checking tools that most modern IDEs have. This project allows you to simply mark your DTO or model class with a single annotation and let the build process generate the required source code for you.
+
+
+= Usage =
+
+You will need to add the modeldata-x.x.x.jar to your project's classpath. Once this is complete you can begin. Let's take a sample class: 
+{{{
+public class UserInfo
+{
+    private String name;
+    private String id;
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public String setName(String aName)
+    {
+        name = aName;
+    }
+
+    public String getId()
+    {
+        return id;
+    }
+}
+}}}
+
+In order to change this class so it can automatically implement ModelData, you need to do the following:
+  * Declare the class as abstract
+  * Add the appropriate implements clause (I typically add Serializable at this time as well)
+  * Add the @ModelDataBean annotation
+
+Your new class should look like this: 
+{{{
+@ModelDataBean
+public abstract class UserInfo implements ModelData, Serializable
+{
+    private String name;
+    private String id;
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public String setName(String aName)
+    {
+        name = aName;
+    }
+
+    public String getId()
+    {
+        return id;
+    }
+}
+}}}
+
+When your build process runs it should automatically detect this and create a corresponding class whose name ends in "Bean", UserInfoBean. This class will be in a "bean" subpackage.
+
+It can be advantageous to create a factory method on this base class so your code never directly calls the generated bean class. This should make it easier to find anywhere in your project that the actual dto/model object is being used. I typically do this using a static "create" method:
+{{{
+@ModelDataBean
+public abstract class UserInfo implements ModelData, Serializable
+{
+    private String name;
+    private String id;
+
+    public static UserInfo create()
+    {
+        return new UserInfoBean();
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public String setName(String aName)
+    {
+        name = aName;
+    }
+
+    public String getId()
+    {
+        return id;
+    }
+}
+}}}
+
+
+= Building =
+
+There are three ways to process your annotation:
+  * [buildtoolsApt Annotation Processor] using Sun's apt tool.
+  * [buildtoolsMaven Maven Plugin]
+  * [buildtoolsAnt Ant Target]
