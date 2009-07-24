@@ -62,8 +62,82 @@ public abstract class UserInfo implements ModelData, Serializable
 }
 }}}
 
-When your build process runs it should automatically detect this and create a corresponding class whose name ends in "Bean", UserInfoBean. This class will be in a "bean" subpackage.
 
+*Output*
+When your build process runs it should automatically detect this and create a corresponding class whose name ends in "Bean", UserInfoBean. This class will be in a "bean" subpackage. Here is the output from our class:
+{{{
+package bean;
+
+import...
+
+@SuppressWarnings("serial")
+public class UserInfoBean extends UserInfo
+{
+    @SuppressWarnings("unchecked")
+    public <X> X get(String aProperty)
+    {
+        if (aProperty != null)
+        {
+            // try to return value
+            if ("name".equals(aProperty))
+            {
+                return (X) getName();
+            }
+            else if ("id".equals(aProperty))
+            {
+                return (X) getId();
+            }
+        }
+        // could not find value - just return null
+        return null;
+    }
+
+    public Map<String, Object> getProperties()
+    {
+        Map<String, Object> properties = new HashMap<String, Object>();
+        for (String property : getPropertyNames())
+        {
+            properties.put(property, get(property));
+        }
+        return properties;
+    }
+
+    public Collection<String> getPropertyNames()
+    {
+        Collection<String> names = new ArrayList<String>();
+        names.add("name");
+        names.add("id");
+        return names;
+    }
+
+    @SuppressWarnings("unchecked")
+    public <X> X remove(String aProperty)
+    {
+        return (X) set(aProperty, null);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <X> X set(String aProperty, X aValue)
+    {
+        if (aProperty != null)
+        {
+            if ("name".equals(aProperty))
+            {
+                X old = (X) get(aProperty);
+                if (aValue instanceof java.lang.String)
+                {
+                    setName((java.lang.String) aValue);
+                }
+                return old;
+            }
+        }
+        throw new UnsupportedOperationException("This model is read only.");
+    }
+}
+}}}
+
+
+*Using a Factory*
 It can be advantageous to create a factory method on this base class so your code never directly calls the generated bean class. This should make it easier to find anywhere in your project that the actual dto/model object is being used. I typically do this using a static "create" method:
 {{{
 @ModelDataBean
