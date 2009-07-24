@@ -88,16 +88,16 @@
 	<!-- Repositories -->
 	<repositories>
 		<repository>
-			<id>jlp</id>
-			<name>JLP Repository</name>
-			<url>https://jlp-svn.cvsdude.com/instantpug/repository</url>
+			<id>unitt</id>
+			<name>UnitT Repository</name>
+			<url>https://unitt.googlecode.com/svn/repository</url>
 		</repository>
 	</repositories>
 	<distributionManagement>
 		<repository>
-			<id>jlp</id>
-			<name>JLP Repository</name>
-			<url>https://jlp-svn.cvsdude.com/instantpug/repository</url>
+			<id>unitt</id>
+			<name>UnitT Repository</name>
+			<url>https://unitt.googlecode.com/svn/repository</url>
 		</repository>
 	</distributionManagement>
 </project>
