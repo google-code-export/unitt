@@ -3,7 +3,9 @@
 
 = Introduction =
 
-The modeldata project is used to make generating DTOs or UI model objects for GXT a simple build process rather than a manual one. All GXT model objects must implement the ModelData interface. There is an annotation that provides a wrapper but this wrapper defeats the purpose in a lot of the refactoring, encapsulation, and reference checking tools that most modern IDEs have. This project allows you to simply mark your DTO or model class with a single annotation and let the build process generate the required source code for you.
+The modeldata project is used to make generating DTOs or UI model objects for GXT a simple build process rather than a manual one. All GXT model objects must implement the ModelData interface. There is an annotation in GXT that provides a wrapper to do this for you. However, this wrapper requires a lot of casting and fetching if you want to use your object in a type safe manner. It also makes it more difficult to make use of a lot of the refactoring, encapsulation, and reference checking tools that most modern IDEs provide. 
+
+This project allows you to simply mark your DTO or model class with a single annotation and let the build process generate the required source code for you. You are always using an instance of your object and never have to worry if you have missed references or become frustrated in using the more advanced features of your IDE.
 
 
 = Usage =
@@ -64,6 +66,7 @@ public abstract class UserInfo implements ModelData, Serializable
 
 
 *Output*
+
 When your build process runs it should automatically detect this and create a corresponding class whose name ends in "Bean", UserInfoBean. This class will be in a "bean" subpackage. Here is the output from our class:
 {{{
 package bean;
@@ -138,6 +141,7 @@ public class UserInfoBean extends UserInfo
 
 
 *Using a Factory*
+
 It can be advantageous to create a factory method on this base class so your code never directly calls the generated bean class. This should make it easier to find anywhere in your project that the actual dto/model object is being used. I typically do this using a static "create" method:
 {{{
 @ModelDataBean
