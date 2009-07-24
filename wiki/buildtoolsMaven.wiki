@@ -1,5 +1,5 @@
 #summary How to Use the Maven Plugin in Your Build Process
-#labels Featured,Phase-Deploy
+#labels Phase-Deploy
 
 = Introduction =
 
