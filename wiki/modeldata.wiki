@@ -20,7 +20,7 @@ public class UserInfo
         return name;
     }
 
-    public String setName(String aName)
+    public void setName(String aName)
     {
         name = aName;
     }
@@ -50,7 +50,7 @@ public abstract class UserInfo implements ModelData, Serializable
         return name;
     }
 
-    public String setName(String aName)
+    public void setName(String aName)
     {
         name = aName;
     }
@@ -69,29 +69,11 @@ It can be advantageous to create a factory method on this base class so your cod
 @ModelDataBean
 public abstract class UserInfo implements ModelData, Serializable
 {
-    private String name;
-    private String id;
-
     public static UserInfo create()
     {
         return new UserInfoBean();
     }
-
-    public String getName()
-    {
-        return name;
-    }
-
-    public String setName(String aName)
-    {
-        name = aName;
-    }
-
-    public String getId()
-    {
-        return id;
-    }
-}
+...
 }}}
 
 
