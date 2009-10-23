@@ -3,7 +3,7 @@
 
 = Introduction =
 
-If you already use Ant, then making use of the modeldata project is simply a matter of adding the buildtools target and taskdef to your build.xml.
+If you already use Ant, then making use of the modeldata project is simply a matter of adding the buildtools target and taskdef to your build.xml. You must be using Ant 1.7 or greater.
 
 
 = Details =
