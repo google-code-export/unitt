@@ -27,7 +27,7 @@ public class PropertyInfo
     protected boolean isPrimitive;
     protected String getterType;
     protected String getterPrefix = "get";
-    protected Set<String> setters = new TreeSet<String>();
+    protected Set<SetterInfo> setters = new TreeSet<SetterInfo>();
     
     public boolean isPrimitive()
     {
@@ -39,7 +39,7 @@ public class PropertyInfo
         isPrimitive = aIsPrimitive;
     }
 
-    public Set<String> getSetters()
+    public Set<SetterInfo> getSetters()
     {
         return setters;
     }

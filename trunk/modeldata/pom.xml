@@ -4,7 +4,7 @@
 	<groupId>com.unitt</groupId>
 	<artifactId>modeldata</artifactId>
 	<name>ModelData Annotations</name>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 	<packaging>jar</packaging>
 	<properties>
 		<!-- library versions -->

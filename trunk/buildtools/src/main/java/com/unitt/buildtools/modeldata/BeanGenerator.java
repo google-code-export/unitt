@@ -83,7 +83,7 @@ public class BeanGenerator
         out.append("\t\treturn names;\n");
         out.append("\t}\n");
         out.append("\n");
-        out.append("@SuppressWarnings(\"unchecked\")\n");
+        out.append("\t@SuppressWarnings(\"unchecked\")\n");
         out.append("\tpublic <X> X remove( String aProperty )\n");
         out.append("\t{\n");
         out.append("\t\treturn (X) set(aProperty, null);\n");
@@ -144,7 +144,7 @@ public class BeanGenerator
 
         boolean innerIsFirst = true;     
         String innerIfClause = "else if";   
-        for (String setter : aProperty.getSetters())
+        for (SetterInfo setter : aProperty.getSetters())
         {
             innerIfClause = "else if";
             if (innerIsFirst)
@@ -152,18 +152,18 @@ public class BeanGenerator
                 innerIfClause = "if";
                 innerIsFirst = false;
             }
-            aOut.append("\t\t\t\t" + innerIfClause + " (aValue instanceof " + setter + ")\n");
+            aOut.append("\t\t\t\t" + innerIfClause + " (aValue instanceof " + setter.getTypeWithoutGenerics() + ")\n");
             aOut.append("\t\t\t\t{\n");
             if (aProperty.isPrimitive())
             {
                 aOut.append("\t\t\t\t\tif (aValue != null)\n");
                 aOut.append("\t\t\t\t\t{\n");
-                aOut.append("\t\t\t\t\t\tset" + aProperty.getName() + "((" + setter + ") aValue);\n");
+                aOut.append("\t\t\t\t\t\tset" + aProperty.getName() + "((" + setter.getType() + ") aValue);\n");
                 aOut.append("\t\t\t\t\t}\n");
             }
             else
             {
-                aOut.append("\t\t\t\t\tset" + aProperty.getName() + "((" + setter + ") aValue);\n");
+                aOut.append("\t\t\t\t\tset" + aProperty.getName() + "((" + setter.getType() + ") aValue);\n");
             }
             aOut.append("\t\t\t\t}\n");
         }

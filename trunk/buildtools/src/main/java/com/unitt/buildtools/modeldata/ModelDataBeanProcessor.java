@@ -82,12 +82,53 @@ public class ModelDataBeanProcessor implements AnnotationProcessor
         }
     }
     
+    protected String getClassName(TypeDeclaration aDeclaration)
+    {
+        return aDeclaration.getPackage().getQualifiedName() + "." + aDeclaration.getSimpleName();
+    }
+    
+    protected String getClassName(InterfaceType aDeclaration)
+    {
+        return aDeclaration.getDeclaration().getPackage().getQualifiedName() + "." + aDeclaration.getDeclaration().getSimpleName();
+    }
+    
+    protected String getClassName(ClassType aDeclaration)
+    {
+        return aDeclaration.getDeclaration().getPackage().getQualifiedName() + "." + aDeclaration.getDeclaration().getSimpleName();
+    }
+    
     protected void handleSerializable(ClassDeclaration aDeclaration, ModelDataConfig aConfig)
     {
+        if ("java.lang.Object".equals(getClassName(aDeclaration)))
+        {
+            return;
+        }
+        
         //look for java.io.Serializable in local interfaces
         for (TypeDeclaration type : aDeclaration.getNestedTypes())
         {
-            if ("java.io.Serializable".equals(type.getPackage().getQualifiedName() + "." + type.getSimpleName()))
+            //check for direct implementation
+            if ("java.io.Serializable".equals(getClassName(type)))
+            {
+                aConfig.setSerializable(true);
+                return;
+            }
+            
+            //look for java.io.Serializable in super interfaces
+            for (InterfaceType superType : type.getSuperinterfaces())
+            {
+                if ("java.io.Serializable".equals(getClassName(superType)))
+                {
+                    aConfig.setSerializable(true);
+                    return;
+                }
+            }
+        }
+        
+        //look for java.io.Serializable in super interfaces
+        for (InterfaceType type : aDeclaration.getSuperinterfaces())
+        {
+            if ("java.io.Serializable".equals(getClassName(type)))
             {
                 aConfig.setSerializable(true);
                 return;
@@ -95,14 +136,7 @@ public class ModelDataBeanProcessor implements AnnotationProcessor
         }
         
         //look for java.io.Serializable in super interfaces
-        for (InterfaceType type : aDeclaration.getSuperinterfaces())
-        {
-            if ("java.io.Serializable".equals(type.getDeclaration().getPackage().getQualifiedName() + "." + type.getDeclaration().getSimpleName()))
-            {
-                aConfig.setSerializable(true);
-                return;
-            }
-        }
+        handleSerializable(aDeclaration.getSuperclass().getDeclaration(), aConfig);
     }
 
     protected boolean hasSpecifiedOutput()
@@ -259,7 +293,7 @@ public class ModelDataBeanProcessor implements AnnotationProcessor
         if (aDeclaration.getParameters().size() == 1)
         {
             ParameterDeclaration parameter = aDeclaration.getParameters().iterator().next();
-            info.getSetters().add(getType(parameter.getType().toString()));
+            info.getSetters().add(new SetterInfo(getType(parameter.getType().toString())));
         }
     }
 
