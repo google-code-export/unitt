@@ -30,6 +30,7 @@ import com.sun.mirror.declaration.AnnotationTypeDeclaration;
 import com.sun.mirror.declaration.ClassDeclaration;
 import com.sun.mirror.declaration.Declaration;
 import com.sun.mirror.declaration.MethodDeclaration;
+import com.sun.mirror.declaration.Modifier;
 import com.sun.mirror.declaration.ParameterDeclaration;
 import com.sun.mirror.declaration.TypeDeclaration;
 import com.sun.mirror.type.ClassType;
@@ -81,40 +82,40 @@ public class ModelDataBeanProcessor implements AnnotationProcessor
             handleOutput(config);
         }
     }
-    
+
     protected String getClassName(TypeDeclaration aDeclaration)
     {
         return aDeclaration.getPackage().getQualifiedName() + "." + aDeclaration.getSimpleName();
     }
-    
+
     protected String getClassName(InterfaceType aDeclaration)
     {
         return aDeclaration.getDeclaration().getPackage().getQualifiedName() + "." + aDeclaration.getDeclaration().getSimpleName();
     }
-    
+
     protected String getClassName(ClassType aDeclaration)
     {
         return aDeclaration.getDeclaration().getPackage().getQualifiedName() + "." + aDeclaration.getDeclaration().getSimpleName();
     }
-    
+
     protected void handleSerializable(ClassDeclaration aDeclaration, ModelDataConfig aConfig)
     {
         if ("java.lang.Object".equals(getClassName(aDeclaration)))
         {
             return;
         }
-        
-        //look for java.io.Serializable in local interfaces
+
+        // look for java.io.Serializable in local interfaces
         for (TypeDeclaration type : aDeclaration.getNestedTypes())
         {
-            //check for direct implementation
+            // check for direct implementation
             if ("java.io.Serializable".equals(getClassName(type)))
             {
                 aConfig.setSerializable(true);
                 return;
             }
-            
-            //look for java.io.Serializable in super interfaces
+
+            // look for java.io.Serializable in super interfaces
             for (InterfaceType superType : type.getSuperinterfaces())
             {
                 if ("java.io.Serializable".equals(getClassName(superType)))
@@ -124,8 +125,8 @@ public class ModelDataBeanProcessor implements AnnotationProcessor
                 }
             }
         }
-        
-        //look for java.io.Serializable in super interfaces
+
+        // look for java.io.Serializable in super interfaces
         for (InterfaceType type : aDeclaration.getSuperinterfaces())
         {
             if ("java.io.Serializable".equals(getClassName(type)))
@@ -134,8 +135,8 @@ public class ModelDataBeanProcessor implements AnnotationProcessor
                 return;
             }
         }
-        
-        //look for java.io.Serializable in super interfaces
+
+        // look for java.io.Serializable in super interfaces
         handleSerializable(aDeclaration.getSuperclass().getDeclaration(), aConfig);
     }
 
@@ -228,21 +229,27 @@ public class ModelDataBeanProcessor implements AnnotationProcessor
         // determine getters & setters
         for (MethodDeclaration methodDeclaration : aDeclaration.getMethods())
         {
-            if (methodDeclaration.getSimpleName().startsWith("get"))
+            if (!aDeclaration.getModifiers().contains(Modifier.STATIC))
             {
-                addGetter(methodDeclaration, aConfig);
-            }
-            else if (methodDeclaration.getSimpleName().startsWith("is"))
-            {
-                addGetter(methodDeclaration, aConfig);
-            }
-            else if (methodDeclaration.getSimpleName().startsWith("has"))
-            {
-                addGetter(methodDeclaration, aConfig);
-            }
-            else if (methodDeclaration.getSimpleName().startsWith("set"))
-            {
-                addSetter(methodDeclaration, aConfig);
+                if (methodDeclaration.getParameters().isEmpty())
+                {
+                    if (methodDeclaration.getSimpleName().startsWith("get"))
+                    {
+                        addGetter(methodDeclaration, aConfig);
+                    }
+                    else if (methodDeclaration.getSimpleName().startsWith("is"))
+                    {
+                        addGetter(methodDeclaration, aConfig);
+                    }
+                    else if (methodDeclaration.getSimpleName().startsWith("has"))
+                    {
+                        addGetter(methodDeclaration, aConfig);
+                    }
+                }
+                else if (methodDeclaration.getSimpleName().startsWith("set"))
+                {
+                    addSetter(methodDeclaration, aConfig);
+                }
             }
         }
 
@@ -271,7 +278,7 @@ public class ModelDataBeanProcessor implements AnnotationProcessor
             }
         }
     }
-    
+
     protected boolean isPrimitive(String aType)
     {
         return types.containsKey(aType);
