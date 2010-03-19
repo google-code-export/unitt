@@ -40,6 +40,8 @@ import com.unitt.buildtools.modeldata.SourceFileUtility;
  */
 public class ModelDataMojo extends AbstractMojo
 {
+	protected String classpathSeparator = null;
+	
     /**
      * @parameter expression="${project.runtimeClasspathElements}"
      * @required
@@ -78,11 +80,28 @@ public class ModelDataMojo extends AbstractMojo
         {
             if (!isFirst)
             {
-                out.append(":");
+                out.append(getClasspathSeparator());
             }
             out.append(item);
             isFirst = false;
         }
         return out.toString();
+    }
+    
+    protected String getClasspathSeparator()
+    {
+    	if (classpathSeparator == null)
+    	{
+    		if (System.getProperty("os.name").startsWith("Windows"))
+    		{
+    			classpathSeparator = ";";
+    		}
+    		else
+    		{
+    			classpathSeparator = ":";
+    		}
+    	}
+    	
+    	return classpathSeparator;
     }
 }

@@ -4,7 +4,7 @@
 	<groupId>com.unitt</groupId>
 	<artifactId>buildtools</artifactId>
 	<packaging>maven-plugin</packaging>
-	<version>1.0.1</version>
+	<version>1.0.3</version>
 	<name>buildtools Maven Mojo</name>
 	<properties>
 		<!-- library versions -->
@@ -88,14 +88,14 @@
 	<!-- Repositories -->
 	<repositories>
 		<repository>
-			<id>unitt</id>
+			<id>unitt-google-ro</id>
 			<name>UnitT Repository</name>
 			<url>http://unitt.googlecode.com/svn/repository</url>
 		</repository>
 	</repositories>
 	<distributionManagement>
 		<repository>
-			<id>unitt</id>
+			<id>unitt-google</id>
 			<name>UnitT Repository</name>
 			<url>https://unitt.googlecode.com/svn/repository</url>
 		</repository>
