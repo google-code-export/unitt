@@ -217,6 +217,19 @@ public class ModelDataBeanProcessor implements AnnotationProcessor
     {
         System.out.println(generator.process(aConfig));
     }
+    
+    protected boolean matchesNamePattern(String aMethodName, String aPrefix)
+    {
+        if (aMethodName != null && aMethodName.length() > aPrefix.length())
+        {
+            if (aMethodName.startsWith( aPrefix ))
+            {
+                return Character.isUpperCase(aMethodName.charAt( aPrefix.length() ));
+            }
+        }
+        
+        return false;
+    }
 
     protected void process(ClassDeclaration aDeclaration, ModelDataConfig aConfig)
     {
@@ -229,24 +242,24 @@ public class ModelDataBeanProcessor implements AnnotationProcessor
         // determine getters & setters
         for (MethodDeclaration methodDeclaration : aDeclaration.getMethods())
         {
-            if (!aDeclaration.getModifiers().contains(Modifier.STATIC))
+            if (methodDeclaration.getModifiers().contains( Modifier.PUBLIC ) && !methodDeclaration.getModifiers().contains(Modifier.STATIC))
             {
                 if (methodDeclaration.getParameters().isEmpty())
                 {
-                    if (methodDeclaration.getSimpleName().startsWith("get"))
+                    if (matchesNamePattern( methodDeclaration.getSimpleName(), "get" ))
                     {
                         addGetter(methodDeclaration, aConfig);
                     }
-                    else if (methodDeclaration.getSimpleName().startsWith("is"))
+                    else if (matchesNamePattern( methodDeclaration.getSimpleName(), "is" ))
                     {
                         addGetter(methodDeclaration, aConfig);
                     }
-                    else if (methodDeclaration.getSimpleName().startsWith("has"))
+                    else if (matchesNamePattern( methodDeclaration.getSimpleName(), "has" ))
                     {
                         addGetter(methodDeclaration, aConfig);
                     }
                 }
-                else if (methodDeclaration.getSimpleName().startsWith("set"))
+                else if (methodDeclaration.getParameters().size() == 1 && matchesNamePattern( methodDeclaration.getSimpleName(), "set" ))
                 {
                     addSetter(methodDeclaration, aConfig);
                 }
@@ -300,7 +313,16 @@ public class ModelDataBeanProcessor implements AnnotationProcessor
         if (aDeclaration.getParameters().size() == 1)
         {
             ParameterDeclaration parameter = aDeclaration.getParameters().iterator().next();
-            info.getSetters().add(new SetterInfo(getType(parameter.getType().toString())));
+            SetterInfo setter = new SetterInfo(getType(parameter.getType().toString()));
+            try
+            {
+                info.getSetters().add(setter);
+            }
+            catch ( Exception e )
+            {
+                System.err.println("Could not add setter: " + aDeclaration.getSimpleName() + "(" + setter.getType() + ")");
+                e.printStackTrace();
+            }
         }
     }
 

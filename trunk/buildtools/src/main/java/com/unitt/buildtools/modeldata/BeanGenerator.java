@@ -104,7 +104,7 @@ public class BeanGenerator
             }
         }
         out.append("\t\t}\n");
-        out.append("\t\tthrow new UnsupportedOperationException( \"This model is read only.\" );\n");
+        out.append("\t\tthrow new UnsupportedOperationException( \"This model property (\" + aProperty + \") is read only.\" );\n");
         out.append("\t}\n");
         out.append("}\n");
         

@@ -58,4 +58,10 @@ public class SetterInfo
             return false;
         return true;
     }
+
+    @Override
+    public String toString()
+    {
+        return "SetterInfo [type=" + type + "]";
+    }
 }
