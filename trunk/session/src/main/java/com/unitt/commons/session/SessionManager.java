@@ -18,13 +18,14 @@ package com.unitt.commons.session;
 
 import java.io.Serializable;
 
+import com.unitt.commons.foundation.lifecycle.Destructable;
 import com.unitt.commons.foundation.lifecycle.Initializable;
 
 
-public class SessionManager implements Initializable
+public class SessionManager implements Initializable, Destructable
 {
-    protected boolean             isInitialized;
-    protected SessionProvider     provider;
+    protected boolean         isInitialized;
+    protected SessionProvider provider;
 
 
     // session logic
@@ -38,10 +39,10 @@ public class SessionManager implements Initializable
     {
         getProvider().touch( aSessionId );
     }
-    
-    public void close(String aSessionId)
+
+    public void close( String aSessionId )
     {
-        getProvider().close(aSessionId);
+        getProvider().close( aSessionId );
     }
 
     public void putValue( String aSessionId, String aKey, Serializable aValue )
@@ -66,6 +67,18 @@ public class SessionManager implements Initializable
     {
         if ( !isInitialized() )
         {
+            // validate provider
+            if ( getProvider() == null )
+            {
+                throw new IllegalStateException( "Cannot initialize session manager without a valid provider." );
+            }
+
+            // init provider if applicable
+            if ( getProvider() instanceof Initializable )
+            {
+                ( (Initializable) getProvider() ).initialize();
+            }
+
             isInitialized = true;
         }
     }
@@ -73,6 +86,24 @@ public class SessionManager implements Initializable
     public boolean isInitialized()
     {
         return isInitialized;
+    }
+
+    public void destroy()
+    {
+        // cleanup provider
+        if ( getProvider() != null )
+        {
+
+            // destroy provider if applicable
+            if ( getProvider() instanceof Destructable )
+            {
+                ( (Destructable) getProvider() ).destroy();
+            }
+
+            provider = null;
+        }
+
+        isInitialized = false;
     }
 
 

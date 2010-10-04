@@ -72,9 +72,12 @@ public class SessionTouch implements Runnable, Serializable
     // ---------------------------------------------------------------------------
     public void run()
     {
-        IMap<Object, Object> map = Hazelcast.getDefaultInstance().getMap( HazelcastProvider.getMapKey( getSessionId() ) );
-        SessionExpiration expiration = (SessionExpiration) map.get( HazelcastProvider.KEY_EXPIRATION );
-        expiration.setExpiresAt( getExpiresFrom() + expiration.getInactiveTimeToLive() );
-        map.put( HazelcastProvider.KEY_EXPIRATION, expiration );
+        IMap<Object, Object> map = Hazelcast.getDefaultInstance().getMap( HazelcastProvider.KEY_EXPIRATION );
+        SessionExpiration expiration = (SessionExpiration) map.get( getSessionId() );
+        if (expiration != null)
+        {
+	        expiration.setExpiresAt( getExpiresFrom() + expiration.getInactiveTimeToLive() );
+	        map.put( getSessionId(), expiration );
+        }
     }
 }
