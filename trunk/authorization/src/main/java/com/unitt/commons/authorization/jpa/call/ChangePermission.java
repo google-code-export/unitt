@@ -13,20 +13,19 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.unitt.commons.authorization.hazelcast.call;
+package com.unitt.commons.authorization.jpa.call;
 
 
 import java.io.Serializable;
-import java.util.concurrent.Callable;
 
-import com.hazelcast.core.Hazelcast;
-import com.hazelcast.core.IMap;
 import com.unitt.commons.authorization.PermissionKey;
-import com.unitt.commons.authorization.hazelcast.HazelcastPermissionManager;
+import com.unitt.commons.authorization.jpa.Permission;
+import com.unitt.commons.authorization.jpa.PermissionDao;
+import com.unitt.commons.authorization.jpa.PermissionPk;
 import com.unitt.commons.authorization.util.PermissionHelper;
 
 
-public class ChangePermission implements Callable<Long>, Serializable
+public class ChangePermission implements Runnable, Serializable
 {
     private static final long serialVersionUID = -7173433229971013721L;
 
@@ -35,49 +34,60 @@ public class ChangePermission implements Callable<Long>, Serializable
         ADD, REMOVE, SET
     }
 
-    protected PermissionKey key;
-    protected long          requestedPermission;
-    protected OPERATION     operation;
+    protected PermissionKey     key;
+    protected long              requestedPermission;
+    protected OPERATION         operation;
+    protected PermissionDao     dao;
+    protected RunnableCallback<ChangePermission, Long> callback;
 
 
-    public ChangePermission( PermissionKey aKey, long aRequestedPermission, OPERATION aOperation )
+    public ChangePermission( RunnableCallback<ChangePermission, Long> aCallback, PermissionKey aKey, long aRequestedPermission, OPERATION aOperation, PermissionDao aDao )
     {
+        callback = aCallback;
         key = aKey;
         requestedPermission = aRequestedPermission;
         operation = aOperation;
+        dao = aDao;
     }
 
 
-    public Long call() throws Exception
+    public Permission updatePermission() throws Exception
     {
-        IMap<PermissionKey, Long> permissions = Hazelcast.getDefaultInstance().getMap( HazelcastPermissionManager.MAP_KEY_PREFIX_NAME );
-        Long permission = permissions.get( key );
+        Permission permission = dao.find( new PermissionPk( key ) );
+        Long mask = permission.getPermissionMask();
 
         // get new permission
         switch ( operation )
         {
             case ADD:
-                permission = addPermission( permission );
+                mask = addPermission( mask );
                 break;
             case REMOVE:
-                permission = removePermission( permission );
+                mask = removePermission( mask );
                 break;
             case SET:
-                permission = setPermission( permission );
+                mask = setPermission( mask );
                 break;
         }
 
         // save new permission
-        if ( permission != null )
-        {
-            permissions.put( key, permission );
-        }
-        else
-        {
-            permissions.remove( key );
-        }
+        permission.setPermissionMask( mask );
+        dao.safeSave( permission );
         
         return permission;
+    }
+
+    public void run()
+    {
+        try
+        {
+            Permission permission = updatePermission();
+            callback.onSuccess( permission.getPermissionMask() );
+        }
+        catch ( Exception e )
+        {
+            callback.onError( this, e );
+        }
     }
 
     protected Long addPermission( Long aPermission )
@@ -103,5 +113,12 @@ public class ChangePermission implements Callable<Long>, Serializable
         }
 
         return aPermission;
+    }
+
+
+    @Override
+    public String toString()
+    {
+        return "ChangePermission [key=" + key + ", operation=" + operation + ", requestedPermission=" + requestedPermission + "]";
     }
 }

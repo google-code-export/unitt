@@ -19,6 +19,7 @@ package com.unitt.commons.authorization.hazelcast;
 import com.hazelcast.core.MapEntry;
 import com.hazelcast.query.Predicate;
 import com.unitt.commons.authorization.Assignable;
+import com.unitt.commons.authorization.PermissionKey;
 
 
 public class AssignablePredicate implements Predicate

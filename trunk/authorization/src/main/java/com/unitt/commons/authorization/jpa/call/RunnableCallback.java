@@ -13,24 +13,11 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.unitt.commons.authorization.hazelcast;
+package com.unitt.commons.authorization.jpa.call;
 
-import java.util.Collection;
-import java.util.Map;
 
-import com.unitt.commons.authorization.PermissionKey;
-
-public interface PermissionDao
+public interface RunnableCallback<R extends Runnable, V>
 {
-    public Long load( PermissionKey aPermissionKey );
-
-    public Map<PermissionKey, Long> loadAll( Collection<PermissionKey> aPermissionKeys );
-
-    public void delete( PermissionKey aPermissionKey );
-
-    public void deleteAll( Collection<PermissionKey> aPermissionKeys );
-
-    public void store( PermissionKey aPermissionKey, Long aPermission );
-
-    public void storeAll( Map<PermissionKey, Long> aPermissions );
+    public void onSuccess(V aResult);
+    public void onError(R aRunnable, Throwable aThrowable);
 }

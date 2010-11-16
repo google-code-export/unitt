@@ -20,6 +20,7 @@ import java.util.Map;
 
 import com.hazelcast.core.MapLoader;
 import com.hazelcast.core.MapStore;
+import com.unitt.commons.authorization.PermissionKey;
 
 public class PermissionMapHandler implements MapLoader<PermissionKey, Long>, MapStore<PermissionKey, Long>
 {

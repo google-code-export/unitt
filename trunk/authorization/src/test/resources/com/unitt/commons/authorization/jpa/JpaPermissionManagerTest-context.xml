@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:amq="http://activemq.apache.org/schema/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                        http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+                        http://www.springframework.org/schema/tx
+                        http://www.springframework.org/schema/tx/spring-tx.xsd
+                        http://www.springframework.org/schema/aop
+                        http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+
+    <aop:config proxy-target-class="true" />
+
+    <!-- Service -->
+    <bean id="AuthorizationManager" class="com.unitt.commons.authorization.AuthorizationManager">
+        <property name="permissionManager" ref="PermissionManager" />
+    </bean>
+    
+    <bean id="PermissionManager" class="com.unitt.commons.authorization.jpa.JpaPermissionManager">
+        <property name="dao" ref="PermissionDao" />
+    </bean>
+
+    <!-- Dao -->
+    <bean id="PermissionDao" class="com.unitt.commons.authorization.jpa.PermissionDao"/>
+    
+    <bean id="PersistHelper" class="com.unitt.commons.persist.PersistHelper" factory-method="instance">
+        <property name="activeUserHelper" ref="ActiveUserHelper"/>
+    </bean>
+    
+    <bean id="ActiveUserHelper" class="com.unitt.commons.authorization.jpa.MockActiveUserHelper"/>
+
+    <!-- database -->
+    <bean id="datasource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <!-- uncomment to see sql
+             <property name="driverClassName" value="com.p6spy.engine.spy.P6SpyDriver" />
+        -->
+        <property name="url" value="jdbc:mysql://localhost/persist" />
+        <property name="username" value="root" />
+        <property name="password" value="" />
+    </bean>
+    
+    <!-- LOCAL entity manager factory -->
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <!-- <property name="persistenceUnitManager" ref="persistenceUnitManager"/> -->
+        <property name="persistenceUnitName" value="domainPersistenceUnit" />
+        <property name="dataSource" ref="datasource" />
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+                <property name="showSql" value="false" />
+                <property name="generateDdl" value="true" />
+                <property name="databasePlatform" value="org.hibernate.dialect.MySQLDialect" />
+            </bean>
+        </property>
+    </bean>
+    
+    <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+    <bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
+
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory" />
+        <property name="dataSource" ref="datasource" />
+    </bean>
+
+    <tx:annotation-driven transaction-manager="transactionManager" />
+
+</beans>

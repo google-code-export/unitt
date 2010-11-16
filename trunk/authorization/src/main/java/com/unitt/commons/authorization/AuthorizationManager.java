@@ -52,8 +52,22 @@ public class AuthorizationManager implements Initializable, ReservedPermission
     // ---------------------------------------------------------------------------
     public void initialize()
     {
+        System.out.println("Initializing...");
         if ( !isInitialized() )
         {
+            if (manager instanceof Initializable)
+            {
+                Initializable permMgr = (Initializable) manager;
+                if (!permMgr.isInitialized())
+                {
+                    System.out.println("Initializing permission manager");
+                    permMgr.initialize();
+                }
+            }
+            else
+            {
+                System.out.println("Manager is not initializable");
+            }
             isInitialized = true;
         }
     }

@@ -13,13 +13,11 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.unitt.commons.authorization.hazelcast;
+package com.unitt.commons.authorization;
 
 
 import java.io.Serializable;
 
-import com.unitt.commons.authorization.Assignable;
-import com.unitt.commons.authorization.Permissable;
 
 
 public class PermissionKey implements Serializable

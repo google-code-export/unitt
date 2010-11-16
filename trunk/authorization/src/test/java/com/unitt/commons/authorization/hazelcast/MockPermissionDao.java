@@ -21,6 +21,7 @@ import java.util.Map;
 
 import com.unitt.commons.authorization.Assignable;
 import com.unitt.commons.authorization.Permissable;
+import com.unitt.commons.authorization.PermissionKey;
 import com.unitt.commons.authorization.ReservedPermission;
 
 public class MockPermissionDao implements PermissionDao, ReservedPermission
