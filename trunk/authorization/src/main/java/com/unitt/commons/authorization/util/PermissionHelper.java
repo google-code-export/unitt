@@ -16,9 +16,15 @@
  */
 package com.unitt.commons.authorization.util;
 
+
 import com.unitt.commons.authorization.ReservedPermission;
 
 
+/**
+ * Utility class for manipulating and checking permission masks.
+ * 
+ * @author Josh Morris
+ */
 public class PermissionHelper implements ReservedPermission
 {
 
@@ -68,6 +74,8 @@ public class PermissionHelper implements ReservedPermission
      * 
      * @param aToggle
      *            true allows, false disallows
+     * 
+     * @return specified permission with the read access bit change applied
      */
     public static long setAllowRead( boolean aToggle, long aMask )
     {
@@ -79,6 +87,8 @@ public class PermissionHelper implements ReservedPermission
      * 
      * @param aToggle
      *            true allows, false disallows
+     * 
+     * @return specified permission with the create access bit change applied
      */
     public static long setAllowCreate( boolean aToggle, long aMask )
     {
@@ -90,6 +100,8 @@ public class PermissionHelper implements ReservedPermission
      * 
      * @param aToggle
      *            true allows, false disallows
+     * 
+     * @return specified permission with the list access bit change applied
      */
     public static long setAllowList( boolean aToggle, long aMask )
     {
@@ -101,6 +113,8 @@ public class PermissionHelper implements ReservedPermission
      * 
      * @param aToggle
      *            true allows, false disallows
+     * 
+     * @return specified permission with the write access bit change applied
      */
     public static long setAllowWrite( boolean aToggle, long aMask )
     {
@@ -112,6 +126,8 @@ public class PermissionHelper implements ReservedPermission
      * 
      * @param aToggle
      *            true allows, false disallows
+     * 
+     * @return specified permission with the delete access bit change applied
      */
     public static long setAllowDelete( boolean aToggle, long aMask )
     {
@@ -123,6 +139,9 @@ public class PermissionHelper implements ReservedPermission
      * 
      * @param aToggle
      *            true allows, false disallows
+     * 
+     * @return specified permission with the change permission access bit change
+     *         applied
      */
     public static long setAllowChangePermissions( boolean aToggle, long aMask )
     {
@@ -134,6 +153,9 @@ public class PermissionHelper implements ReservedPermission
      * 
      * @param aToggle
      *            true allows, false disallows
+     * 
+     * @return specified permission with the change owner access bit change
+     *         applied
      */
     public static long setAllowChangeOwner( boolean aToggle, long aMask )
     {
@@ -145,6 +167,8 @@ public class PermissionHelper implements ReservedPermission
      * 
      * @param aToggle
      *            true allows, false disallows
+     * 
+     * @return specified permission with the requested access bit change applied
      */
     public static long setAllowBit( int aBit, long aMask, boolean aToggle )
     {
@@ -152,7 +176,7 @@ public class PermissionHelper implements ReservedPermission
         {
             return applyMask( 1 << aBit, aMask, aToggle );
         }
-        
+
         return aMask;
     }
 
@@ -161,6 +185,8 @@ public class PermissionHelper implements ReservedPermission
      * 
      * @param aToggle
      *            true allows, false disallows
+     * 
+     * @return specified permission with the owner bit change applied
      */
     public static long setOwnerFlag( boolean aToggle, long aMask )
     {
@@ -178,6 +204,8 @@ public class PermissionHelper implements ReservedPermission
      *            mask to apply
      * @param aAddMask
      *            true adds, false subtracts
+     * 
+     * @return specified permission with the addition/subtraction change applied
      */
     public static long applyMask( long aMaskToApply, long aOriginalMask, boolean aAddMask )
     {
@@ -195,7 +223,10 @@ public class PermissionHelper implements ReservedPermission
      * Adds given mask to permission mask
      * 
      * @param aMask
-     * @see com.valeo.util.BitMasks#addMask(long, long)
+     * 
+     * @return specified permission with the addition change applied
+     * 
+     * @see BitMasks#addMask(long, long)
      */
     public static long addMask( long aMaskToAdd, long aOriginalMask )
     {
@@ -206,7 +237,10 @@ public class PermissionHelper implements ReservedPermission
      * Subtracts given mask from permission mask
      * 
      * @param aMask
-     * @see com.valeo.util.BitMasks#addMask(long, long)
+     * 
+     * @return specified permission with the subtraction change applied
+     * 
+     * @see BitMasks#addMask(long, long)
      */
     public static long subtractMask( long aMaskToAdd, long aOriginalMask )
     {

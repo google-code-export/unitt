@@ -19,7 +19,11 @@ package com.unitt.commons.authorization;
 import java.io.Serializable;
 
 
-
+/**
+ * Simple bean used to index the permissions held by an assignable on a permissable.
+ * 
+ * @author Josh Morris
+ */
 public class PermissionKey implements Serializable
 {
     private static final long serialVersionUID = 2818642294748136055L;

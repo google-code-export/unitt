@@ -15,15 +15,29 @@
  */
 package com.unitt.commons.authorization;
 
+
 import java.io.Serializable;
 
+import com.unitt.commons.authorization.util.BitMasks;
+
+
+/**
+ * Used to identify a permission for a specific assignable. This permission
+ * could be just one permission, or an aggregation of several permissions. The
+ * specific permissions that exist can be determined using the BitMasks utility.
+ * 
+ * @author Josh Morris
+ * 
+ * @see Assignable
+ * @see BitMasks
+ */
 public class AssignedPermission implements Serializable
 {
     private static final long serialVersionUID = -3376596355657590506L;
-    
-    protected long permission;
-    protected long id;
-    protected long typeId;
+
+    protected long            permission;
+    protected long            id;
+    protected long            typeId;
 
 
     // constructors
@@ -78,7 +92,7 @@ public class AssignedPermission implements Serializable
     {
         permission = aPermission;
     }
-    
+
 
     // Object overrides
     // ------------------------------------------------

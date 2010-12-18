@@ -19,6 +19,17 @@ package com.unitt.commons.authorization;
 import java.io.Serializable;
 
 
+/**
+ * Used to identify the entity who has permissions on an object that can be
+ * assigned or revoked. Each assignable is identified by a type and an id. These
+ * are determined by the implementation and can be any long. The combination of
+ * type and id must be unique. This allows the system to uniquely identify
+ * objects that may share the same id across type boundaries. For example: a
+ * user with an id of 1 would also have the type id (200) for user. This would
+ * be different from a group with an id of 1 and the type id (210) for group.
+ * 
+ * @author Josh Morris
+ */
 public class Assignable implements Serializable
 {
     private static final long serialVersionUID = -6379859480760169569L;

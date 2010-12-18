@@ -19,7 +19,12 @@ package com.unitt.commons.authorization;
 import java.util.List;
 
 
-public class InsufficentPrivelegesException extends Exception
+/**
+ * Designates that the contained assignables do not have sufficient privileges to perform the requested operation.
+ * 
+ * @author Josh Morris
+ */
+public class InsufficentPrivilegesException extends Exception
 {
     private static final long  serialVersionUID = -2578019419215440853L;
 
@@ -29,7 +34,7 @@ public class InsufficentPrivelegesException extends Exception
 
     // constructors
     // ---------------------------------------------------------------------------
-    public InsufficentPrivelegesException( Permissable aPermissable, List<Assignable> aAssignables )
+    public InsufficentPrivilegesException( Permissable aPermissable, List<Assignable> aAssignables )
     {
         super();
         permissable = aPermissable;

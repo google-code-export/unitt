@@ -80,7 +80,7 @@ public class AuthorizationManager implements Initializable, ReservedPermission
     
     // authorization logic
     // ---------------------------------------------------------------------------
-    public void applyPermission( List<Assignable> aAssigning, long aPermission, boolean aAdd, Permissable aPermissable, List<Assignable> aAssignables ) throws InsufficentPrivelegesException
+    public void applyPermission( List<Assignable> aAssigning, long aPermission, boolean aAdd, Permissable aPermissable, List<Assignable> aAssignables ) throws InsufficentPrivilegesException
     {
         verifyChangePermission( aPermissable, aAssigning );
         getPermissionManager().applyPermission( aPermission, aAdd, aPermissable, aAssignables );
@@ -101,17 +101,17 @@ public class AuthorizationManager implements Initializable, ReservedPermission
         return getPermissionManager().hasPermission( aPermission, aPermissable, aAssignables );
     }
 
-    public void setPermission( List<Assignable> aAssigning, long aPermission, boolean aAdd, Permissable aPermissable, List<Assignable> aAssignables ) throws InsufficentPrivelegesException
+    public void setPermission( List<Assignable> aAssigning, long aPermission, Permissable aPermissable, List<Assignable> aAssignables ) throws InsufficentPrivilegesException
     {
         verifyChangePermission( aPermissable, aAssigning );
-        getPermissionManager().setPermission( aPermission, aAdd, aPermissable, aAssignables );
+        getPermissionManager().setPermission( aPermission, aPermissable, aAssignables );
     }
     
-    protected void verifyChangePermission(Permissable aPermissable, List<Assignable> aAssigning) throws InsufficentPrivelegesException
+    protected void verifyChangePermission(Permissable aPermissable, List<Assignable> aAssigning) throws InsufficentPrivilegesException
     {
         if (!hasPermission( PERMISSION_CHPERMS, aPermissable, aAssigning ))
         {
-            throw new InsufficentPrivelegesException( aPermissable, aAssigning );
+            throw new InsufficentPrivilegesException( aPermissable, aAssigning );
         }
     }
     

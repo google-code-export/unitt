@@ -26,7 +26,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.unitt.commons.authorization.Assignable;
 import com.unitt.commons.authorization.AssignedPermission;
 import com.unitt.commons.authorization.AuthorizationManager;
-import com.unitt.commons.authorization.InsufficentPrivelegesException;
+import com.unitt.commons.authorization.InsufficentPrivilegesException;
 import com.unitt.commons.authorization.Permissable;
 import com.unitt.commons.authorization.PermissionKey;
 import com.unitt.commons.authorization.ReservedPermission;
@@ -100,7 +100,7 @@ public class JpaPermissionManagerTest implements ReservedPermission
         {
             manager.applyPermission( assignables, PERMISSION_READ, true, permissable, assignables );
         }
-        catch ( InsufficentPrivelegesException e )
+        catch ( InsufficentPrivilegesException e )
         {
             Assert.fail("Did not have sufficient privileges.");
         }
@@ -111,7 +111,7 @@ public class JpaPermissionManagerTest implements ReservedPermission
         {
             manager.applyPermission( assignables, PERMISSION_READ, false, permissable, assignables );
         }
-        catch ( InsufficentPrivelegesException e )
+        catch ( InsufficentPrivilegesException e )
         {
             Assert.fail("Did not have sufficient privileges.");
         }

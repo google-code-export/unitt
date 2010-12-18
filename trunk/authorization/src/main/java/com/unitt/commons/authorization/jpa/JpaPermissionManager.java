@@ -202,7 +202,7 @@ public class JpaPermissionManager implements PermissionManager, Initializable, D
         }
     }
 
-    public void setPermission( long aPermission, boolean aAdd, Permissable aPermissable, List<Assignable> aAssignables )
+    public void setPermission( long aPermission, Permissable aPermissable, List<Assignable> aAssignables )
     {
         PermissionChangeCallback callback = new PermissionChangeCallback();
         callback.setTotal( aAssignables.size() );

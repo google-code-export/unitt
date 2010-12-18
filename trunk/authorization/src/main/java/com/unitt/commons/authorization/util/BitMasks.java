@@ -15,18 +15,20 @@
  */
 package com.unitt.commons.authorization.util;
 
+/**
+ * Utility class for inspecting and modifying bit masks
+ * 
+ * @author Josh Morris
+ */
 public class BitMasks
 {
-    /**
-     * Constructor for BitMasks.
-     */
     public BitMasks()
     {
         super();
     }
 
     /**
-     * does the specified mask contain more than one bit, or does more than one
+     * Does the specified mask contain more than one bit, or does more than one
      * bit have a value of one
      * 
      * @param aMask
@@ -56,7 +58,10 @@ public class BitMasks
      * Adds specified mask in a manner that guarantees every bit set to 1 in
      * either mask will be set to 1 in the resulting mask.
      * 
+     * @param aRecipient
+     *            permission to change
      * @param aMask
+     *            permission to add
      */
     public static long addMask( long aRecipient, long aMask )
     {
@@ -82,11 +87,33 @@ public class BitMasks
         return aRecipient;
     }
 
+    /**
+     * Determines if the requested mask is wholly contained within the
+     * specified mask.
+     * 
+     * @param aContainer
+     *            mask to search within
+     * @param aContained
+     *            mask to search for
+     * 
+     * @return true if wholly contained
+     */
     public static boolean contains( long aContainer, long aContained )
     {
         return ( aContained == ( aContained & aContainer ) );
     }
 
+    /**
+     * Determines if the requested mask is, at least partially, contained
+     * within the specified mask.
+     * 
+     * @param aContainer
+     *            mask to search within
+     * @param aContained
+     *            mask to search for
+     * 
+     * @return false if the two masks do not have a single bit in common
+     */
     public static boolean containsPartOfMask( long aContainer, long aContained )
     {
         if ( aContainer > 0 )
