@@ -23,7 +23,7 @@
 	</scm>
 	<properties>
 		<unitt.version>1.0.0</unitt.version>
-		<spring.version>2.5.6</spring.version>
+		<spring.version>3.0.3.RELEASE</spring.version>
 		<compiler.source>1.6</compiler.source>
 		<compiler.target>1.6</compiler.target>
 	</properties>
@@ -50,16 +50,16 @@
 			<version>${unitt.version}</version>
 			<type>jar</type>
 		</dependency>
-        <dependency>
-            <groupId>com.unitt.commons</groupId>
-            <artifactId>persist</artifactId>
-            <version>${unitt.version}</version>
-            <type>jar</type>
-        </dependency>
+		<dependency>
+			<groupId>com.unitt.commons</groupId>
+			<artifactId>persist</artifactId>
+			<version>${unitt.version}</version>
+			<type>jar</type>
+		</dependency>
 		<!-- spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring</artifactId>
+			<artifactId>spring-core</artifactId>
 			<version>${spring.version}</version>
 			<type>jar</type>
 		</dependency>
@@ -95,6 +95,11 @@
 		</dependency>
 		<!-- needed by spring -->
 		<dependency>
+			<groupId>aspectj</groupId>
+			<artifactId>aspectjtools</artifactId>
+			<version>1.5.3</version>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.xbean</groupId>
 			<artifactId>xbean-spring</artifactId>
 			<version>3.4.3</version>
@@ -115,7 +120,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.4</version>
+			<version>4.6</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -173,116 +178,116 @@
 					<downloadJavadocs>true</downloadJavadocs>
 				</configuration>
 			</plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>hibernate3-maven-plugin</artifactId>
-                <version>2.0</version>
-                <executions>
-                    <execution>
-                        <id>generate-drop-ddl</id>
-                        <phase>process-classes</phase>
-                        <goals>
-                            <goal>hbm2ddl</goal>
-                        </goals>
-                        <configuration>
-                            <componentProperties>
-                                <outputfilename>
-                                    domain-drop.ddl
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>hibernate3-maven-plugin</artifactId>
+				<version>2.0</version>
+				<executions>
+					<execution>
+						<id>generate-drop-ddl</id>
+						<phase>process-classes</phase>
+						<goals>
+							<goal>hbm2ddl</goal>
+						</goals>
+						<configuration>
+							<componentProperties>
+								<outputfilename>
+									domain-drop.ddl
                             </outputfilename>
-                                <drop>true</drop>
-                                <create>false</create>
-                            </componentProperties>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>generate-create-ddl</id>
-                        <phase>process-classes</phase>
-                        <goals>
-                            <goal>hbm2ddl</goal>
-                        </goals>
-                        <configuration>
-                            <componentProperties>
-                                <outputfilename>
-                                    domain-create.ddl
+								<drop>true</drop>
+								<create>false</create>
+							</componentProperties>
+						</configuration>
+					</execution>
+					<execution>
+						<id>generate-create-ddl</id>
+						<phase>process-classes</phase>
+						<goals>
+							<goal>hbm2ddl</goal>
+						</goals>
+						<configuration>
+							<componentProperties>
+								<outputfilename>
+									domain-create.ddl
                             </outputfilename>
-                                <drop>false</drop>
-                                <create>true</create>
-                            </componentProperties>
-                        </configuration>
-                    </execution>
-                </executions>
-                <configuration>
-                    <components>
-                        <component>
-                            <name>hbm2ddl</name>
-                            <implementation>annotationconfiguration
+								<drop>false</drop>
+								<create>true</create>
+							</componentProperties>
+						</configuration>
+					</execution>
+				</executions>
+				<configuration>
+					<components>
+						<component>
+							<name>hbm2ddl</name>
+							<implementation>annotationconfiguration
                             </implementation>
-                            <outputDirectory>
-                                src/main/data
+							<outputDirectory>
+								src/main/data
                         </outputDirectory>
-                        </component>
-                    </components>
-                    <componentProperties>
-                        <implementation>jpaconfiguration
+						</component>
+					</components>
+					<componentProperties>
+						<implementation>jpaconfiguration
                         </implementation>
-                        <persistenceunit>domainPersistenceUnit
+						<persistenceunit>domainPersistenceUnit
                         </persistenceunit>
-                        <propertyfile>${basedir}/src/main/resources/database.properties
+						<propertyfile>${basedir}/src/main/resources/database.properties
                         </propertyfile>
-                        <export>false</export>
-                        <format>true</format>
-                    </componentProperties>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>sql-maven-plugin</artifactId>
-                <version>1.4</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>mysql</groupId>
-                        <artifactId>mysql-connector-java</artifactId>
-                        <version>5.1.12</version>
-                        <type>jar</type>
-                    </dependency>
-                </dependencies>
-                <configuration>
-                    <driver>com.mysql.jdbc.Driver</driver>
-                    <url>jdbc:mysql://localhost/persist</url>
-                    <username>root</username>
-                    <password></password>
-                    <autocommit>true</autocommit>
-                    <srcFiles>
-                        <srcFile>src/main/data/domain-drop.ddl</srcFile>
-                        <srcFile>src/main/data/domain-create.ddl</srcFile>
-                    </srcFiles>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>dbunit-maven-plugin</artifactId>
-                <version>1.0-beta-3</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>mysql</groupId>
-                        <artifactId>mysql-connector-java</artifactId>
-                        <version>5.1.12</version>
-                        <type>jar</type>
-                    </dependency>
-                </dependencies>
-                <configuration>
-                    <dataTypeFactoryName>org.dbunit.ext.mysql.MySqlDataTypeFactory</dataTypeFactoryName>
-                    <format>flat</format>
-                    <type>CLEAN_INSERT</type>
-                    <src>src/main/data/data.xml</src>
-                    <driver>com.mysql.jdbc.Driver</driver>
-                    <url>jdbc:mysql://localhost/persist</url>
-                    <username>root</username>
-                    <password></password>
-                    <transaction>true</transaction>
-                    <metadataHandlerName>org.dbunit.ext.mysql.MySqlMetadataHandler</metadataHandlerName>
-                </configuration>
-            </plugin>
+						<export>false</export>
+						<format>true</format>
+					</componentProperties>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>sql-maven-plugin</artifactId>
+				<version>1.4</version>
+				<dependencies>
+					<dependency>
+						<groupId>mysql</groupId>
+						<artifactId>mysql-connector-java</artifactId>
+						<version>5.1.12</version>
+						<type>jar</type>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<driver>com.mysql.jdbc.Driver</driver>
+					<url>jdbc:mysql://localhost/persist</url>
+					<username>root</username>
+					<password></password>
+					<autocommit>true</autocommit>
+					<srcFiles>
+						<srcFile>src/main/data/domain-drop.ddl</srcFile>
+						<srcFile>src/main/data/domain-create.ddl</srcFile>
+					</srcFiles>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>dbunit-maven-plugin</artifactId>
+				<version>1.0-beta-3</version>
+				<dependencies>
+					<dependency>
+						<groupId>mysql</groupId>
+						<artifactId>mysql-connector-java</artifactId>
+						<version>5.1.12</version>
+						<type>jar</type>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<dataTypeFactoryName>org.dbunit.ext.mysql.MySqlDataTypeFactory</dataTypeFactoryName>
+					<format>flat</format>
+					<type>CLEAN_INSERT</type>
+					<src>src/main/data/data.xml</src>
+					<driver>com.mysql.jdbc.Driver</driver>
+					<url>jdbc:mysql://localhost/persist</url>
+					<username>root</username>
+					<password></password>
+					<transaction>true</transaction>
+					<metadataHandlerName>org.dbunit.ext.mysql.MySqlMetadataHandler</metadataHandlerName>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
@@ -295,12 +300,12 @@
 		</repository>
 	</repositories>
 
-    <distributionManagement>
-        <repository>
-            <id>unitt-google-releases</id>
-            <name>UnitT Repository</name>
-            <url>https://unitt.googlecode.com/svn/repository</url>
-        </repository>
-    </distributionManagement>
+	<distributionManagement>
+		<repository>
+			<id>unitt-google-releases</id>
+			<name>UnitT Repository</name>
+			<url>https://unitt.googlecode.com/svn/repository</url>
+		</repository>
+	</distributionManagement>
 
 </project>

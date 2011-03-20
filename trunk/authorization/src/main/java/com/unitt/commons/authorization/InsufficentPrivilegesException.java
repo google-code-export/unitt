@@ -44,6 +44,9 @@ public class InsufficentPrivilegesException extends Exception
 
     // getters & setters
     // ---------------------------------------------------------------------------
+    /**
+     * Permissable that the associated assignables lack sufficient privileges to
+     */
     public Permissable getPermissable()
     {
         return permissable;
@@ -54,6 +57,9 @@ public class InsufficentPrivilegesException extends Exception
         permissable = aPermissable;
     }
 
+    /**
+     * List of Assignables that lack the requested privileges on the associated permissable
+     */
     public List<Assignable> getAssignables()
     {
         return assignables;

@@ -56,6 +56,9 @@ public class Permissable implements Serializable
 
     // getters & setters
     // ---------------------------------------------------------------------------
+    /**
+     * The id component of the unique identifier. 
+     */
     public long getId()
     {
         return id;
@@ -66,6 +69,9 @@ public class Permissable implements Serializable
         id = aId;
     }
 
+    /**
+     * The type component of the unique identifier.
+     */
     public long getTypeId()
     {
         return typeId;

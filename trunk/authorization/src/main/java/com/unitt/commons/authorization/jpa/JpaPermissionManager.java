@@ -39,6 +39,12 @@ import com.unitt.commons.authorization.util.PermissionHelper;
 import com.unitt.commons.foundation.lifecycle.Destructable;
 import com.unitt.commons.foundation.lifecycle.Initializable;
 
+/**
+ * Uses JPA to distribute the permission caching, storage, and management. Uses a Java Concurrent
+ * ExecutorService to parallelize operations where desirable.
+ * 
+ * @See {@link PermissionManager}
+ */
 public class JpaPermissionManager implements PermissionManager, Initializable, Destructable
 {
     private static final Logger logger = LoggerFactory.getLogger( JpaPermissionManager.class );

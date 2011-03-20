@@ -42,6 +42,13 @@ import com.unitt.commons.authorization.hazelcast.call.ChangePermission.OPERATION
 import com.unitt.commons.authorization.util.PermissionHelper;
 
 
+/**
+ * Uses Hazelcast to distribute the permission caching and management. Uses a persistent backstore
+ * to store the actual permissions. All read operations are distributed across the cluster using
+ * Hazelcast's internal data affinity.
+ * 
+ * @See {@link PermissionManager}
+ */
 public class HazelcastPermissionManager implements PermissionManager
 {
     private static final Logger logger = LoggerFactory.getLogger( HazelcastPermissionManager.class );

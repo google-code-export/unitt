@@ -58,6 +58,9 @@ public class PermissionKey implements Serializable
     
     // getters & setters
     // ---------------------------------------------------------------------------
+    /**
+     * The id component of the unique identifier for the permissable associated with this permission. 
+     */
     public long getPermissableId()
     {
         return permissableId;
@@ -68,6 +71,9 @@ public class PermissionKey implements Serializable
         permissableId = aPermissableId;
     }
 
+    /**
+     * The type component of the unique identifier for the permissable associated with this permission.
+     */
     public long getPermissableTypeId()
     {
         return permissableTypeId;
@@ -78,6 +84,9 @@ public class PermissionKey implements Serializable
         permissableTypeId = aPermissableTypeId;
     }
 
+    /**
+     * The id component of the unique identifier for the assignable associated with this permission. 
+     */
     public long getAssignableId()
     {
         return assignableId;
@@ -88,6 +97,9 @@ public class PermissionKey implements Serializable
         assignableId = aAssignableId;
     }
 
+    /**
+     * The type component of the unique identifier for the assignable associated with this permission.
+     */
     public long getAssignableTypeId()
     {
         return assignableTypeId;

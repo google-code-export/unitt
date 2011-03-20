@@ -63,6 +63,9 @@ public class AssignedPermission implements Serializable
 
     // getters & setters
     // ---------------------------------------------------------------------------
+    /**
+     * The id component of the unique identifier for the permissable associated with this permission. 
+     */
     public long getId()
     {
         return id;
@@ -73,6 +76,9 @@ public class AssignedPermission implements Serializable
         id = aId;
     }
 
+    /**
+     * The type component of the unique identifier for the permissable associated with this permission.
+     */
     public long getTypeId()
     {
         return typeId;
@@ -83,6 +89,11 @@ public class AssignedPermission implements Serializable
         typeId = aTypeId;
     }
 
+    /**
+     * The permission mask
+     * 
+     * @see BitMasks
+     */
     public long getPermission()
     {
         return permission;
