@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.unitt.commons</groupId>
+        <artifactId>authorization</artifactId>
+        <version>1.0.2</version>
+    </parent>
+
+    <groupId>com.unitt.commons.authorization</groupId>
+    <artifactId>authorization-api</artifactId>
+    <name>Authorization API</name>
+    
+    <issueManagement>
+        <system>Google Issues</system>
+        <url>http://code.google.com/p/unitt/issues/list</url>
+    </issueManagement>
+    <scm>
+        <connection>
+            scm:svn:http://unitt.googlecode.com/svn/projects/commons/authorization
+        </connection>
+        <developerConnection>
+            scm:svn:https://unitt.googlecode.com/svn/projects/commons/authorization
+        </developerConnection>
+        <tag>HEAD</tag>
+        <url>scm:svn:https://unitt.googlecode.com/svn/projects/commons/authorization/trunk
+        </url>
+    </scm>
+
+</project>
