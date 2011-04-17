@@ -26,16 +26,17 @@ import com.unitt.commons.foundation.lifecycle.Initializable;
 import com.unitt.commons.identity.IdentityManager;
 import com.unitt.commons.security.Identity;
 import com.unitt.commons.security.SecurityContext;
-import com.unitt.commons.security.SecurityContextHelper;
+import com.unitt.commons.security.SecurityContextFactoryImpl;
 
 
 public class AuthenticationManager implements Initializable
 {
-    private static Log                     log           = LogFactory.getLog( AuthenticationManager.class );
+    private static Log                     log            = LogFactory.getLog( AuthenticationManager.class );
 
-    protected List<AuthenticationProvider> providers     = new ArrayList<AuthenticationProvider>();
-    protected boolean                      isInitialized = false;
+    protected List<AuthenticationProvider> providers      = new ArrayList<AuthenticationProvider>();
+    protected boolean                      isInitialized  = false;
     protected IdentityManager              identityManager;
+    protected SecurityContextFactory       contextFactory = new SecurityContextFactoryImpl();
 
 
     // getters & setters
@@ -73,6 +74,17 @@ public class AuthenticationManager implements Initializable
     }
 
 
+    public SecurityContextFactory getContextFactory()
+    {
+        return contextFactory;
+    }
+
+    public void setContextFactory( SecurityContextFactory aContextFactory )
+    {
+        contextFactory = aContextFactory;
+    }
+    
+
     // lifecycle logic
     // ---------------------------------------------------------------------------
     public void initialize()
@@ -91,6 +103,16 @@ public class AuthenticationManager implements Initializable
 
     // authentication logic
     // ---------------------------------------------------------------------------
+    /**
+     * Authenticates the user using the specified token.
+     * 
+     * @param aToken there must be a provider that can handle this token
+     * 
+     * @return valid security context when successfully authenticated
+     * 
+     * @throws BadCredentialsException if the credentials are not valid
+     * @throws IllegalArgumentException if no provider is found that can handle the token 
+     */
     public SecurityContext authenticate( AuthenticationToken aToken ) throws BadCredentialsException
     {
         // verify we have initialized
@@ -126,6 +148,6 @@ public class AuthenticationManager implements Initializable
         }
 
         // create context
-        return SecurityContextHelper.createContext( aIdentity, secondary );
+        return getContextFactory().createContext( aIdentity, secondary );
     }
 }
