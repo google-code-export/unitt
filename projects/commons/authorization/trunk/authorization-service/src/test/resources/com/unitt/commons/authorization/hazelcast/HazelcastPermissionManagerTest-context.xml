@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:amq="http://activemq.apache.org/schema/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                        http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+                        http://www.springframework.org/schema/tx
+                        http://www.springframework.org/schema/tx/spring-tx.xsd
+                        http://www.springframework.org/schema/aop
+                        http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+
+    <aop:config proxy-target-class="true" />
+
+    <!-- Service -->
+    <bean id="Authorization" class="com.unitt.commons.authorization.AuthorizationImpl">
+        <property name="permissionManager" ref="PermissionManager" />
+    </bean>
+
+    <!-- Provider -->
+    <bean id="PermissionManager" class="com.unitt.commons.authorization.hazelcast.HazelcastPermissionManager">
+        <property name="client" ref="Hazelcast" />
+    </bean>
+
+    <!-- Dao -->
+    <bean id="PermissionDao" class="com.unitt.commons.authorization.hazelcast.MockPermissionDao">
+    </bean>
+
+    <!-- Hazelcast -->
+    <bean name="Hazelcast" class="com.hazelcast.core.Hazelcast"
+        factory-method="init">
+        <constructor-arg ref="HazelcastConfig" />
+    </bean>
+
+    <bean name="HazelcastConfig" class="com.hazelcast.config.Config">
+        <property name="mapConfigs">
+            <map>
+                <entry key="System:Permission" value-ref="MapConfig" />
+            </map>
+        </property>
+    </bean>
+    
+    <bean name="MapConfig" class="com.hazelcast.config.MapConfig">
+        <property name="name" value="System:Permission" />
+        <property name="mapStoreConfig" ref="MapStoreConfig" />
+    </bean>
+    
+    <bean name="MapStoreConfig" class="com.hazelcast.config.MapStoreConfig">
+        <property name="enabled" value="true" />
+        <property name="implementation" ref="MapHandler" />
+        <property name="writeDelaySeconds" value="0" />
+    </bean>
+
+    <!-- Map Loaders/Stores -->
+    <bean id="MapHandler"
+        class="com.unitt.commons.authorization.hazelcast.PermissionMapHandler">
+        <property name="dao" ref="PermissionDao" />
+    </bean>
+
+</beans>
