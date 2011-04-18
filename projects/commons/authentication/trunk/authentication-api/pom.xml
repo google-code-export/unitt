@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.unitt.commons</groupId>
+        <artifactId>authentication</artifactId>
+        <version>1.0.2</version>
+    </parent>
+
+    <groupId>com.unitt.commons.authentication</groupId>
+    <artifactId>authentication-api</artifactId>
+    <name>Authentication API</name>
+    
+    <issueManagement>
+        <system>Google Issues</system>
+        <url>http://code.google.com/p/unitt/issues/list</url>
+    </issueManagement>
+    <scm>
+        <connection>
+            scm:svn:http://unitt.googlecode.com/svn/projects/commons/authentication
+        </connection>
+        <developerConnection>
+            scm:svn:https://unitt.googlecode.com/svn/projects/commons/authentication
+        </developerConnection>
+        <tag>HEAD</tag>
+        <url>scm:svn:https://unitt.googlecode.com/svn/projects/commons/authentication/trunk
+        </url>
+    </scm>
+    
+    <properties>
+        <unitt.version>1.0.0</unitt.version>
+        <compiler.source>1.6</compiler.source>
+        <compiler.target>1.6</compiler.target>
+    </properties>
+
+    <dependencies>
+        <!-- unitt -->   
+        <dependency>
+            <groupId>com.unitt.commons</groupId>
+            <artifactId>foundation</artifactId>
+            <version>${unitt.version}</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>com.unitt.commons</groupId>
+            <artifactId>security</artifactId>
+            <version>${unitt.version}</version>
+            <type>jar</type>
+        </dependency>
+    </dependencies>
+
+</project>
