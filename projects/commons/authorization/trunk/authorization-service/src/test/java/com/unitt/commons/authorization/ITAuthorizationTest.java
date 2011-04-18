@@ -4,7 +4,6 @@ package com.unitt.commons.authorization;
 import java.io.File;
 import java.util.Map;
 
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.rioproject.cybernode.StaticCybernode;
@@ -19,16 +18,6 @@ public class ITAuthorizationTest extends ITAbstractAuthorizationTest
 {
     protected static String        opstring = "src/main/opstring/authorization.groovy";
     protected static Authorization service;
-
-    /*
-    @Parameterized.Parameters
-    public static Collection<Object[]> data()
-    {
-        String opstring = System.getProperty( "opstring" );
-        Assert.assertNotNull( "no opstring given", opstring );
-        return Arrays.asList( new Object[][] { { opstring } } );
-    }
-    */
 
     public ITAuthorizationTest()
     {

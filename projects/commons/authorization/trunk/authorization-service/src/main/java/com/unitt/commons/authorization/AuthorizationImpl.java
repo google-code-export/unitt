@@ -9,7 +9,7 @@ import com.unitt.commons.foundation.lifecycle.Initializable;
  *
  * @author Josh Morris
  */
-public class AuthorizationImpl implements Authorization,Initializable, ReservedPermission
+public class AuthorizationImpl implements Authorization, Initializable, ReservedPermission
 {
     protected boolean isInitialized;
     protected PermissionManager manager;
