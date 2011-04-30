@@ -1,40 +1,34 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.unitt.commons</groupId>
 	<artifactId>session</artifactId>
-	<packaging>jar</packaging>
-	<version>1.0.0</version>
+    <version>2.0.0-SNAPSHOT</version>
 	<name>session</name>
-	<issueManagement>
-		<system>Google Issues</system>
-		<url>http://code.google.com/p/unitt/issues/list</url>
-	</issueManagement>
-	<scm>
-		<connection>
-            scm:svn:http://unitt.googlecode.com/svn/trunk/session
+    
+    <issueManagement>
+        <system>Google Issues</system>
+        <url>http://code.google.com/p/unitt/issues/list</url>
+    </issueManagement>
+    
+    <scm>
+        <connection>
+            scm:svn:http://unitt.googlecode.com/svn/projects/commons/session
         </connection>
-		<developerConnection>
-            scm:svn:http://unitt.googlecode.com/svn/trunk/session
+        <developerConnection>
+            scm:svn:https://unitt.googlecode.com/svn/projects/commons/session
         </developerConnection>
-		<tag>HEAD</tag>
-		<url>scm:svn:http://unitt.googlecode.com/svn/trunk/session
+        <tag>HEAD</tag>
+        <url>scm:svn:https://unitt.googlecode.com/svn/projects/commons/session/trunk
         </url>
-	</scm>
-	<properties>
-		<unitt.version>1.0.0</unitt.version>
-		<spring.version>2.5.6</spring.version>
+    </scm>
+    
+    <properties>
+        <unitt.version>2.0.0-SNAPSHOT</unitt.version>
+        <spring.version>3.0.3.RELEASE</spring.version>
 		<compiler.source>1.6</compiler.source>
 		<compiler.target>1.6</compiler.target>
 	</properties>
-
-	<pluginRepositories>
-		<pluginRepository>
-			<id>unitt</id>
-			<name>UnitT Repository</name>
-			<url>http://unitt.googlecode.com/svn/repository/</url>
-		</pluginRepository>
-	</pluginRepositories>
 
 	<dependencies>
 		<!-- unitt -->
@@ -47,7 +41,7 @@
 		<!-- spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring</artifactId>
+			<artifactId>spring-core</artifactId>
 			<version>${spring.version}</version>
 			<type>jar</type>
 		</dependency>
@@ -103,7 +97,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.4</version>
+			<version>4.6</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -169,14 +163,14 @@
 		</plugins>
 	</build>
 
-	<!-- Repositories -->
-	<repositories>
-		<repository>
-			<id>unitt-google</id>
-			<name>UnitT Open Source Repository</name>
-			<url>http://unitt.googlecode.com/svn/repository</url>
-		</repository>
-	</repositories>
+    <!-- Repositories -->
+    <repositories>
+        <repository>
+            <id>unitt-google</id>
+            <name>UnitT Open Source Repository</name>
+            <url>http://unitt.googlecode.com/svn/repository</url>
+        </repository>
+    </repositories>
 
     <distributionManagement>
         <repository>
@@ -185,5 +179,13 @@
             <url>https://unitt.googlecode.com/svn/repository</url>
         </repository>
     </distributionManagement>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>unitt</id>
+            <name>UnitT Repository</name>
+            <url>http://unitt.googlecode.com/svn/repository/</url>
+        </pluginRepository>
+    </pluginRepositories>
 
 </project>
