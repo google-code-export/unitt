@@ -1,0 +1,12 @@
+<module>
+      <!-- Inherit the core Web Toolkit stuff.                        -->
+      <inherits name='com.google.gwt.user.User'/>
+
+      <!-- Other module inherits                                      -->
+      
+      <!-- Source paths.                                              -->
+      <source path="client"/>
+      <source path="lifecycle"/>
+      <source path="util"/>
+      <source path="validation"/>
+</module>
