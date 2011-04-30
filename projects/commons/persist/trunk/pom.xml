@@ -4,24 +4,32 @@
 	<groupId>com.unitt.commons</groupId>
 	<artifactId>persist</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.0</version>
+    <version>2.0.0-SNAPSHOT</version>
 	<name>persist</name>
-	<scm>
-		<connection>
-			scm:svn:http://unitt.googlecode.com/svn/trunk/persist
-		</connection>
-		<developerConnection>
-			scm:svn:http://unitt.googlecode.com/svn/trunk/persist
-		</developerConnection>
-		<tag>HEAD</tag>
-		<url>scm:svn:http://unitt.googlecode.com/svn/trunk/persist</url>
-	</scm>
-	<properties>
-        <unitt.version>1.0.0</unitt.version>
+    
+    <issueManagement>
+        <system>Google Issues</system>
+        <url>http://code.google.com/p/unitt/issues/list</url>
+    </issueManagement>
+    
+    <scm>
+        <connection>
+            scm:svn:http://unitt.googlecode.com/svn/projects/commons/persist
+        </connection>
+        <developerConnection>
+            scm:svn:https://unitt.googlecode.com/svn/projects/commons/persist
+        </developerConnection>
+        <tag>HEAD</tag>
+        <url>scm:svn:https://unitt.googlecode.com/svn/projects/commons/persist/trunk
+        </url>
+    </scm>
+    
+    <properties>
+        <unitt.version>2.0.0-SNAPSHOT</unitt.version>
+        <spring.version>3.0.3.RELEASE</spring.version>
+        <hibernate.version>3.4.0.GA</hibernate.version>
 		<compiler.source>1.6</compiler.source>
 		<compiler.target>1.6</compiler.target>
-        <spring.version>2.5.6</spring.version>
-        <hibernate.version>3.4.0.GA</hibernate.version>
 	</properties>
 	<dependencies>
         <dependency>
@@ -31,7 +39,7 @@
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring</artifactId>
+            <artifactId>spring-core</artifactId>
             <version>${spring.version}</version>
             <type>jar</type>
         </dependency>
@@ -50,6 +58,12 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
             <version>${spring.version}</version>
             <type>jar</type>
         </dependency>
@@ -283,14 +297,14 @@
 		</plugins>
 	</build>
 
-	<!-- Repositories -->
-	<repositories>
-		<repository>
-		    <id>unitt-google</id>
-		    <name>UnitT Open Source Repository</name>
-		    <url>http://unitt.googlecode.com/svn/repository</url>
-		</repository>
-	</repositories>
+    <!-- Repositories -->
+    <repositories>
+        <repository>
+            <id>unitt-google</id>
+            <name>UnitT Open Source Repository</name>
+            <url>http://unitt.googlecode.com/svn/repository</url>
+        </repository>
+    </repositories>
 
     <distributionManagement>
         <repository>
@@ -299,5 +313,13 @@
             <url>https://unitt.googlecode.com/svn/repository</url>
         </repository>
     </distributionManagement>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>unitt</id>
+            <name>UnitT Repository</name>
+            <url>http://unitt.googlecode.com/svn/repository/</url>
+        </pluginRepository>
+    </pluginRepositories>
 
 </project>

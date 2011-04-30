@@ -80,11 +80,11 @@
             <id>rio</id>
             <url>http://www.rio-project.org/maven2</url>
         </pluginRepository>
-        <repository>
-            <id>unitt-google</id>
-            <name>UnitT Open Source Repository</name>
-            <url>http://unitt.googlecode.com/svn/repository</url>
-        </repository>
+        <pluginRepository>
+            <id>unitt</id>
+            <name>UnitT Repository</name>
+            <url>http://unitt.googlecode.com/svn/repository/</url>
+        </pluginRepository>
     </pluginRepositories>
 
     <distributionManagement>
@@ -100,11 +100,11 @@
             <id>rio</id>
             <url>http://www.rio-project.org/maven2</url>
         </repository>
-        <pluginRepository>
-            <id>unitt</id>
-            <name>UnitT Repository</name>
-            <url>http://unitt.googlecode.com/svn/repository/</url>
-        </pluginRepository>
+        <repository>
+            <id>unitt-google</id>
+            <name>UnitT Open Source Repository</name>
+            <url>http://unitt.googlecode.com/svn/repository</url>
+        </repository>
     </repositories>
 
 </project>
