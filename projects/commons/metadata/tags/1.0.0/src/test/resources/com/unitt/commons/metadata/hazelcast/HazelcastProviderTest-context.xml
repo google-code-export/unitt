@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:amq="http://activemq.apache.org/schema/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                        http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+                        http://www.springframework.org/schema/tx
+                        http://www.springframework.org/schema/tx/spring-tx.xsd
+                        http://www.springframework.org/schema/aop
+                        http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+
+	<aop:config proxy-target-class="true" />
+
+	<!-- Service -->
+	<bean id="MetadataService" class="com.unitt.commons.metadata.MetadataManager">
+		<property name="provider" ref="MetadataProvider" />
+	</bean>
+
+	<!-- Provider -->
+	<bean id="MetadataProvider" class="com.unitt.commons.metadata.hazelcast.HazelcastProvider">
+		<property name="client" ref="Hazelcast" />
+		<property name="dao" ref="MetadataDao" />
+	</bean>
+
+	<!-- Dao -->
+	<bean id="MetadataDao" class="com.unitt.commons.metadata.hazelcast.MockMetadataDao">
+	</bean>
+
+	<!-- Hazelcast -->
+	<bean name="Hazelcast" class="com.hazelcast.core.Hazelcast"
+		factory-method="newHazelcastInstance">
+		<constructor-arg ref="HazelcastConfig" />
+	</bean>
+
+	<bean name="HazelcastConfig" class="com.hazelcast.config.Config">
+		<property name="mapConfigs">
+			<map>
+				<entry key="System:Metadata:Id" value-ref="IdMapConfig" />
+				<entry key="System:Metadata:Type" value-ref="TypeMapConfig" />
+			</map>
+		</property>
+	</bean>
+	
+	<bean name="IdMapConfig" class="com.hazelcast.config.MapConfig">
+		<property name="name" value="System:Metadata:Id" />
+		<property name="mapStoreConfig" ref="IdMapStoreConfig" />
+	</bean>
+    
+    <bean name="IdMapStoreConfig" class="com.hazelcast.config.MapStoreConfig">
+        <property name="enabled" value="true" />
+        <property name="implementation" ref="IdMapHandler" />
+        <property name="writeDelaySeconds" value="0" />
+    </bean>
+    
+    <bean name="TypeMapConfig" class="com.hazelcast.config.MapConfig">
+        <property name="name" value="System:Metadata:Type" />
+        <property name="mapStoreConfig" ref="TypeMapStoreConfig" />
+    </bean>
+    
+    <bean name="TypeMapStoreConfig" class="com.hazelcast.config.MapStoreConfig">
+        <property name="enabled" value="true" />
+        <property name="implementation" ref="TypeMapHandler" />
+        <property name="writeDelaySeconds" value="0" />
+    </bean>
+
+	<!-- Map Loaders/Stores -->
+	<bean id="TypeMapHandler"
+		class="com.unitt.commons.metadata.hazelcast.MetadataTypeMapHandler">
+		<property name="dao" ref="MetadataDao" />
+	</bean>
+	<bean id="IdMapHandler"
+		class="com.unitt.commons.metadata.hazelcast.MetadataIdMapHandler">
+		<property name="dao" ref="MetadataDao" />
+	</bean>
+
+</beans>
