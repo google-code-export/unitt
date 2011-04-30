@@ -4,37 +4,32 @@
 	<groupId>com.unitt.commons</groupId>
 	<artifactId>metadata</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.0</version>
+	<version>2.0.0-SNAPSHOT</version>
 	<name>metadata</name>
-	<issueManagement>
-		<system>Google Issues</system>
-		<url>http://code.google.com/p/unitt/issues/list</url>
-	</issueManagement>
-	<scm>
-		<connection>
-            scm:svn:http://unitt.googlecode.com/svn/trunk/metadata
+    
+    <issueManagement>
+        <system>Google Issues</system>
+        <url>http://code.google.com/p/unitt/issues/list</url>
+    </issueManagement>
+    
+    <scm>
+        <connection>
+            scm:svn:http://unitt.googlecode.com/svn/projects/commons/identity
         </connection>
-		<developerConnection>
-            scm:svn:http://unitt.googlecode.com/svn/trunk/metadata
+        <developerConnection>
+            scm:svn:https://unitt.googlecode.com/svn/projects/commons/identity
         </developerConnection>
-		<tag>HEAD</tag>
-		<url>scm:svn:http://unitt.googlecode.com/svn/trunk/metadata
+        <tag>HEAD</tag>
+        <url>scm:svn:https://unitt.googlecode.com/svn/projects/commons/identity/trunk
         </url>
-	</scm>
-	<properties>
-		<unitt.version>1.0.0</unitt.version>
-		<spring.version>2.5.6</spring.version>
+    </scm>
+    
+    <properties>
+        <unitt.version>2.0.0-SNAPSHOT</unitt.version>
+        <spring.version>3.0.3.RELEASE</spring.version>
 		<compiler.source>1.6</compiler.source>
 		<compiler.target>1.6</compiler.target>
 	</properties>
-
-	<pluginRepositories>
-		<pluginRepository>
-			<id>unitt</id>
-			<name>UnitT Repository</name>
-			<url>http://unitt.googlecode.com/svn/repository/</url>
-		</pluginRepository>
-	</pluginRepositories>
 
 	<dependencies>
 		<!-- unitt -->
@@ -47,7 +42,7 @@
 		<!-- spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring</artifactId>
+			<artifactId>spring-core</artifactId>
 			<version>${spring.version}</version>
 			<type>jar</type>
 		</dependency>
@@ -122,56 +117,56 @@
 		</dependency>
 	</dependencies>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.0.2</version>
-				<configuration>
-					<source>${compiler.source}</source>
-					<target>${compiler.target}</target>
-					<encoding>UTF-8</encoding>
-					<!--
-						Fix for GWT issue #3439 <excludes>
-						<exclude>javax/servlet/**</exclude> </excludes>
-					-->
-				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-source-plugin</artifactId>
-				<configuration>
-					<attach>true</attach>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>install</phase>
-						<goals>
-							<goal>jar</goal>
-							<goal>test-jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-eclipse-plugin</artifactId>
-				<configuration>
-					<downloadSources>true</downloadSources>
-					<downloadJavadocs>true</downloadJavadocs>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.0.2</version>
+                <configuration>
+                    <source>${compiler.source}</source>
+                    <target>${compiler.target}</target>
+                    <encoding>UTF-8</encoding>
+                    <!--
+                        Fix for GWT issue #3439 <excludes>
+                        <exclude>javax/servlet/**</exclude> </excludes>
+                    -->
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-source-plugin</artifactId>
+                <configuration>
+                    <attach>true</attach>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>jar</goal>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-eclipse-plugin</artifactId>
+                <configuration>
+                    <downloadSources>true</downloadSources>
+                    <downloadJavadocs>true</downloadJavadocs>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
-	<!-- Repositories -->
-	<repositories>
-		<repository>
-			<id>unitt-google</id>
-			<name>UnitT Open Source Repository</name>
-			<url>http://unitt.googlecode.com/svn/repository</url>
-		</repository>
-	</repositories>
+    <!-- Repositories -->
+    <repositories>
+        <repository>
+            <id>unitt-google</id>
+            <name>UnitT Open Source Repository</name>
+            <url>http://unitt.googlecode.com/svn/repository</url>
+        </repository>
+    </repositories>
 
     <distributionManagement>
         <repository>
@@ -180,5 +175,13 @@
             <url>https://unitt.googlecode.com/svn/repository</url>
         </repository>
     </distributionManagement>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>unitt</id>
+            <name>UnitT Repository</name>
+            <url>http://unitt.googlecode.com/svn/repository/</url>
+        </pluginRepository>
+    </pluginRepositories>
 
 </project>

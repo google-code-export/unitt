@@ -31,14 +31,6 @@
 		<compiler.target>1.6</compiler.target>
 	</properties>
 
-	<pluginRepositories>
-		<pluginRepository>
-			<id>unitt</id>
-			<name>UnitT Repository</name>
-			<url>http://unitt.googlecode.com/svn/repository/</url>
-		</pluginRepository>
-	</pluginRepositories>
-
 	<dependencies>
 		<!-- UnitT -->
 		<dependency>
