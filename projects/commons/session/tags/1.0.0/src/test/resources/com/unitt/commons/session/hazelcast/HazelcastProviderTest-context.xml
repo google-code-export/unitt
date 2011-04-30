@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:amq="http://activemq.apache.org/schema/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                        http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+                        http://www.springframework.org/schema/tx
+                        http://www.springframework.org/schema/tx/spring-tx.xsd
+                        http://www.springframework.org/schema/aop
+                        http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+
+	<aop:config proxy-target-class="true" />
+
+	<!-- Service -->
+	<bean id="SessionService" class="com.unitt.commons.session.SessionManager">
+		<property name="provider" ref="SessionProvider" />
+	</bean>
+
+	<!-- Provider -->
+	<bean id="SessionProvider" class="com.unitt.commons.session.hazelcast.HazelcastProvider">
+		<property name="client" ref="hazelcast" />
+	</bean>
+
+	<!-- Hazelcast -->
+	<bean name="hazelcast" class="com.hazelcast.core.Hazelcast"
+		factory-method="newHazelcastInstance">
+		<constructor-arg><null/></constructor-arg>
+	</bean>
+
+</beans>
