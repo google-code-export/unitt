@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.unitt.commons</groupId>
 	<artifactId>authorization</artifactId>
-	<version>1.0.2</version>
+	<version>2.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>authorization</name>
 	
@@ -74,20 +74,38 @@
 
 		</plugins>
 	</build>
+    
+    <pluginRepositories>
+        <pluginRepository>
+            <id>rio</id>
+            <url>http://www.rio-project.org/maven2</url>
+        </pluginRepository>
+        <repository>
+            <id>unitt-google</id>
+            <name>UnitT Open Source Repository</name>
+            <url>http://unitt.googlecode.com/svn/repository</url>
+        </repository>
+    </pluginRepositories>
 
-	<pluginRepositories>
-		<pluginRepository>
-			<id>rio</id>
-			<url>http://www.rio-project.org/maven2</url>
-		</pluginRepository>
-	</pluginRepositories>
-
-	<repositories>
-		<repository>
-			<id>rio</id>
-			<url>http://www.rio-project.org/maven2</url>
-		</repository>
-	</repositories>
+    <distributionManagement>
+        <repository>
+            <id>unitt-google-releases</id>
+            <name>UnitT Repository</name>
+            <url>https://unitt.googlecode.com/svn/repository</url>
+        </repository>
+    </distributionManagement>
+    
+    <repositories>
+        <repository>
+            <id>rio</id>
+            <url>http://www.rio-project.org/maven2</url>
+        </repository>
+        <pluginRepository>
+            <id>unitt</id>
+            <name>UnitT Repository</name>
+            <url>http://unitt.googlecode.com/svn/repository/</url>
+        </pluginRepository>
+    </repositories>
 
 </project>
 

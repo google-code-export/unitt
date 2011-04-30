@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.unitt.commons</groupId>
         <artifactId>authorization</artifactId>
-        <version>1.0.2</version>
+        <version>2.0.0-SNAPSHOT</version>
     </parent>
 
     <groupId>com.unitt.commons.authorization</groupId>
@@ -19,14 +19,77 @@
     </issueManagement>
     <scm>
         <connection>
-            scm:svn:http://unitt.googlecode.com/svn/projects/commons/authorization
+            scm:svn:http://unitt.googlecode.com/svn/projects/commons/authorization/authorization-service
         </connection>
         <developerConnection>
-            scm:svn:https://unitt.googlecode.com/svn/projects/commons/authorization
+            scm:svn:https://unitt.googlecode.com/svn/projects/commons/authorization/authorization-service
         </developerConnection>
         <tag>HEAD</tag>
-        <url>scm:svn:https://unitt.googlecode.com/svn/projects/commons/authorization/trunk
+        <url>scm:svn:https://unitt.googlecode.com/svn/projects/commons/authorization/authorization-service/trunk
         </url>
     </scm>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.0.2</version>
+                <configuration>
+                    <source>${compiler.source}</source>
+                    <target>${compiler.target}</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-source-plugin</artifactId>
+                <configuration>
+                    <attach>true</attach>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>jar</goal>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-eclipse-plugin</artifactId>
+                <configuration>
+                    <downloadSources>true</downloadSources>
+                    <downloadJavadocs>true</downloadJavadocs>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <!-- Repositories -->
+    <repositories>
+        <repository>
+            <id>unitt-google</id>
+            <name>UnitT Open Source Repository</name>
+            <url>http://unitt.googlecode.com/svn/repository</url>
+        </repository>
+    </repositories>
+
+    <distributionManagement>
+        <repository>
+            <id>unitt-google-releases</id>
+            <name>UnitT Repository</name>
+            <url>https://unitt.googlecode.com/svn/repository</url>
+        </repository>
+    </distributionManagement>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>unitt</id>
+            <name>UnitT Repository</name>
+            <url>http://unitt.googlecode.com/svn/repository/</url>
+        </pluginRepository>
+    </pluginRepositories>
 
 </project>
