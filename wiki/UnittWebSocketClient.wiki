@@ -5,10 +5,12 @@
 
 !UnittWebSocketClient is an API that allows you to use web sockets in your iOS Objective-C projects. It conforms to the latest version of web sockets. It tries to follow the client specification from javascript using Objective-C constructs. Web sockets provide a low latency, bi-directional, full-duplex communication channel over TCP. For more information, see [http://en.wikipedia.org/wiki/WebSockets Wikipedia].
 
+= Setup Your Project =
 
-= Usage =
+  # Include the CFNetwork and Security frameworks
+  # Include the !UnittWebSocketClient library in your project. For more information on this, see [xCodeIncludes Including a LIbrary in Your Xcode Project].
 
-You will need to include the library to your project. For more information on this, see [xCodeIncludes Including a LIbrary in Your Xcode Project]. Once this is complete you can begin. 
+= Using a WebSocket =
 
   ===1. The first step is to create your !WebSocketDelegate. This is the class that will receive the callbacks from the web socket.===
 <p>
