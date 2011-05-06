@@ -24,8 +24,7 @@
 @implementation HomeModel
 
 
-//model logic
-//--------------------------------------------------------------------------------
+#pragma mark Model
 - (NSArray*) iconModels
 {
     if (iconModels)
@@ -87,8 +86,7 @@
 }
 
 
-//lifecycle logic
-//--------------------------------------------------------------------------------
+#pragma mark Lifecycle
 - (id)init 
 {
     self = [super init];

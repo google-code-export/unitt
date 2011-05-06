@@ -31,10 +31,26 @@
     UIImage* iconImage;
 }
 
+/**
+ * Unique key to reference this model item.
+ */
 @property (copy) NSString* key;
+
+/**
+ * UIViewController to push into the view when this item is selected.
+ */
 @property (retain) UIViewController* viewController;
+
+/**
+ * Label of the item in the home view.
+ */
 @property (copy) NSString* labelText;
+
+/**
+ * Icon of the item in the home view.
+ */
 @property (retain) UIImage* iconImage;
+
 
 + withKey: (NSString*) aKey controller: (UIViewController*) aController icon: (UIImage*) aIcon label: (NSString*) aLabel;
 

@@ -38,18 +38,64 @@
     int pageNumber;
 }
 
+/**
+ * Delegate used to gather layout info and handle events
+ */
 @property (retain) id<HomeViewDelegate> homeDelegate;
+
+/**
+ * Model datasource that provides the icons to show
+ */
 @property (retain) id<HomeViewDatasource> homeDatasource;
+
+/**
+ * Calculated number of rows that can be shown
+ */ 
 @property (readonly) int rows;
+
+/**
+ * Calculated number of columns that can be shown
+ */
 @property (readonly) int columns;
+
+/**
+ * The page that this view represents. Will be used to grab the correct items from the 
+ * datasource based upon the max number of items that can be shown in the view.
+ */
 @property (assign) int pageNumber;
 
+
+/**
+ * Returns the number of rows (width) and number of columns (height) that can be shown in
+ * the specified frame for the desired minimum margin and desired item size.
+ */
 + (CGSize) getGridExtents: (CGRect) aRect margin: (CGSize) aMargin itemSize: (CGSize) aItemSize;
 
+
 - (id) initWithFrame: (CGRect) aFrame page: (int) aPage delegate: (id<HomeViewDelegate>) aDelegate datasource: (id<HomeViewDatasource>) aDataSource;
+
+/**
+ * Factory method to create icon for the item at the specified index in the datasource.
+ * You can override this to provide your own UIView for the icon.
+ */
 - (UIView*) createImageForTag: (NSInteger) aTag;
+
+/**
+ * Apply image to the icon for the item at the specified index in the datasource.
+ * You can override this to apply the image to your own UIView for the icon.
+ */
 - (void) applyImageForTag:(NSInteger)aTag icon:(UIImage*) aIconImage view:(UIView *)aView;
+
+/**
+ * Factory method to create label for the item at the specified index in the datasource.
+ * You can override this to provide your own UIView for the label.
+ */
 - (UIView*) createTextForTag: (NSInteger) aTag;
+
+/**
+ * Apply text to the label for the item at the specified index in the datasource.
+ * You can override this to apply the text to your own UIView for the label.
+ */
 - (void) applyTextForTag: (NSInteger) aTag text: (NSString*) aText view: (UIView*) aView;
 
 @end

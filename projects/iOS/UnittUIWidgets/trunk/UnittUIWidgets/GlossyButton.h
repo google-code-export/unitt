@@ -23,13 +23,30 @@
 #import <UIKit/UIKit.h>
 
 
+/**
+ * Class used to provide a simple glossy or a rich, caustic gradient, gel effect
+ * to a UIButton. At this time, only rounded rectangle buttons are supported. This
+ * can easily be changed and the rounded rectangle appearance moved into a configurable
+ * property.
+ */
 @interface GlossyButton : UIButton 
 {
     UIColor *gradientColor;
     BOOL useGelAppearance;
 }
 
+/**
+ * Color to use as a base for the gradient. Highlights are derived from this
+ * color so darker is better.
+ */
 @property (nonatomic, retain) UIColor *gradientColor;
+
+/**
+ * True to use a caustic highlight to provide a gel appearance. False to use
+ * a simple gloss effect. For more information on caustice highlights, see
+ * Matt Gallagher's excellent article in his "Cocoa With Love" blog, 
+ * http://cocoawithlove.com/2008/09/drawing-gloss-gradients-in-coregraphics.html
+ */
 @property (nonatomic) BOOL useGelAppearance;
 
 @end

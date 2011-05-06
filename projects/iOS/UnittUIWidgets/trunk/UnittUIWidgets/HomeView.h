@@ -30,6 +30,9 @@
 
 @protocol HomeViewDatasource
 
+/**
+ * Ordered list of IconModel objects.
+ */
 - (NSArray*) getHomeItems;
 
 @end
@@ -37,15 +40,56 @@
 
 @protocol HomeViewDelegate
 
+/**
+ * Start color for the gradient view.
+ */
 @property (retain) UIColor* startColor;
-@property (retain) UIColor* endColor;
-@property (assign) CGSize itemSize;
-@property (assign) CGSize margin;
-@property (assign) int toolbarHeight;
-@property (assign) BOOL useToolbar;
-@property (readonly) NSArray* toolbarItems;
 
-- (void) didSelectItem: (UIButton*) aSender;
+/**
+ * End color for the gradient view.
+ */
+@property (retain) UIColor* endColor;
+
+/**
+ * Show shadow at the top of the view.
+ */
+@property (assign) BOOL showShadow;
+
+/**
+ * Desired size of each item (label and icon together).
+ */
+@property (assign) CGSize itemSize;
+
+/**
+ * Minimum size of the margins. Width specifies horizontal margin.
+ * Height specifies vertical margin. These margins are the minimum
+ * size. When the view is actually laid out, the margins may be
+ * increased to fill the space.
+ */
+@property (assign) CGSize margin;
+
+/**
+ * Specifies the height of the toolbar.
+ */
+@property (assign) int toolbarHeight;
+
+/**
+ * True to include a toolbar in the view. The toolbar will use
+ * the toolbarHeight propety to set the height. It will autosize
+ * to fill the width.
+ */
+@property (assign) BOOL useToolbar;
+
+/**
+ * Items for the toolbar. Changing this after the view is loaded
+ * will have no effect.
+ */
+@property (retain) NSArray* toolbarItems;
+
+/*
+ * Called when the icon view is pressed. 
+ */
+- (void) didSelectItem: (UIView*) aSender;
 
 @end
 
@@ -71,17 +115,63 @@
 	CAGradientLayer *originShadow;
 }
 
+/**
+ * Delegate used to gather layout info and handle events
+ */
 @property (retain) id<HomeViewDelegate> homeDelegate;
+
+/**
+ * Model datasource that provides the icons to show
+ */
 @property (retain) id<HomeViewDatasource> homeDatasource;
+
+/**
+ * Toolbar for the view. Value is nil if the delegate
+ * useToolbar property is false.
+ */
 @property (readonly) UIToolbar* toolbar;
+
+/**
+ * Total number of pages.
+ */
 @property (readonly) int numberOfPages;
+
+/**
+ * Current page being shown.
+ */
 @property (assign) int currentPage;
 
 - (id) initWithFrame: (CGRect) aFrame delegate: (id<HomeViewDelegate>) aDelegate datasource: (id<HomeViewDatasource>) aDataSource;
+
+/**
+ * Called to perform the inital setup of the home view before any other 
+ * sub views are added. You can override this to customize the home view
+ * appearance for your purposes.
+ */
 - (void) setupView;
+
+/**
+ * Factory method to create the individual page views. You can override 
+ * this to provide your own UIView for the page view.
+ */
 - (IconPageView*) createPageView: (int) aPage frame: (CGRect) aFrame;
+
+/**
+ * Factory method to create the scroll view. You can override this to 
+ * provide your own UIView for the scroll view.
+ */
 - (UIScrollView*) createScrollViewWithFrame: (CGRect) aFrame;
+
+/**
+ * Factory method to create the page control view. You can override this 
+ * to provide your own UIView for the page control view.
+ */
 - (UIPageControl*) createPageControlWithFrame: (CGRect) aFrame;
+
+/**
+ * Factory method to create the page control view. You can override this 
+ * to provide your own UIView for the page control view.
+ */
 - (UIToolbar*) createToolbarWithFrame: (CGRect) aFrame;
 
 @end

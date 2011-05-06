@@ -38,8 +38,7 @@
 CGSize actualMargin;
 
 
-//view logic
-//--------------------------------------------------------------------------------
+#pragma mark View
 - (void) onItemOpen: (UIButton*) aSender
 {
     if (self.homeDelegate)
@@ -226,12 +225,6 @@ CGSize actualMargin;
 {
     CGRect viewFrame = self.frame;
     
-    //handle variance for toolbar
-    if (self.homeDelegate.useToolbar)
-    {
-        viewFrame.size.height -= self.homeDelegate.toolbarHeight;
-    }
-    
     //determine max rows & columns
     CGSize grid = [IconPageView getGridExtents:viewFrame margin:self.homeDelegate.margin itemSize:self.homeDelegate.itemSize];
     
@@ -286,8 +279,7 @@ CGSize actualMargin;
 }
 
 
-//lifecycle logic
-//--------------------------------------------------------------------------------
+#pragma mark Lifecycle
 - (id) initWithFrame: (CGRect) aFrame page: (int) aPage delegate: (id<HomeViewDelegate>) aDelegate datasource: (id<HomeViewDatasource>) aDataSource
 {
     self = [super initWithFrame:aFrame];

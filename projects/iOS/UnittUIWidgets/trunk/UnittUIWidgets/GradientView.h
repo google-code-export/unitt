@@ -21,6 +21,9 @@
 #import <UIKit/UIKit.h>
 
 
+/**
+ * Draws a gradient background using the colors provided.
+ */
 @interface GradientView : UIView 
 {
 @private 
@@ -28,7 +31,14 @@
     UIColor* endColor;
 }
 
+/**
+ * Start color of the gradient
+ */
 @property (retain) UIColor* startColor;
+
+/**
+ * End color of the gradient
+ */
 @property (retain) UIColor* endColor;
 
 @end

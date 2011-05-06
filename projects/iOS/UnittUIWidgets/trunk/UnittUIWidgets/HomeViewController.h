@@ -35,14 +35,8 @@
     BOOL useToolbar;
     BOOL isDirty;
     NSArray* toolbarItems;
+    BOOL showShadow;
 }
-
-@property (retain) UIColor* startColor;
-@property (retain) UIColor* endColor;
-@property (assign) CGSize itemSize;
-@property (assign) CGSize margin;
-@property (assign) BOOL useToolbar;
-@property (readonly) NSArray* toolbarItems;
 
 
 - (void) addItem: (NSString*) aKey controller: (UIViewController*) aController icon: (UIImage*) aIcon label: (NSString*) aLabelText;

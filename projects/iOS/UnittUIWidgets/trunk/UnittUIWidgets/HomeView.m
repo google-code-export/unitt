@@ -42,8 +42,7 @@
 
 int pageControlHeight = 18;
 
-//view logic
-//--------------------------------------------------------------------------------
+#pragma mark View
 - (void) onItemOpen: (UIButton*) aSender
 {
     if (self.homeDelegate)
@@ -113,24 +112,27 @@ int pageControlHeight = 18;
 	[super layoutSubviews];
 	
 	//create origin shadow, if needed
-	if (!originShadow)
-	{
-		originShadow = [self createShadowLayer];
-		[self.layer insertSublayer:originShadow atIndex:0];
-	}
-	else if (![[self.layer.sublayers objectAtIndex:0] isEqual:originShadow])
-	{
-		[self.layer insertSublayer:originShadow atIndex:0];
-	}
-	
-	// Stretch and place the origin shadow
-	[CATransaction begin];
-	[CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
-	CGRect originShadowFrame = originShadow.frame;
-	originShadowFrame.size.width = self.frame.size.width;
-	originShadowFrame.origin.y = 0;
-	originShadow.frame = originShadowFrame;
-	[CATransaction commit];
+    if (self.homeDelegate && self.homeDelegate.showShadow)
+    {
+        if (!originShadow)
+        {
+            originShadow = [self createShadowLayer];
+            [self.layer insertSublayer:originShadow atIndex:0];
+        }
+        else if (![[self.layer.sublayers objectAtIndex:0] isEqual:originShadow])
+        {
+            [self.layer insertSublayer:originShadow atIndex:0];
+        }
+        
+        // Stretch and place the origin shadow
+        [CATransaction begin];
+        [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
+        CGRect originShadowFrame = originShadow.frame;
+        originShadowFrame.size.width = self.frame.size.width;
+        originShadowFrame.origin.y = 0;
+        originShadow.frame = originShadowFrame;
+        [CATransaction commit];
+    }
     
     //recalculate page number
     [self updatePageCount];
@@ -308,8 +310,7 @@ int pageControlHeight = 18;
 }
 
 
-//lifecycle logic
-//--------------------------------------------------------------------------------
+#pragma mark Lifecycle
 - (void) setupView
 {
     self.opaque = YES;
@@ -327,7 +328,7 @@ int pageControlHeight = 18;
     //add scrollview
     int height = aFrame.size.height - (aFrame.origin.y + pageControlHeight + (self.homeDelegate.useToolbar ? self.homeDelegate.toolbarHeight : 0));
     self.scrollView = [self createScrollViewWithFrame: CGRectMake(aFrame.origin.x, aFrame.origin.y, aFrame.size.width, height)];
-    [self.scrollView setAutoresizingMask:UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+    [self.scrollView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [self addSubview: self.scrollView];
     
     //add page control

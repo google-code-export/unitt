@@ -30,15 +30,14 @@
 
 @implementation HomeViewController
 
-@synthesize startColor, endColor;
+@synthesize startColor, endColor, showShadow;
 @synthesize itemSize, margin, toolbarHeight;
 @synthesize useToolbar;
 @synthesize isDirty;
 @synthesize toolbarItems;
 
 
-//properties logic
-//--------------------------------------------------------------------------------
+#pragma mark Properties
 - (HomeModel*) model
 {
     if (!model) 
@@ -55,19 +54,18 @@
 }
 
 
-//model logic
-//--------------------------------------------------------------------------------
+#pragma mark Model
 - (void) handleModelChange
 {
     //tell view to reload if needed, else mark dirty to draw later
     if (self.view && self.view.window)
     {
         [self.homeView setNeedsLayout];
-        self.isDirty = false;
+        self.isDirty = NO;
     }
     else
     {
-        self.isDirty = true;
+        self.isDirty = YES;
     }
 }
 
@@ -86,9 +84,8 @@
 }
 
 
-//controller logic
-//--------------------------------------------------------------------------------
-- (void) didSelectItem: (UIButton*) aSender
+#pragma mark Controller
+- (void) didSelectItem: (UIView*) aSender
 {
     if (self.navigationController)
     {
@@ -119,8 +116,7 @@
 }
 
 
-//lifecycle logic
-//--------------------------------------------------------------------------------
+#pragma mark Lifecycle
 - (void) loadView
 {
     HomeView* myView = [[HomeView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame] delegate:self datasource:self];
@@ -132,7 +128,7 @@
 {
     if (self.isDirty)
     {
-        self.isDirty = false;
+        self.isDirty = NO;
     }
     [super viewWillAppear:aAnimated];
 }
@@ -153,8 +149,9 @@
     self.endColor = [UIColor blackColor];
     self.itemSize = CGSizeMake(92, 120);
     self.margin = CGSizeMake(10, 10);
-    self.useToolbar = false;
+    self.useToolbar = NO;
     self.toolbarHeight = 32;
+    self.showShadow = YES;
 }
 
 - (id)init 
@@ -174,7 +171,7 @@
     {
         [self setup];
         self.useToolbar = true;
-        toolbarItems = aItems;
+        self.toolbarItems = aItems;
     }
     return self;
 }

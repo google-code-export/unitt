@@ -23,6 +23,10 @@
 #import <UIKit/UIKit.h>
 
 
+/**
+ * Workhorse for actually creating the various gradients and effects used in the
+ * GlossyButton.
+ */
 @interface GlossyGradientFill : NSObject 
 {    
 }
