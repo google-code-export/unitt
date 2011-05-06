@@ -12,7 +12,7 @@ You will need to include the library to your project. For more information on th
 
   ===1. The first step is to create your !WebSocketDelegate. This is the class that will receive the callbacks from the web socket.===
 <p>
-*MyWebSocket.h*
+*!MyWebSocket.h*
 {{{
 #import "WebSocket.h"
 
@@ -25,7 +25,7 @@ You will need to include the library to your project. For more information on th
 }}}
 </p>
 <p>
-*MyWebSocket.m*
+*!MyWebSocket.m*
 {{{
 #import "MyWebSocket.h"
 #import "WebSocket.h"
@@ -62,7 +62,7 @@ You will need to include the library to your project. For more information on th
 
   ===2. The next step is to actually create and use our web socket.===
 <p>
-*MyWebSocket.h*
+*!MyWebSocket.h*
 {{{
 #import "WebSocket.h"
 
@@ -81,7 +81,7 @@ You will need to include the library to your project. For more information on th
 }}}
 </p>
 <p>
-*MyWebSocket.m*
+*!MyWebSocket.m*
 {{{
 //...
 
