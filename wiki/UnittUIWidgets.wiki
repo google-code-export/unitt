@@ -1,0 +1,31 @@
+#summary General Help for Using the UnitT UI Widgets Library.
+#labels Featured,Phase-Implementation
+
+= Introduction =
+
+The UnitT UI Widgets library is a collection of widgets that you can use in your iOS projects. This article presents a general survey of these widgets and an in-depth discussion of each one.
+
+= Setup Your Project =
+
+  # Include the !QuartzCore and !CoreGraphics frameworks
+  # Include the !UnittUIWidgets library in your project. For more information on this, see [xCodeIncludes Including a LIbrary in Your Xcode Project].
+
+= Widgets =
+
+=== Home View Controller ===
+
+[http://code.google.com/p/unitt/source/browse/wiki/homeLandscape.png]
+
+The Home View Controller class is meant to give you a scrollable, rotatable view of a large icon grid to open subviews. This is typically placed inside a navigation view controller. It is very customizable and provides a toolbar, if so desired. For more information, see [UIWidgets-HVC Using the Home View Controller].
+
+=== Glossy Button ===
+
+*missing image*
+
+The Glossy Button gives you two different appearances. A simple glossy button and a gel glossy button. For more information, see [UIWidgets-GB Using the Glossy Button].
+
+=== Gradient View ===
+
+*missing image*
+
+The Gradient View gives a simple vertical gradient as a background for your view. The start and end colors and alpha values are customizable. For more information, see [UIWidgets-GV Using the Gradient View].
