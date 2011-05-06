@@ -1,0 +1,135 @@
+#summary How to use the UnittWebSocketClient project
+#labels Featured,Phase-Implementation
+
+= Introduction =
+
+!UnittWebSocketClient is an API that allows you to use web sockets in your iOS Objective-C projects. It conforms to the latest version of web sockets. It tries to follow the client specification from javascript using Objective-C constructs. Web sockets provide a low latency, bi-directional, full-duplex communication channel over TCP. For more information, see [http://en.wikipedia.org/wiki/WebSockets Wikipedia].
+
+
+= Usage =
+
+You will need to include the library to your project. For more information on this, see [xCodeIncludes Including a LIbrary in Your Xcode Project]. Once this is complete you can begin. 
+
+  ===1. The first step is to create your !WebSocketDelegate. This is the class that will receive the callbacks from the web socket.===
+<p>
+*MyWebSocket.h*
+{{{
+#import "WebSocket.h"
+
+
+@interface MyWebSocket : NSObject <WebSocketDelegate>
+{
+}
+
+@end
+}}}
+</p>
+<p>
+*MyWebSocket.m*
+{{{
+#import "MyWebSocket.h"
+#import "WebSocket.h"
+
+
+@implementation MyWebSocket
+
+
+#pragma mark Web Socket
+- (void) didOpen
+{
+    NSLog(@"Socket is open for business.");
+}
+
+- (void) didClose: (NSError*) aError
+{
+    NSLog(@"Oops. It closed.");
+}
+
+- (void) didReceiveError: (NSError*) aError
+{
+    NSLog(@"Oops. An error occurred.");
+}
+
+- (void) didReceiveMessage: (NSString*) aMessage
+{
+    //Hooray! I got a message to print.
+    NSLog(@"Did receive message: %@", aMessage);
+}
+
+@end
+}}}
+</p>
+
+  ===2. The next step is to actually create and use our web socket.===
+<p>
+*MyWebSocket.h*
+{{{
+#import "WebSocket.h"
+
+
+@interface MyWebSocket : NSObject <WebSocketDelegate>
+{
+@private
+    WebSocket* ws;
+}
+
+@property (nonatomic, readonly) WebSocket* ws;
+
+- (void) startMyWebSocket;
+
+@end
+}}}
+</p>
+<p>
+*MyWebSocket.m*
+{{{
+//...
+
+@synthesize ws;
+
+#pragma mark Web Socket
+- (void) startMyWebSocket
+{
+    [self.ws open];
+    
+    //continue processing other stuff
+    //...
+}
+
+#pragma mark Lifecycle
+- (id)init
+{
+    self = [super init];
+    if (self) 
+    {
+        ws = [[WebSocket webSocketWithURLString:@"ws://localhost:8080/testws/ws/test" delegate:self origin:nil protocols:nil tlsSettings:nil verifyAccept:true] retain];
+    }
+    return self;
+    
+}
+
+- (void)dealloc 
+{
+    [ws release];
+    [super dealloc];
+}
+
+//...
+}}}
+</p>
+
+  ===3. The final step is to call our code. ===
+<p>
+{{{
+MyWebSocket* myWS = [[MyWebSocket alloc] init];
+[myWS startMyWebSocket];
+
+//continue processing
+//...
+}}}
+</p>
+
+
+= More Info =
+  * Check out the [http://code.google.com/p/unitt/source/browse/projects/iOS/UnittWebSocketClient/tags/1.0/UnittWebSocketClient/WebSocket.h WebSocket.h] for more information on how to use this class
+  * For more information on web sockets, see [http://en.wikipedia.org/wiki/WebSockets Wikipedia]
