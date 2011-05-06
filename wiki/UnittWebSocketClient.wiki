@@ -10,7 +10,7 @@
   # Include the CFNetwork and Security frameworks
   # Include the !UnittWebSocketClient library in your project. For more information on this, see [xCodeIncludes Including a LIbrary in Your Xcode Project].
 
-= Using a WebSocket =
+= Using a Web Socket =
 
   ===1. The first step is to create your !WebSocketDelegate. This is the class that will receive the callbacks from the web socket.===
 <p>
