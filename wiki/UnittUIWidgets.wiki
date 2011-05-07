@@ -8,7 +8,7 @@ The UnitT UI Widgets library is a collection of widgets that you can use in your
 = Setup Your Project =
 
   # Include the !QuartzCore and !CoreGraphics frameworks
-  # Include the !UnittUIWidgets library in your project. For more information on this, see [xCodeIncludes Including a LIbrary in Your Xcode Project].
+  # Include the !UnittUIWidgets library in your project. For more information on this, see [xCodeIncludes Including a Library in Your Xcode Project].
 
 = Widgets =
 
