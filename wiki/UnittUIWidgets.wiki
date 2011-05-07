@@ -16,7 +16,7 @@ The UnitT UI Widgets library is a collection of widgets that you can use in your
 
 [http://unitt.googlecode.com/svn/wiki/homePortrait.png]
 
-The Home View Controller class is meant to give you a scrollable, rotatable view of a large icon grid to open subviews. This is typically placed inside a navigation view controller. It is very customizable and provides a toolbar, if so desired. You can specify an image, label, and UIViewController individually for each item (our example above uses the same image for all items). For more information, see [UIWidgets-HVC Using the Home View Controller].
+The Home View Controller class is meant to give you a scrollable, rotatable view of a large icon grid to open subviews. This is typically placed inside a navigation view controller. It is very customizable and provides a toolbar, if so desired. You can specify an image, label, and UIViewController individually for each item (our example above uses the same image for all items). For more information, see [UIWidgetsHVC Using the Home View Controller].
 
 === Glossy Button ===
 
