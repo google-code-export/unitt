@@ -22,10 +22,10 @@ The Home View Controller class is meant to give you a scrollable, rotatable view
 
 [http://unitt.googlecode.com/svn/wiki/glossyButtons.png]
 
-The Glossy Button gives you two different appearances. A simple glossy button and a gel glossy button. For more information, see [UIWidgets-GB Using the Glossy Button].
+The Glossy Button gives you two different appearances. A simple glossy button and a gel glossy button. For more information, see [UIWidgetsGB Using the Glossy Button].
 
 === Gradient View ===
 
 [http://unitt.googlecode.com/svn/wiki/gradientView.png]
 
-The Gradient View gives a simple vertical gradient as a background for your view. The start and end colors and alpha values are customizable. For more information, see [UIWidgets-GV Using the Gradient View].
+The Gradient View gives a simple vertical gradient as a background for your view. The start and end colors and alpha values are customizable. For more information, see [UIWidgetsGV Using the Gradient View].
