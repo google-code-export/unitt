@@ -8,6 +8,7 @@
 = Setup Your Project =
 
   # Include the CFNetwork and Security frameworks
+  # Add the "-all_load" flag to your "Other Linker Flags" in the "Build Settings" of your project
   # Include the !UnittWebSocketClient library in your project. For more information on this, see [xCodeIncludes Including a LIbrary in Your Xcode Project].
 
 = Using a Web Socket =
