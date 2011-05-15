@@ -2,7 +2,12 @@
 //  GlossyGradientFill.h
 //  UnittUIWidgets
 //
-//  Created by Josh Morris on 10/23/10.
+//  Original code provided by Matt Gallagher. For reference, see his excellent
+//  blog, "Cocoa With Love" at http://cocoawithlove.com/. The specific article is
+//  http://cocoawithlove.com/2008/09/drawing-gloss-gradients-in-coregraphics.html
+//  Original code, Copyright (c) 2009-2011 Matt Gallagher. All rights reserved. 
+//
+//  Alterations and improvements made by Josh Morris on 10/23/10.
 //  Copyright 2010 UnitT Software, Inc. All rights reserved.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License"); you may not
