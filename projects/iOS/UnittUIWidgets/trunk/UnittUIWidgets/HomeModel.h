@@ -28,9 +28,12 @@
 @private NSMutableArray* iconModels;
 }
 
+/**
+ * Ordered list of item models for the home screen.
+ **/
 @property (readonly) NSArray* iconModels;
 
-/*
+/**
  * Adds an item to the model. The key must be unique.
  **/
 - (void) addItem: (NSString*) aKey controller: (UIViewController*) aController icon: (UIImage*) aIcon label: (NSString*) aLabelText;

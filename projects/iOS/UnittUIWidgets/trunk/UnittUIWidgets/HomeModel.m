@@ -53,7 +53,7 @@
         }
         
         //add to models
-        [iconModels addObject:[IconModel withKey:aKey controller:aController icon:aIcon label:aLabelText]];
+        [iconModels addObject:[IconModel iconModelWithKey:aKey controller:aController icon:aIcon label:aLabelText]];
     }
 }
 

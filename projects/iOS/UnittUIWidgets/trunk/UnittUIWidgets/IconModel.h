@@ -52,6 +52,6 @@
 @property (retain) UIImage* iconImage;
 
 
-+ withKey: (NSString*) aKey controller: (UIViewController*) aController icon: (UIImage*) aIcon label: (NSString*) aLabel;
++ (id) iconModelWithKey: (NSString*) aKey controller: (UIViewController*) aController icon: (UIImage*) aIcon label: (NSString*) aLabel;
 
 @end

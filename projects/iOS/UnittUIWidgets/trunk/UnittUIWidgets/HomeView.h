@@ -28,6 +28,9 @@
 #define SHADOW_RATIO (SHADOW_INVERSE_HEIGHT / SHADOW_HEIGHT)
 
 
+/**
+ * Delegate used to provide the model for the home screen.
+ */
 @protocol HomeViewDatasource
 
 /**
@@ -38,6 +41,10 @@
 @end
 
 
+/**
+ * Delegate responsible for configuring the appearance of the home screen 
+ * and handling actions.
+ */
 @protocol HomeViewDelegate
 
 /**

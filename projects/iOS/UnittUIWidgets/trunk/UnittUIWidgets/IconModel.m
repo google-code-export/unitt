@@ -30,7 +30,7 @@
 
 
 #pragma mark Lifecycle
-+ withKey: (NSString*) aKey controller: (UIViewController*) aController icon: (UIImage*) aIcon label: (NSString*) aLabel
++ (id) iconModelWithKey: (NSString*) aKey controller: (UIViewController*) aController icon: (UIImage*) aIcon label: (NSString*) aLabel
 {
     IconModel* value = [[IconModel alloc] init];
     
