@@ -12,20 +12,20 @@
 		BD02741913493BCF007AF649 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD02741813493BCF007AF649 /* CoreGraphics.framework */; };
 		BD02741C13493BCF007AF649 /* libUnittUIWidgets.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BD02740713493BCF007AF649 /* libUnittUIWidgets.a */; };
 		BD02742213493BCF007AF649 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BD02742013493BCF007AF649 /* InfoPlist.strings */; };
-		BD02742513493BCF007AF649 /* UnittUIWidgetsTests.h in Resources */ = {isa = PBXBuildFile; fileRef = BD02742413493BCF007AF649 /* UnittUIWidgetsTests.h */; };
-		BD02742713493BCF007AF649 /* UnittUIWidgetsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BD02742613493BCF007AF649 /* UnittUIWidgetsTests.m */; };
+		BD02742513493BCF007AF649 /* UrlManagerTests.h in Resources */ = {isa = PBXBuildFile; fileRef = BD02742413493BCF007AF649 /* UrlManagerTests.h */; };
+		BD02742713493BCF007AF649 /* UrlManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BD02742613493BCF007AF649 /* UrlManagerTests.m */; };
 		BD02743413493C05007AF649 /* GlossyButton.h in Headers */ = {isa = PBXBuildFile; fileRef = BD02743013493C05007AF649 /* GlossyButton.h */; };
 		BD02743513493C05007AF649 /* GlossyButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BD02743113493C05007AF649 /* GlossyButton.m */; };
-		BD02743613493C05007AF649 /* GlossyButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BD02743113493C05007AF649 /* GlossyButton.m */; };
 		BD02743713493C05007AF649 /* GlossyGradientFill.h in Headers */ = {isa = PBXBuildFile; fileRef = BD02743213493C05007AF649 /* GlossyGradientFill.h */; };
 		BD02743813493C05007AF649 /* GlossyGradientFill.m in Sources */ = {isa = PBXBuildFile; fileRef = BD02743313493C05007AF649 /* GlossyGradientFill.m */; };
-		BD02743913493C05007AF649 /* GlossyGradientFill.m in Sources */ = {isa = PBXBuildFile; fileRef = BD02743313493C05007AF649 /* GlossyGradientFill.m */; };
 		BD02743C13493E4A007AF649 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD02743A13493E4A007AF649 /* QuartzCore.framework */; };
 		BD02743D13493E4A007AF649 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD02743B13493E4A007AF649 /* UIKit.framework */; };
 		BD3DBA281354024900DD4C78 /* GradientView.h in Headers */ = {isa = PBXBuildFile; fileRef = BD3DBA261354024900DD4C78 /* GradientView.h */; };
 		BD3DBA291354024900DD4C78 /* GradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = BD3DBA271354024900DD4C78 /* GradientView.m */; };
-		BD3DBA2A1354024900DD4C78 /* GradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = BD3DBA271354024900DD4C78 /* GradientView.m */; };
 		BD3DBA4013540DBE00DD4C78 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD3DBA3F13540DBE00DD4C78 /* CoreGraphics.framework */; };
+		BD84ECAD1382148800CD2ED6 /* UrlManager.h in Headers */ = {isa = PBXBuildFile; fileRef = BD84ECAB1382148800CD2ED6 /* UrlManager.h */; };
+		BD84ECAE1382148800CD2ED6 /* UrlManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BD84ECAC1382148800CD2ED6 /* UrlManager.m */; };
+		BD84ECAF1382148800CD2ED6 /* UrlManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BD84ECAC1382148800CD2ED6 /* UrlManager.m */; };
 		BD9CCD28136F184000A02055 /* HomeModel.h in Headers */ = {isa = PBXBuildFile; fileRef = BD9CCD1E136F184000A02055 /* HomeModel.h */; };
 		BD9CCD29136F184000A02055 /* HomeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BD9CCD1F136F184000A02055 /* HomeModel.m */; };
 		BD9CCD2A136F184000A02055 /* IconPageView.h in Headers */ = {isa = PBXBuildFile; fileRef = BD9CCD20136F184000A02055 /* IconPageView.h */; };
@@ -36,6 +36,12 @@
 		BD9CCD2F136F184000A02055 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD9CCD25136F184000A02055 /* HomeViewController.m */; };
 		BD9CCD30136F184000A02055 /* IconModel.h in Headers */ = {isa = PBXBuildFile; fileRef = BD9CCD26136F184000A02055 /* IconModel.h */; };
 		BD9CCD31136F184000A02055 /* IconModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BD9CCD27136F184000A02055 /* IconModel.m */; };
+		BDCF5316138341B1009DE400 /* PrefixUrlHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = BDCF5314138341B1009DE400 /* PrefixUrlHandler.h */; };
+		BDCF5317138341B1009DE400 /* PrefixUrlHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = BDCF5315138341B1009DE400 /* PrefixUrlHandler.m */; };
+		BDCF5318138341B1009DE400 /* PrefixUrlHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = BDCF5315138341B1009DE400 /* PrefixUrlHandler.m */; };
+		BDCF531B13837889009DE400 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BDCF531A13837889009DE400 /* UIKit.framework */; };
+		BDCF531E13838393009DE400 /* UrlNavigationController.h in Headers */ = {isa = PBXBuildFile; fileRef = BDCF531C13838393009DE400 /* UrlNavigationController.h */; };
+		BDCF531F13838393009DE400 /* UrlNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDCF531D13838393009DE400 /* UrlNavigationController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,8 +63,8 @@
 		BD02741F13493BCF007AF649 /* UnittUIWidgetsTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "UnittUIWidgetsTests-Info.plist"; sourceTree = "<group>"; };
 		BD02742113493BCF007AF649 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		BD02742313493BCF007AF649 /* UnittUIWidgetsTests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UnittUIWidgetsTests-Prefix.pch"; sourceTree = "<group>"; };
-		BD02742413493BCF007AF649 /* UnittUIWidgetsTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UnittUIWidgetsTests.h; sourceTree = "<group>"; };
-		BD02742613493BCF007AF649 /* UnittUIWidgetsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UnittUIWidgetsTests.m; sourceTree = "<group>"; };
+		BD02742413493BCF007AF649 /* UrlManagerTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UrlManagerTests.h; sourceTree = "<group>"; };
+		BD02742613493BCF007AF649 /* UrlManagerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UrlManagerTests.m; sourceTree = "<group>"; };
 		BD02743013493C05007AF649 /* GlossyButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlossyButton.h; sourceTree = "<group>"; };
 		BD02743113493C05007AF649 /* GlossyButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GlossyButton.m; sourceTree = "<group>"; };
 		BD02743213493C05007AF649 /* GlossyGradientFill.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlossyGradientFill.h; sourceTree = "<group>"; };
@@ -68,6 +74,8 @@
 		BD3DBA261354024900DD4C78 /* GradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GradientView.h; sourceTree = "<group>"; };
 		BD3DBA271354024900DD4C78 /* GradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GradientView.m; sourceTree = "<group>"; };
 		BD3DBA3F13540DBE00DD4C78 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		BD84ECAB1382148800CD2ED6 /* UrlManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UrlManager.h; sourceTree = "<group>"; };
+		BD84ECAC1382148800CD2ED6 /* UrlManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UrlManager.m; sourceTree = "<group>"; };
 		BD9CCD1E136F184000A02055 /* HomeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeModel.h; sourceTree = "<group>"; };
 		BD9CCD1F136F184000A02055 /* HomeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeModel.m; sourceTree = "<group>"; };
 		BD9CCD20136F184000A02055 /* IconPageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IconPageView.h; sourceTree = "<group>"; };
@@ -78,6 +86,11 @@
 		BD9CCD25136F184000A02055 /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
 		BD9CCD26136F184000A02055 /* IconModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IconModel.h; sourceTree = "<group>"; };
 		BD9CCD27136F184000A02055 /* IconModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IconModel.m; sourceTree = "<group>"; };
+		BDCF5314138341B1009DE400 /* PrefixUrlHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrefixUrlHandler.h; sourceTree = "<group>"; };
+		BDCF5315138341B1009DE400 /* PrefixUrlHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrefixUrlHandler.m; sourceTree = "<group>"; };
+		BDCF531A13837889009DE400 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		BDCF531C13838393009DE400 /* UrlNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UrlNavigationController.h; sourceTree = "<group>"; };
+		BDCF531D13838393009DE400 /* UrlNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UrlNavigationController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +109,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BDCF531B13837889009DE400 /* UIKit.framework in Frameworks */,
 				BD02741713493BCF007AF649 /* Foundation.framework in Frameworks */,
 				BD02741913493BCF007AF649 /* CoreGraphics.framework in Frameworks */,
 				BD02741C13493BCF007AF649 /* libUnittUIWidgets.a in Frameworks */,
@@ -127,6 +141,7 @@
 		BD02740913493BCF007AF649 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BDCF531A13837889009DE400 /* UIKit.framework */,
 				BD3DBA3F13540DBE00DD4C78 /* CoreGraphics.framework */,
 				BD02743B13493E4A007AF649 /* UIKit.framework */,
 				BD02743A13493E4A007AF649 /* QuartzCore.framework */,
@@ -139,6 +154,7 @@
 		BD02740C13493BCF007AF649 /* UnittUIWidgets */ = {
 			isa = PBXGroup;
 			children = (
+				BDB3BB671380ADF70098CB61 /* Url */,
 				BD9CCD33136F198000A02055 /* Home */,
 				BD02743013493C05007AF649 /* GlossyButton.h */,
 				BD02743113493C05007AF649 /* GlossyButton.m */,
@@ -162,8 +178,8 @@
 		BD02741D13493BCF007AF649 /* UnittUIWidgetsTests */ = {
 			isa = PBXGroup;
 			children = (
-				BD02742413493BCF007AF649 /* UnittUIWidgetsTests.h */,
-				BD02742613493BCF007AF649 /* UnittUIWidgetsTests.m */,
+				BD02742413493BCF007AF649 /* UrlManagerTests.h */,
+				BD02742613493BCF007AF649 /* UrlManagerTests.m */,
 				BD02741E13493BCF007AF649 /* Supporting Files */,
 			);
 			path = UnittUIWidgetsTests;
@@ -196,6 +212,19 @@
 			name = Home;
 			sourceTree = "<group>";
 		};
+		BDB3BB671380ADF70098CB61 /* Url */ = {
+			isa = PBXGroup;
+			children = (
+				BD84ECAB1382148800CD2ED6 /* UrlManager.h */,
+				BD84ECAC1382148800CD2ED6 /* UrlManager.m */,
+				BDCF5314138341B1009DE400 /* PrefixUrlHandler.h */,
+				BDCF5315138341B1009DE400 /* PrefixUrlHandler.m */,
+				BDCF531C13838393009DE400 /* UrlNavigationController.h */,
+				BDCF531D13838393009DE400 /* UrlNavigationController.m */,
+			);
+			name = Url;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -211,6 +240,9 @@
 				BD9CCD2C136F184000A02055 /* HomeView.h in Headers */,
 				BD9CCD2E136F184000A02055 /* HomeViewController.h in Headers */,
 				BD9CCD30136F184000A02055 /* IconModel.h in Headers */,
+				BD84ECAD1382148800CD2ED6 /* UrlManager.h in Headers */,
+				BDCF5316138341B1009DE400 /* PrefixUrlHandler.h in Headers */,
+				BDCF531E13838393009DE400 /* UrlNavigationController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -282,7 +314,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BD02742213493BCF007AF649 /* InfoPlist.strings in Resources */,
-				BD02742513493BCF007AF649 /* UnittUIWidgetsTests.h in Resources */,
+				BD02742513493BCF007AF649 /* UrlManagerTests.h in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -317,6 +349,9 @@
 				BD9CCD2D136F184000A02055 /* HomeView.m in Sources */,
 				BD9CCD2F136F184000A02055 /* HomeViewController.m in Sources */,
 				BD9CCD31136F184000A02055 /* IconModel.m in Sources */,
+				BD84ECAE1382148800CD2ED6 /* UrlManager.m in Sources */,
+				BDCF5317138341B1009DE400 /* PrefixUrlHandler.m in Sources */,
+				BDCF531F13838393009DE400 /* UrlNavigationController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -324,10 +359,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BD02742713493BCF007AF649 /* UnittUIWidgetsTests.m in Sources */,
-				BD02743613493C05007AF649 /* GlossyButton.m in Sources */,
-				BD02743913493C05007AF649 /* GlossyGradientFill.m in Sources */,
-				BD3DBA2A1354024900DD4C78 /* GradientView.m in Sources */,
+				BD02742713493BCF007AF649 /* UrlManagerTests.m in Sources */,
+				BD84ECAF1382148800CD2ED6 /* UrlManager.m in Sources */,
+				BDCF5318138341B1009DE400 /* PrefixUrlHandler.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
