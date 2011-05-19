@@ -25,7 +25,38 @@
 
 @interface UrlNavigationController : UINavigationController 
 {
-    
+@private
+    UrlManager* urlManager;
 }
+
+/**
+ * Returns the current URL value of the top most controller. Returns nil if the
+ * top controller is nil or does not conform to the UIViewControllerHasUrl protocol. 
+ */
+@property (nonatomic,readonly) NSURL* topUrl;
+
+
+/**
+ * Returns an array of all controllers that conform to the UIViewControllerHasUrl 
+ * protocol. If none are found on the stack, the array will be empty. Typically used
+ * to persist the state of this navigation controller for restoration later.
+ */
+@property (nonatomic,readonly) NSArray* urls;
+
+/**
+ * The UrlManager used by this controller to handle the specified urls.
+ */
+@property (retain) UrlManager* urlManager;
+
+/**
+ * Used to push a UIViewController that conforms to the UIViewControllerHasUrl protocol
+ * onto the stack of managed controllers. Returns true if the url can be handled and
+ * a UIViewController was successfully created and pushed onto the stack.
+ */
+- (BOOL) pushUrl:(NSURL*) aUrl animated:(BOOL) aAnimated;
+
++ (id) controllerWithUrlManager: (UrlManager*) aUrlManager;
+- (id) initWithUrlManager: (UrlManager*) aUrlManager;
+- (id) init;
 
 @end

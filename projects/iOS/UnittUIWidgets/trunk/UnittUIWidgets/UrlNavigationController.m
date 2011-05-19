@@ -23,4 +23,81 @@
 
 @implementation UrlNavigationController
 
+@synthesize urlManager;
+
+#pragma mark Properties
+- (NSURL*) getUrlFromController:(UIViewController*) aViewController
+{
+    if (aViewController && [aViewController conformsToProtocol:@protocol(UIViewControllerHasUrl)])
+    {
+        return [(UIViewController<UIViewControllerHasUrl>*) aViewController currentUrl];
+    }
+    
+    return nil;
+}
+
+- (NSURL*) topUrl
+{
+    return [self getUrlFromController:self.topViewController];
+}        
+
+- (NSArray*) urls
+{
+    NSMutableArray* results = [NSMutableArray array];
+    for (UIViewController* controller in self.viewControllers) 
+    {
+        NSURL* url = [self getUrlFromController:controller];
+        if (url)
+        {
+            [results addObject:url];
+        }
+    }
+    return results;
+}
+
+
+#pragma mark Url Logic
+- (BOOL) pushUrl:(NSURL*) aUrl animated:(BOOL) aAnimated
+{
+    if (self.urlManager)
+    {
+        UIViewController<UIViewControllerHasUrl>* controller = [self.urlManager handleUrl: aUrl];
+        if (controller)
+        {
+            [self pushViewController:controller animated:aAnimated];
+            return YES;
+        }
+    }
+    
+    return NO;
+}
+
+#pragma mark Lifecycle
++ (id) controllerWithUrlManager: (UrlManager*) aUrlManager
+{
+    return [[[UrlNavigationController alloc] initWithUrlManager:aUrlManager] autorelease];
+}
+
+- (id) initWithUrlManager: (UrlManager*) aUrlManager
+{
+    self = [super init];
+    if (self) 
+    {
+        self.urlManager = aUrlManager;
+    }
+    return self;
+}
+
+- (id) init 
+{
+    return [super init];
+}
+
+- (void) dealloc 
+{
+    self.urlManager = nil;
+    
+    [super dealloc];
+}
+
 @end
