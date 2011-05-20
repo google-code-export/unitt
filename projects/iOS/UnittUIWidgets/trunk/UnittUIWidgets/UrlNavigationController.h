@@ -55,6 +55,13 @@
  */
 - (BOOL) pushUrl:(NSURL*) aUrl animated:(BOOL) aAnimated;
 
+/**
+ * Used to push an array of UIViewControllers that conforms to the UIViewControllerHasUrl
+ * protocol onto the stack of managed controllers. Returns true if there are urls that 
+ * can be handled and a UIViewController was successfully created and pushed onto the stack.
+ */
+- (BOOL) pushUrls:(NSArray*) aUrls animated:(BOOL) aAnimated;
+
 + (id) controllerWithUrlManager: (UrlManager*) aUrlManager;
 - (id) initWithUrlManager: (UrlManager*) aUrlManager;
 - (id) init;

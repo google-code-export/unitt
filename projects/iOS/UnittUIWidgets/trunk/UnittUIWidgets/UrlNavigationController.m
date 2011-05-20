@@ -72,6 +72,34 @@
     return NO;
 }
 
+- (BOOL) pushUrls:(NSArray*) aUrls animated:(BOOL) aAnimated
+{
+    if (self.urlManager)
+    {
+        NSMutableArray* controllers = [NSMutableArray array];
+        
+        //grab controller for each url, if it exists
+        for (NSURL* url in aUrls) 
+        {            
+            UIViewController<UIViewControllerHasUrl>* controller = [self.urlManager handleUrl: url];
+            if (controller)
+            {
+                [controllers addObject:controller];
+            }
+        }
+        
+        //if we have a single controller - set it
+        if ([controllers lastObject])
+        {
+            [self setViewControllers:controllers animated:aAnimated];
+            return YES;
+        }
+    }
+    
+    return NO;
+}
+
+
 #pragma mark Lifecycle
 + (id) controllerWithUrlManager: (UrlManager*) aUrlManager
 {
