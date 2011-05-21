@@ -15,7 +15,7 @@ Using the !UrlNavigationController is very straightforward. The controller is us
  * *!UrlManager:* A !UrlManager has an ordered list of !UrlHandlers. Each of these handlers are queried to see if they can handle the specified URL. The first one that can handle the specified URL is used.
  * *!UrlNavigationController:* Extends !NavigationController to allow URLs to be pushed onto the stack as UIViewControllers. 
  * *!PersistentUrlNavigationController:* Extends !UrlNavigationController to provide a mechanism for persisting the active URLs and loading them later.
- * *!UIViewControllerHasUrl:* Protocol used to designated UIViewControllers that can represent their model data or internal state as a URL. If given a URL, they are also able to load their state or model data from that URL.
+ * *UIViewControllerHasUrl:* Protocol used to designated UIViewControllers that can represent their model data or internal state as a URL. If given a URL, they are also able to load their state or model data from that URL.
 
 
 = Sample Code =
