@@ -116,11 +116,6 @@
     return self;
 }
 
-- (id) init 
-{
-    return [super init];
-}
-
 - (void) dealloc 
 {
     self.urlManager = nil;

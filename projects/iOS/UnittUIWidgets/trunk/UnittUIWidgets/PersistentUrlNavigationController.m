@@ -23,56 +23,73 @@
 
 @implementation PersistentUrlNavigationController
 
-NSString* urlPrefixKey = @"UnittPersistentUrlSet";
 
-@synthesize persistentUrlKeySuffix;
-
-#pragma mark Properties
-- (NSString*) persistentUrlKey
-{
-    return [NSString stringWithFormat:@"%@:%@", urlPrefixKey, self.persistentUrlKeySuffix];
-}
+@synthesize persistentUrlKey;
 
 
 #pragma mark Persistence
 - (void) saveActiveUrls
 {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    [prefs setValue:self.urls forKey:self.persistentUrlKey];
+    NSArray* urlsToSave = self.urls;
+    NSMutableArray* urlsWeWillSave = [NSMutableArray array];
+    if (urlsToSave && [urlsToSave lastObject])
+    {
+        if (!self.persistentUrlKey)
+        {
+            self.persistentUrlKey = @"DefaultPersistentUrlSet";
+        }
+        for (NSURL* urlToSave in urlsToSave) 
+        {
+            [urlsWeWillSave addObject:[urlToSave absoluteString]];
+        }
+        [prefs setValue:urlsWeWillSave forKey:self.persistentUrlKey];
+    }
 }
-
 
 - (void) loadActiveUrls: (BOOL) aAnimated
 {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    NSArray* activeUrls = [prefs stringArrayForKey:self.persistentUrlKey];
-    [self pushUrls:activeUrls animated:aAnimated];
+    if (!self.persistentUrlKey)
+    {
+        self.persistentUrlKey = @"DefaultPersistentUrlSet";
+    }
+    NSArray* urlsToLoad = [prefs arrayForKey:self.persistentUrlKey];
+    if (urlsToLoad && [urlsToLoad lastObject])
+    {
+        NSMutableArray* activeUrls = [NSMutableArray array];
+        for (NSString* urlValue in urlsToLoad) 
+        {
+            [activeUrls addObject:[NSURL URLWithString:urlValue]];
+        }
+        [self pushUrls:activeUrls animated:aAnimated];
+    }
 }
+
 
 #pragma mark Lifecycle
-+ (id) controllerWithUrlManager: (UrlManager*) aUrlManager
++ (id) controllerWithUrlManager: (UrlManager*) aUrlManager urlKey: (NSString*) aUrlKey
 {
-    return [[[PersistentUrlNavigationController alloc] initWithUrlManager:aUrlManager] autorelease];
+    return [[[PersistentUrlNavigationController alloc] initWithUrlManager:aUrlManager urlKey:aUrlKey] autorelease];
 }
 
-- (id) initWithUrlManager: (UrlManager*) aUrlManager
+- (id) initWithUrlManager: (UrlManager*) aUrlManager urlKey: (NSString*) aUrlKey
 {
     self = [super init];
     if (self) 
     {
         self.urlManager = aUrlManager;
+        if (aUrlKey) 
+        {
+            self.persistentUrlKey = aUrlKey;
+        }
     }
     return self;
 }
 
-- (id) init 
-{
-    return [super init];
-}
-
 - (void) dealloc 
 {
-    self.urlManager = nil;
+    self.persistentUrlKey = nil;
     
     [super dealloc];
 }

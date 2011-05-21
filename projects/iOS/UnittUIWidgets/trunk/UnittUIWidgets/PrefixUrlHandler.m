@@ -26,6 +26,9 @@
 
 @synthesize controllerClass;
 @synthesize urlPrefix;
+@synthesize useNib;
+@synthesize nibName;
+@synthesize nibBundle;
 
 
 #pragma mark UrlHandler
@@ -42,13 +45,21 @@
 
 - (UIViewController<UIViewControllerHasUrl>*) handleUrl: (NSURL*) aUrl
 {
+    UIViewController<UIViewControllerHasUrl>* controller = nil;
+    
     //if we have a controller class and can handle the url - return a new instance of the controller class
     if (self.controllerClass && [self canHandleUrl:aUrl])
     {
-        return [[self.controllerClass alloc] init];
+        if (self.useNib)
+        {
+            controller = [[self.controllerClass alloc] initWithNibName:self.nibName bundle:self.nibBundle];
+        }
+        
+        controller = [[self.controllerClass alloc] init];
+        controller.currentUrl = aUrl;
     }
     
-    return nil;
+    return controller;
 }
 
 
@@ -56,6 +67,11 @@
 + (id) handlerWithControllerClass: (Class) aControllerClass urlPrefix: (NSURL*) aUrlPrefix
 {
     return [[[PrefixUrlHandler alloc] initWithControllerClass:aControllerClass urlPrefix:aUrlPrefix] autorelease];
+}
+
++ (id) handlerWithControllerClass: (Class) aControllerClass nibName: (NSString*) aNibName nibBundle: (NSBundle*) aNibBundle urlPrefix: (NSURL*) aUrlPrefix
+{
+    return [[[PrefixUrlHandler alloc] initWithControllerClass:aControllerClass nibName:aNibName nibBundle:aNibBundle urlPrefix:aUrlPrefix] autorelease];
 }
 
 - (id) initWithControllerClass: (Class) aControllerClass urlPrefix: (NSURL*)  aUrlPrefix
@@ -69,9 +85,18 @@
     return self;
 }
 
-- (id) init 
+- (id) initWithControllerClass: (Class) aControllerClass nibName: (NSString*) aNibName nibBundle: (NSBundle*) aNibBundle urlPrefix: (NSURL*) aUrlPrefix
 {
-    return [super init];
+    self = [super init];
+    if (self) 
+    {
+        self.controllerClass = aControllerClass;
+        self.useNib = true;
+        self.nibName = aNibName;
+        self.nibBundle = aNibBundle;
+        self.urlPrefix = aUrlPrefix;
+    }
+    return self;
 }
 
 - (void) dealloc 

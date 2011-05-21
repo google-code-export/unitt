@@ -31,7 +31,26 @@
 @private
     Class controllerClass;
     NSURL* urlPrefix;
+    BOOL useNib;
+    NSString* nibName;
+    NSBundle* nibBundle;
 }
+
+/**
+ * If true, init new instances of the controller with the nibName & nibBundle
+ * properties. If false, simply init.
+ */
+@property (assign) BOOL useNib;
+
+/**
+ * Name of the NIB to load. Can be nil.
+ */
+@property (copy) NSString* nibName;
+
+/**
+ * Bundle to use when loading the NIB. Can be nil.
+ */
+@property (retain) NSBundle* nibBundle;
 
 /**
  * Class of the UIViewControllerHasUrl to return when handling a url.
@@ -44,7 +63,8 @@
 @property (retain) NSURL* urlPrefix;
 
 + (id) handlerWithControllerClass: (Class) aControllerClass urlPrefix: (NSURL*) aUrlPrefix;
++ (id) handlerWithControllerClass: (Class) aControllerClass nibName: (NSString*) aNibName nibBundle: (NSBundle*) aNibBundle urlPrefix: (NSURL*) aUrlPrefix; //sets useNib to true
 - (id) initWithControllerClass: (Class) aControllerClass urlPrefix: (NSURL*) aUrlPrefix;
-- (id) init;
+- (id) initWithControllerClass: (Class) aControllerClass nibName: (NSString*) aNibName nibBundle: (NSBundle*) aNibBundle urlPrefix: (NSURL*) aUrlPrefix; //sets useNib to true
 
 @end

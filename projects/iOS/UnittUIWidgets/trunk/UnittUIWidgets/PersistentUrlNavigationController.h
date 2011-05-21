@@ -25,17 +25,29 @@
 @interface PersistentUrlNavigationController : UrlNavigationController 
 {
 @private
-    NSString* persistentUrlKeySuffix;
+    NSString* persistentUrlKey;
 }
 
-@property (nonatomic,readonly) NSString* persistentUrlKey;
-@property (copy) NSString* persistentUrlKeySuffix;
+/**
+ * Key used to save/load the active urls in NSUserDefaults. If none is provided a
+ * default constant will be used.
+ */
+@property (copy) NSString* persistentUrlKey;
 
+/**
+ * Saves the absolute urls returned by each of the controllers in the urls
+ * property to the NSUserDefaults.
+ */
 - (void) saveActiveUrls;
+
+/**
+ * Loads the urls saved in NSUserDefaults and pushes the entire array of 
+ * controllers onto the stack. The last one will be animated if so specified.
+ */
 - (void) loadActiveUrls: (BOOL) aAnimated;
 
-+ (id) controllerWithUrlManager: (UrlManager*) aUrlManager;
-- (id) initWithUrlManager: (UrlManager*) aUrlManager;
-- (id) init;
+
++ (id) controllerWithUrlManager: (UrlManager*) aUrlManager urlKey: (NSString*) aUrlKey;
+- (id) initWithUrlManager: (UrlManager*) aUrlManager urlKey: (NSString*) aUrlKey;
 
 @end

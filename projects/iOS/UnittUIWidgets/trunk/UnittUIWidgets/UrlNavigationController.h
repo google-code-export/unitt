@@ -64,6 +64,5 @@
 
 + (id) controllerWithUrlManager: (UrlManager*) aUrlManager;
 - (id) initWithUrlManager: (UrlManager*) aUrlManager;
-- (id) init;
 
 @end
