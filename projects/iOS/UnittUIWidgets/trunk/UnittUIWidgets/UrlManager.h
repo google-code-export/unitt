@@ -82,6 +82,5 @@
 
 + (id) managerWithUrlHandlers: (NSArray*) aUrlHandlers;
 - (id) initWithUrlHandlers: (NSArray*) aUrlHandlers;
-- (id) init;
 
 @end
