@@ -18,6 +18,12 @@ The UnitT UI Widgets library is a collection of widgets that you can use in your
 
 The Home View Controller class is meant to give you a scrollable, rotatable view of a large icon grid to open subviews. This is typically placed inside a navigation view controller. It is very customizable and provides a toolbar, if so desired. You can specify an image, label, and UIViewController individually for each item (our example above uses the same image for all items). For more information, see [UIWidgetsHVC Using the Home View Controller].
 
+=== Url Navigation Controller ===
+
+[http://unitt.googlecode.com/svn/wiki/urlNavigator.png]
+
+The Url Navigation Controller class is meant to give you a navigation controller that can create and push UIViewControllers on itself from a specified URL. There is a persistent variant that also allows you to save the state of your application views and restore them on launch. For more information, see [UIWidgetsUrlNav Using the Url Navigation Controller].
+
 === Glossy Button ===
 
 [http://unitt.googlecode.com/svn/wiki/glossyButtons.png]
