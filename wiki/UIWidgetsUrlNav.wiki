@@ -19,4 +19,7 @@ Using the !UrlNavigationController is very straightforward. The controller is us
 
 
 = Sample Code =
+
+For our sample, we are going to create the screen above. A simple view whose model has only one value, a number. The UI contains only one button. When pressed this button will push a new view on the stack with a model value one higher. We will use a sample url of "test://number/numbervalue". For example, a view whose model data is the number 5, would have a URL of "test://number/5".  Pressing its button, would push a controller onto the stack with a model value of 6. 
+
 needs completion...
