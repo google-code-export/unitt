@@ -105,6 +105,7 @@
     self = [super init];
     if (self) 
     {
+        //make sure to use the right url, it must point to your specific web socket endpoint or the handshake will fail
         ws = [[WebSocket webSocketWithURLString:@"ws://localhost:8080/testws/ws/test" delegate:self origin:nil protocols:nil tlsSettings:nil verifyAccept:true] retain];
     }
     return self;
