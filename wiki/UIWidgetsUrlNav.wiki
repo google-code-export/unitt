@@ -22,4 +22,69 @@ Using the !UrlNavigationController is very straightforward. The controller is us
 
 For our sample, we are going to create the screen above. A simple view whose model has only one value, a number. The UI contains only one button. When pressed this button will push a new view on the stack with a model value one higher. We will use a sample url of "test://number/numbervalue". For example, a view whose model data is the number 5, would have a URL of "test://number/5".  Pressing its button, would push a controller onto the stack with a model value of 6. 
 
+Let's create the button controller. Make sure it conforms to the !UIViewControllerHasUrl protocol...
+
+*NumberedButtonController.h*
+{{{
+@property (assign) int number; //our model value
+@property (retain) IBOutlet UIButton* button; //the button used to launch a new url
+@property (nonatomic,readonly) UrlNavigationController* urlNavigationController; //convenience method to handle nils and cast the navigationController to a UrlNavigationController
+
+- (IBAction) onPush: (UIButton*) aButton; //action used to push a new url onto the navigation controller
+}}}
+
+*NumberedButtonController.m*
+{{{
+
+@synthesize number;
+@synthesize button;
+
+- (NSURL*) currentUrl
+{
+    return [NSURL URLWithString:[NSString stringWithFormat:@"test://number/%i", self.number + 1]];
+}
+
+- (void) setCurrentUrl:(NSURL *)aCurrentUrl
+{
+    NSString* numberString = [[aCurrentUrl absoluteString] substringFromIndex:[@"test://number/" length]];
+    self.number = [numberString intValue];
+}
+
+- (UrlNavigationController*) urlNavigationController
+{    
+    if (self.navigationController && [self.navigationController isKindOfClass:[UrlNavigationController class]]) 
+    {
+        return (UrlNavigationController*) self.navigationController;
+    }
+    
+    return nil;
+}
+
+- (IBAction) onPush: (UIButton*) aButton
+{
+    if (self.urlNavigationController)
+    {
+        [self.urlNavigationController pushUrl:[NSURL URLWithString:[NSString stringWithFormat:@"test://number/%i", self.number + 1]] animated:YES];
+    }
+}
+
+#pragma mark - View lifecycle
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    // Do any additional setup after loading the view from its nib.
+    self.button.titleLabel.text = [NSString stringWithFormat:@"%i", self.number + 1];
+    self.title = [NSString stringWithFormat:@"%i", self.number];
+}
+
+- (void)viewDidUnload
+{
+    [super viewDidUnload];
+    // Release any retained subviews of the main view.
+    self.button = nil;
+}
+}}}
+
+Now let's configure our url navigation controller. If you are loading the controller from a nib, make sure to change its class to !UrlNavigationController.
 needs completion...
