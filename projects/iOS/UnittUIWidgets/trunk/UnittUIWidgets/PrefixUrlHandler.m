@@ -59,7 +59,7 @@
         controller.currentUrl = aUrl;
     }
     
-    return controller;
+    return [controller autorelease];
 }
 
 

@@ -47,7 +47,8 @@
 
 /**
  * Returns a new instance of a UIViewControllerHasUrl configured with the specified
- * URL. Will return nil if it is unable to handle the URL.
+ * URL. Will return nil if it is unable to handle the URL. The instance returned will
+ * have a retain count of 0.
  */
 - (UIViewController<UIViewControllerHasUrl>*) handleUrl: (NSURL*) aUrl;
 
