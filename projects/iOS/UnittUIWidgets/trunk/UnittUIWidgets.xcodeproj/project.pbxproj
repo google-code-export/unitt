@@ -20,6 +20,8 @@
 		BD02743813493C05007AF649 /* GlossyGradientFill.m in Sources */ = {isa = PBXBuildFile; fileRef = BD02743313493C05007AF649 /* GlossyGradientFill.m */; };
 		BD02743C13493E4A007AF649 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD02743A13493E4A007AF649 /* QuartzCore.framework */; };
 		BD02743D13493E4A007AF649 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD02743B13493E4A007AF649 /* UIKit.framework */; };
+		BD3D14F21385E1710026E42F /* PersistentUrlNavigationController.h in Headers */ = {isa = PBXBuildFile; fileRef = BD3D14F01385E1710026E42F /* PersistentUrlNavigationController.h */; };
+		BD3D14F31385E1710026E42F /* PersistentUrlNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD3D14F11385E1710026E42F /* PersistentUrlNavigationController.m */; };
 		BD3DBA281354024900DD4C78 /* GradientView.h in Headers */ = {isa = PBXBuildFile; fileRef = BD3DBA261354024900DD4C78 /* GradientView.h */; };
 		BD3DBA291354024900DD4C78 /* GradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = BD3DBA271354024900DD4C78 /* GradientView.m */; };
 		BD3DBA4013540DBE00DD4C78 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD3DBA3F13540DBE00DD4C78 /* CoreGraphics.framework */; };
@@ -71,6 +73,8 @@
 		BD02743313493C05007AF649 /* GlossyGradientFill.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GlossyGradientFill.m; sourceTree = "<group>"; };
 		BD02743A13493E4A007AF649 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		BD02743B13493E4A007AF649 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		BD3D14F01385E1710026E42F /* PersistentUrlNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersistentUrlNavigationController.h; sourceTree = "<group>"; };
+		BD3D14F11385E1710026E42F /* PersistentUrlNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersistentUrlNavigationController.m; sourceTree = "<group>"; };
 		BD3DBA261354024900DD4C78 /* GradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GradientView.h; sourceTree = "<group>"; };
 		BD3DBA271354024900DD4C78 /* GradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GradientView.m; sourceTree = "<group>"; };
 		BD3DBA3F13540DBE00DD4C78 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -221,6 +225,8 @@
 				BDCF5315138341B1009DE400 /* PrefixUrlHandler.m */,
 				BDCF531C13838393009DE400 /* UrlNavigationController.h */,
 				BDCF531D13838393009DE400 /* UrlNavigationController.m */,
+				BD3D14F01385E1710026E42F /* PersistentUrlNavigationController.h */,
+				BD3D14F11385E1710026E42F /* PersistentUrlNavigationController.m */,
 			);
 			name = Url;
 			sourceTree = "<group>";
@@ -243,6 +249,7 @@
 				BD84ECAD1382148800CD2ED6 /* UrlManager.h in Headers */,
 				BDCF5316138341B1009DE400 /* PrefixUrlHandler.h in Headers */,
 				BDCF531E13838393009DE400 /* UrlNavigationController.h in Headers */,
+				BD3D14F21385E1710026E42F /* PersistentUrlNavigationController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -352,6 +359,7 @@
 				BD84ECAE1382148800CD2ED6 /* UrlManager.m in Sources */,
 				BDCF5317138341B1009DE400 /* PrefixUrlHandler.m in Sources */,
 				BDCF531F13838393009DE400 /* UrlNavigationController.m in Sources */,
+				BD3D14F31385E1710026E42F /* PersistentUrlNavigationController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -391,7 +399,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CURRENT_PROJECT_VERSION = 1.0;
+				CURRENT_PROJECT_VERSION = 1.2;
 				DYLIB_COMPATIBILITY_VERSION = "";
 				DYLIB_CURRENT_VERSION = "";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -415,7 +423,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CURRENT_PROJECT_VERSION = 1.0;
+				CURRENT_PROJECT_VERSION = 1.2;
 				DYLIB_COMPATIBILITY_VERSION = "";
 				DYLIB_CURRENT_VERSION = "";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -436,6 +444,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CURRENT_PROJECT_VERSION = 1.2;
 				DSTROOT = /tmp/UnittUIWidgets.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "UnittUIWidgets/UnittUIWidgets-Prefix.pch";
@@ -448,6 +457,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CURRENT_PROJECT_VERSION = 1.2;
 				DSTROOT = /tmp/UnittUIWidgets.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "UnittUIWidgets/UnittUIWidgets-Prefix.pch";
