@@ -43,8 +43,9 @@
 /**
  * Loads the urls saved in NSUserDefaults and pushes the entire array of 
  * controllers onto the stack. The last one will be animated if so specified.
+ * Returns true if any URLs were successfully loaded onto the stack.
  */
-- (void) loadActiveUrls: (BOOL) aAnimated;
+- (BOOL) loadActiveUrls: (BOOL) aAnimated;
 
 
 + (id) controllerWithUrlManager: (UrlManager*) aUrlManager urlKey: (NSString*) aUrlKey;

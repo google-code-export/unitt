@@ -47,7 +47,7 @@
     }
 }
 
-- (void) loadActiveUrls: (BOOL) aAnimated
+- (BOOL) loadActiveUrls: (BOOL) aAnimated
 {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     if (!self.persistentUrlKey)
@@ -62,8 +62,10 @@
         {
             [activeUrls addObject:[NSURL URLWithString:urlValue]];
         }
-        [self pushUrls:activeUrls animated:aAnimated];
+        return [self pushUrls:activeUrls animated:aAnimated];
     }
+    
+    return NO;
 }
 
 
