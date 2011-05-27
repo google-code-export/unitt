@@ -82,6 +82,21 @@ Let's add some code to our getHomeViewController method to add a notification it
     hvc.toolbarItems = tbItems;
 }}}
 
+= Add URL Items to the Home Screen =
+
+If you are using a !UrlNavigationController in your project, you can have the items on the home screen open URLs instead. The !HomeViewController will check to make sure that your navigation controller is a, or inherits from, a !UrlNavigationController before using a URL. However, to do so, simply change your code that adds items to the home screen to look something like this...
+{{{
+    //add items to home screen using the button.png in our project as each icon
+    [hvc addItem:@"button1" url:[NSURL URLWithString:@"myapp://myurl/button/1"] icon:[UIImage imageNamed:@"button"] label:@"Button #1"];
+    [hvc addItem:@"button2" url:[NSURL URLWithString:@"myapp://myurl/button/2"] icon:[UIImage imageNamed:@"button"] label:@"Button #2"];
+    [hvc addItem:@"button3" url:[NSURL URLWithString:@"myapp://myurl/button/3"] icon:[UIImage imageNamed:@"button"] label:@"Button #3"];
+    [hvc addItem:@"button4" url:[NSURL URLWithString:@"myapp://myurl/button/4"] icon:[UIImage imageNamed:@"button"] label:@"Button #4"];
+    [hvc addItem:@"button5" url:[NSURL URLWithString:@"myapp://myurl/button/5"] icon:[UIImage imageNamed:@"button"] label:@"Button #5"];
+    [hvc addItem:@"button6" url:[NSURL URLWithString:@"myapp://myurl/button/6"] icon:[UIImage imageNamed:@"button"] label:@"Button #6"];
+    [hvc addItem:@"button7" url:[NSURL URLWithString:@"myapp://myurl/button/7"] icon:[UIImage imageNamed:@"button"] label:@"Button #7"];
+}}}
+For more information on !UrlNavigationController, see [UIWidgetsUrlNav Using the Url Navigation Controller].
+
 = Customizing Your Home View Controller =
 
 There are factory methods in each of the various view classes that you can extend to customize or replace the default UIViews used to construct each of these items. It should be as simple as extending !HomeViewController and implementing your own factory methods.
