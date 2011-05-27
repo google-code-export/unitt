@@ -25,12 +25,13 @@
 
 @synthesize key;
 @synthesize viewController;
+@synthesize url;
 @synthesize labelText;
 @synthesize iconImage;
 
 
 #pragma mark Lifecycle
-+ (id) iconModelWithKey: (NSString*) aKey controller: (UIViewController*) aController icon: (UIImage*) aIcon label: (NSString*) aLabel
++ (id) iconModelWithKey:(NSString*) aKey controller:(UIViewController*) aController icon:(UIImage*) aIcon label:(NSString*) aLabel
 {
     IconModel* value = [[IconModel alloc] init];
     
@@ -42,10 +43,23 @@
     return [value autorelease];
 }
 
++ (id) iconModelWithKey:(NSString*) aKey url:(NSURL*) aUrl icon:(UIImage*) aIcon label:(NSString*) aLabel
+{
+    IconModel* value = [[IconModel alloc] init];
+    
+    value.key = aKey;
+    value.url = aUrl;
+    value.iconImage = aIcon;
+    value.labelText = aLabel;
+    
+    return [value autorelease];
+}
+
 - (void)dealloc 
 {
     [key release];
     [viewController release];
+    [url release];
     [labelText release];
     [iconImage release];
     [super dealloc];

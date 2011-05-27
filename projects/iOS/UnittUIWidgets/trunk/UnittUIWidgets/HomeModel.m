@@ -57,6 +57,28 @@
     }
 }
 
+- (void) addItem: (NSString*) aKey url: (NSURL*) aUrl icon: (UIImage*) aIcon label: (NSString*) aLabelText
+{
+    //if params are valid, proceed
+    if (aKey && aUrl && aIcon && aLabelText)
+    {
+        //verify we don't already have this key
+        for (IconModel* item in iconModels) 
+        {
+            if (item)
+            {
+                if ([aKey isEqualToString:item.key])
+                {
+                    return;
+                }
+            }
+        }
+        
+        //add to models
+        [iconModels addObject:[IconModel iconModelWithKey:aKey url:aUrl icon:aIcon label:aLabelText]];
+    }
+}
+
 - (void) removeItem: (NSString*) aKey
 {
     //if params are valid, proceed

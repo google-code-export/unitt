@@ -26,6 +26,7 @@
 {
 @private 
     UIViewController* viewController;
+    NSURL* url;
     NSString* labelText;
     NSString* key;
     UIImage* iconImage;
@@ -37,9 +38,18 @@
 @property (copy) NSString* key;
 
 /**
- * UIViewController to push into the view when this item is selected.
+ * UIViewController to push into the view when this item is selected. This
+ * property will not be used if the url property is a non-nil value and the
+ * managing controller knows how to handle a URL.
  */
 @property (retain) UIViewController* viewController;
+
+/**
+ * URL to push onto the UrlNavigationController when the item is selected. 
+ * If this property is a non-nil value, the controller property will be
+ * ignored if the managing controller knows how to handle a URL.
+ */
+@property (retain) NSURL* url;
 
 /**
  * Label of the item in the home view.
@@ -52,6 +62,7 @@
 @property (retain) UIImage* iconImage;
 
 
-+ (id) iconModelWithKey: (NSString*) aKey controller: (UIViewController*) aController icon: (UIImage*) aIcon label: (NSString*) aLabel;
++ (id) iconModelWithKey:(NSString*) aKey controller:(UIViewController*) aController icon:(UIImage*) aIcon label:(NSString*) aLabel;
++ (id) iconModelWithKey:(NSString*) aKey url:(NSURL*) aUrl icon:(UIImage*) aIcon label:(NSString*) aLabel;
 
 @end

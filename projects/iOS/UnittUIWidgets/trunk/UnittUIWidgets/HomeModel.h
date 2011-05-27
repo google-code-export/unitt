@@ -39,6 +39,11 @@
 - (void) addItem: (NSString*) aKey controller: (UIViewController*) aController icon: (UIImage*) aIcon label: (NSString*) aLabelText;
 
 /**
+ * Adds an item to the model. The key must be unique.
+ **/
+- (void) addItem:(NSString*) aKey url:(NSURL*) aUrl icon:(UIImage*) aIcon label:(NSString*) aLabelText;
+
+/**
  * Removes an item from the model.
  */
 - (void) removeItem: (NSString*) aKey;

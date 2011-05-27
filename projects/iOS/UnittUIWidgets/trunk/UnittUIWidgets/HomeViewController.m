@@ -20,6 +20,7 @@
 
 #import "HomeViewController.h"
 #import "IconModel.h"
+#import "UrlNavigationController.h"
 
 
 @interface HomeViewController()
@@ -76,6 +77,13 @@
     [self handleModelChange];
 }
 
+- (void) addItem: (NSString*) aKey url: (NSURL*) aUrl icon: (UIImage*) aIcon label: (NSString*) aLabelText
+{        
+    //add to model
+    [self.model addItem:aKey url:aUrl icon:aIcon label:aLabelText];
+    [self handleModelChange];
+}
+
 - (void) removeItem: (NSString*) aKey
 {
     //add to model
@@ -97,6 +105,18 @@
             {
                 @try
                 {
+                    //if it has a url and we can handle it, use that
+                    if (item.url)
+                    {
+                        if ([self.navigationController isKindOfClass:[UrlNavigationController class]])
+                        {
+                            UrlNavigationController* urlNav = (UrlNavigationController*) self.navigationController;
+                            [urlNav pushUrl:item.url animated:YES];
+                            return;
+                        }
+                    }
+                    
+                    //push controller
                     [self.navigationController pushViewController:item.viewController animated:YES];
                 }
                 @catch (NSException* e)

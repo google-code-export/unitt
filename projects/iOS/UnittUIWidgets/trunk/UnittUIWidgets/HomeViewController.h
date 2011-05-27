@@ -39,10 +39,11 @@
 }
 
 
-- (void) addItem: (NSString*) aKey controller: (UIViewController*) aController icon: (UIImage*) aIcon label: (NSString*) aLabelText;
-- (void) removeItem: (NSString*) aKey;
+- (void) addItem:(NSString*) aKey controller:(UIViewController*) aController icon:(UIImage*) aIcon label:(NSString*) aLabelText;
+- (void) addItem:(NSString*) aKey url:(NSURL*) aUrl icon:(UIImage*) aIcon label:(NSString*) aLabelText;  //only used if your navigation controller is a UrlNavigationController
+- (void) removeItem:(NSString*) aKey;
 
 - (id) init;
-- (id) initWithToolbarItems: (NSArray*) aItems;
+- (id) initWithToolbarItems:(NSArray*) aItems;
 
 @end
