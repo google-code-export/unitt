@@ -1,20 +1,22 @@
 package com.unitt.commons.authentication;
 
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.unitt.commons.foundation.lifecycle.Initializable;
-import com.unitt.commons.identity.IdentityManager;
 import com.unitt.commons.security.Identity;
 import com.unitt.commons.security.SecurityContext;
 import com.unitt.commons.security.SecurityContextFactoryImpl;
 
+
 /**
  * Authentication service implementation
- *
+ * 
  * @author Josh Morris
  */
 public class AuthenticationImpl implements Authentication, Initializable
@@ -23,7 +25,6 @@ public class AuthenticationImpl implements Authentication, Initializable
 
     protected List<AuthenticationProvider> providers      = new ArrayList<AuthenticationProvider>();
     protected boolean                      isInitialized  = false;
-    protected IdentityManager              identityManager;
     protected SecurityContextFactory       contextFactory = new SecurityContextFactoryImpl();
 
 
@@ -45,23 +46,6 @@ public class AuthenticationImpl implements Authentication, Initializable
         providers.addAll( aProviders );
     }
 
-
-    public IdentityManager getIdentityManager()
-    {
-        return identityManager;
-    }
-
-    public void setIdentityManager( IdentityManager aIdentityManager )
-    {
-        if ( isInitialized() )
-        {
-            throw new IllegalStateException( "Cannot set identity manager after authentication manager has been initialized" );
-        }
-
-        identityManager = aIdentityManager;
-    }
-
-
     public SecurityContextFactory getContextFactory()
     {
         return contextFactory;
@@ -71,7 +55,7 @@ public class AuthenticationImpl implements Authentication, Initializable
     {
         contextFactory = aContextFactory;
     }
-    
+
 
     // lifecycle logic
     // ---------------------------------------------------------------------------
@@ -94,12 +78,15 @@ public class AuthenticationImpl implements Authentication, Initializable
     /**
      * Authenticates the user using the specified token.
      * 
-     * @param aToken there must be a provider that can handle this token
+     * @param aToken
+     *            there must be a provider that can handle this token
      * 
      * @return valid security context when successfully authenticated
      * 
-     * @throws BadCredentialsException if the credentials are not valid
-     * @throws IllegalArgumentException if no provider is found that can handle the token 
+     * @throws BadCredentialsException
+     *             if the credentials are not valid
+     * @throws IllegalArgumentException
+     *             if no provider is found that can handle the token
      */
     public SecurityContext authenticate( AuthenticationToken aToken ) throws BadCredentialsException
     {
@@ -128,7 +115,7 @@ public class AuthenticationImpl implements Authentication, Initializable
         List<Identity> secondary = new ArrayList<Identity>();
         try
         {
-            secondary.addAll( getIdentityManager().getSecondaryIdentities( aIdentity.getId(), null ) );
+            secondary.addAll( getSecondaryIdentities( aIdentity ) );
         }
         catch ( Exception e )
         {
@@ -137,5 +124,10 @@ public class AuthenticationImpl implements Authentication, Initializable
 
         // create context
         return getContextFactory().createContext( aIdentity, secondary );
+    }
+
+    protected List<Identity> getSecondaryIdentities( Identity aIdentity )
+    {
+        return Collections.emptyList();
     }
 }

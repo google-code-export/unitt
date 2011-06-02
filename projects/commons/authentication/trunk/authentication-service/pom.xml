@@ -57,12 +57,6 @@
         </dependency>
         <dependency>
             <groupId>com.unitt.commons</groupId>
-            <artifactId>identity</artifactId>
-            <version>${unitt.version}</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>com.unitt.commons</groupId>
             <artifactId>persist</artifactId>
             <version>${unitt.version}</version>
             <type>jar</type>
