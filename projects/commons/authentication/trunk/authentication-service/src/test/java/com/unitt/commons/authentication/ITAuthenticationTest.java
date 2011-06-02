@@ -16,7 +16,7 @@ import org.rioproject.cybernode.StaticCybernode;
  */
 public class ITAuthenticationTest extends ITAbstractAuthenticationTest
 {
-    protected static String         opstring = "src/main/opstring/authentication.groovy";
+    protected static String         opstring = "src/test/opstring/authentication.groovy";
     protected static Authentication service;
 
     public ITAuthenticationTest()

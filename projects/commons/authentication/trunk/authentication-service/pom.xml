@@ -179,7 +179,7 @@
                     <systemProperties>
                         <property>
                             <name>opstring</name>
-                            <value>../src/main/opstring/authentication.groovy</value>
+                            <value>../src/test/opstring/authentication.groovy</value>
                         </property>
                     </systemProperties>
                 </configuration>

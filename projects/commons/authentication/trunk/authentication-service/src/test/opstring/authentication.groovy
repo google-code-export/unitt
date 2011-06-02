@@ -2,8 +2,8 @@ deployment(name:'Authentication')
 {
     groups 'unitt'
 
-    artifact id:'service', 'com.unitt.commons:authentication:1.0.2'
-    artifact id:'service-dl', 'com.unitt.commons:authentication:dl:1.0.2'
+    artifact id:'service', 'com.unitt.commons:authentication:2.0.0-SNAPSHOT'
+    artifact id:'service-dl', 'com.unitt.commons:authentication:dl:2.0.0-SNAPSHOT'
 
     spring(name: 'Authentication', config:'com/unitt/commons/authentication/AuthenticationTest-context.xml') 
     {

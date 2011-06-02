@@ -9,8 +9,8 @@ deployment(name:'Authentication') {
 
     /* Declares the artifacts required for deployment. Note the 'dl'
      * classifier used for the 'download' jar */
-    artifact id:'service', 'com.unitt.commons.authentication:authentication-service:1.0.2'
-    artifact id:'service-dl', 'com.unitt.commons.authentication:authentication-api:1.0.2'
+    artifact id:'service', 'com.unitt.commons.authentication:authentication-service:2.0.0-SNAPSHOT'
+    artifact id:'service-dl', 'com.unitt.commons.authentication:authentication-api:2.0.0-SNAPSHOT'
 
     /*
      * Declare the service to be deployed. The number of instances deployed
