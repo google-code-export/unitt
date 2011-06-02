@@ -273,7 +273,7 @@
                         </implementation>
                         <persistenceunit>domainPersistenceUnit
                         </persistenceunit>
-                        <propertyfile>${basedir}/src/main/resources/database.properties
+                        <propertyfile>${basedir}/src/test/resources/database.properties
                         </propertyfile>
                         <export>false</export>
                         <format>true</format>
