@@ -19,7 +19,7 @@ public class TestWebSocketServlet extends WebSocketServlet
     // servlet logic
     // ---------------------------------------------------------------------------
     @Override
-    protected WebSocket doWebSocketConnect( HttpServletRequest aRequest, String aProtocol )
+    public WebSocket doWebSocketConnect( HttpServletRequest aRequest, String aProtocol )
     {
         return new TestWebSocket();
     }
