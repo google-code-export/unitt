@@ -20,7 +20,7 @@
 #import "WebSocket07.h"
 
 
-@interface MyWebSocket : NSObject <WebSocketDelegate>
+@interface MyWebSocket : NSObject <WebSocket07Delegate>
 {
 }
 
@@ -75,13 +75,13 @@
 #import "WebSocket07.h"
 
 
-@interface MyWebSocket : NSObject <WebSocketDelegate>
+@interface MyWebSocket : NSObject <WebSocket07Delegate>
 {
 @private
-    WebSocket* ws;
+    WebSocket07* ws;
 }
 
-@property (nonatomic, readonly) WebSocket* ws;
+@property (nonatomic, readonly) WebSocket07* ws;
 
 - (void) startMyWebSocket;
 
@@ -111,7 +111,7 @@
     if (self) 
     {
         //make sure to use the right url, it must point to your specific web socket endpoint or the handshake will fail
-        ws = [[WebSocket webSocketWithURLString:@"ws://localhost:8080/testws/ws/test" delegate:self origin:nil protocols:nil tlsSettings:nil verifyHandshake:true] retain];
+        ws = [[WebSocket07 webSocketWithURLString:@"ws://localhost:8080/testws/ws/test" delegate:self origin:nil protocols:nil tlsSettings:nil verifyHandshake:true] retain];
     }
     return self;
     
@@ -140,5 +140,5 @@ MyWebSocket* myWS = [[MyWebSocket alloc] init];
 
 
 = More Info =
-  * Check out the [http://code.google.com/p/unitt/source/browse/projects/iOS/UnittWebSocketClient/tags/1.0/UnittWebSocketClient/WebSocket07.h WebSocket07.h] for more information on how to use this class
+  * Check out the [http://code.google.com/p/unitt/source/browse/projects/iOS/UnittWebSocketClient/tags/2.2/UnittWebSocketClient/WebSocket07.h WebSocket07.h] for more information on how to use this class
   * For more information on web sockets, see [http://en.wikipedia.org/wiki/WebSockets Wikipedia]
