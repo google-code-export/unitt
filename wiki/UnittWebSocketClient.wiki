@@ -143,5 +143,5 @@ MyWebSocket* myWS = [[MyWebSocket alloc] init];
   * Check out the [http://code.google.com/p/unitt/source/browse/projects/iOS/UnittWebSocketClient/tags/2.2/UnittWebSocketClient/WebSocket07.h WebSocket07.h] for more information on how to use this class
   * For more information on web sockets, see [http://en.wikipedia.org/wiki/WebSockets Wikipedia]
 
-= !WebSocket v00 =
+== !WebSocket v00 ==
 !WebSocket00.h is based on an earlier specification that was not as clear on how binary messages were handled. Therefore, this class only supports UTF8 text messages, so there is only send: and didReceiveMessage: instead of the text/binary variants.
