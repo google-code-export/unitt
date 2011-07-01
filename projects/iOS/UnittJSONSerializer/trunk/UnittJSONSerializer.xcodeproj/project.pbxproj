@@ -1,0 +1,436 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		BD05B2AB139190B500372B4E /* TestTransportObject.m in Sources */ = {isa = PBXBuildFile; fileRef = BD05B2AA139190B500372B4E /* TestTransportObject.m */; };
+		BD05B2BB1391B17500372B4E /* TestSuperTransportObject.m in Sources */ = {isa = PBXBuildFile; fileRef = BD05B2BA1391B17500372B4E /* TestSuperTransportObject.m */; };
+		BD66570E138F8EDA00E6094C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD66570D138F8EDA00E6094C /* Foundation.framework */; };
+		BD665719138F8EDA00E6094C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD665718138F8EDA00E6094C /* UIKit.framework */; };
+		BD66571A138F8EDA00E6094C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD66570D138F8EDA00E6094C /* Foundation.framework */; };
+		BD66571C138F8EDA00E6094C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD66571B138F8EDA00E6094C /* CoreGraphics.framework */; };
+		BD66571F138F8EDA00E6094C /* libUnittJSONSerializer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BD66570A138F8EDA00E6094C /* libUnittJSONSerializer.a */; };
+		BD665725138F8EDA00E6094C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BD665723138F8EDA00E6094C /* InfoPlist.strings */; };
+		BD665728138F8EDA00E6094C /* UnittJSONSerializerTests.h in Resources */ = {isa = PBXBuildFile; fileRef = BD665727138F8EDA00E6094C /* UnittJSONSerializerTests.h */; };
+		BD66572A138F8EDA00E6094C /* UnittJSONSerializerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BD665729138F8EDA00E6094C /* UnittJSONSerializerTests.m */; };
+		BD665735138F901800E6094C /* JSONSerializer.h in Headers */ = {isa = PBXBuildFile; fileRef = BD665733138F901800E6094C /* JSONSerializer.h */; };
+		BD665736138F901800E6094C /* JSONSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = BD665734138F901800E6094C /* JSONSerializer.m */; };
+		BD665737138F901800E6094C /* JSONSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = BD665734138F901800E6094C /* JSONSerializer.m */; };
+		BD665742138F941C00E6094C /* JSONKit.h in Headers */ = {isa = PBXBuildFile; fileRef = BD665740138F941C00E6094C /* JSONKit.h */; };
+		BD665743138F941C00E6094C /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = BD665741138F941C00E6094C /* JSONKit.m */; };
+		BD665744138F941C00E6094C /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = BD665741138F941C00E6094C /* JSONKit.m */; };
+		BDB8F0771391FDBE00316BF7 /* JSONPropertyInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = BDB8F0751391FDBD00316BF7 /* JSONPropertyInfo.h */; };
+		BDB8F0781391FDBE00316BF7 /* JSONPropertyInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = BDB8F0761391FDBD00316BF7 /* JSONPropertyInfo.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		BD66571D138F8EDA00E6094C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BD665701138F8EDA00E6094C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BD665709138F8EDA00E6094C;
+			remoteInfo = UnittJSONSerializer;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		BD05B2A9139190B500372B4E /* TestTransportObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestTransportObject.h; sourceTree = "<group>"; };
+		BD05B2AA139190B500372B4E /* TestTransportObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestTransportObject.m; sourceTree = "<group>"; };
+		BD05B2B91391B17500372B4E /* TestSuperTransportObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestSuperTransportObject.h; sourceTree = "<group>"; };
+		BD05B2BA1391B17500372B4E /* TestSuperTransportObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestSuperTransportObject.m; sourceTree = "<group>"; };
+		BD66570A138F8EDA00E6094C /* libUnittJSONSerializer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libUnittJSONSerializer.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		BD66570D138F8EDA00E6094C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		BD665711138F8EDA00E6094C /* UnittJSONSerializer-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UnittJSONSerializer-Prefix.pch"; sourceTree = "<group>"; };
+		BD665717138F8EDA00E6094C /* UnittJSONSerializerTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UnittJSONSerializerTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		BD665718138F8EDA00E6094C /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		BD66571B138F8EDA00E6094C /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		BD665722138F8EDA00E6094C /* UnittJSONSerializerTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "UnittJSONSerializerTests-Info.plist"; sourceTree = "<group>"; };
+		BD665724138F8EDA00E6094C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		BD665726138F8EDA00E6094C /* UnittJSONSerializerTests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UnittJSONSerializerTests-Prefix.pch"; sourceTree = "<group>"; };
+		BD665727138F8EDA00E6094C /* UnittJSONSerializerTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UnittJSONSerializerTests.h; sourceTree = "<group>"; };
+		BD665729138F8EDA00E6094C /* UnittJSONSerializerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UnittJSONSerializerTests.m; sourceTree = "<group>"; };
+		BD665733138F901800E6094C /* JSONSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONSerializer.h; sourceTree = "<group>"; };
+		BD665734138F901800E6094C /* JSONSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONSerializer.m; sourceTree = "<group>"; };
+		BD665740138F941C00E6094C /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
+		BD665741138F941C00E6094C /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
+		BDB8F0751391FDBD00316BF7 /* JSONPropertyInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONPropertyInfo.h; sourceTree = "<group>"; };
+		BDB8F0761391FDBD00316BF7 /* JSONPropertyInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONPropertyInfo.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		BD665707138F8EDA00E6094C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BD66570E138F8EDA00E6094C /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BD665713138F8EDA00E6094C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BD665719138F8EDA00E6094C /* UIKit.framework in Frameworks */,
+				BD66571A138F8EDA00E6094C /* Foundation.framework in Frameworks */,
+				BD66571C138F8EDA00E6094C /* CoreGraphics.framework in Frameworks */,
+				BD66571F138F8EDA00E6094C /* libUnittJSONSerializer.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		BD6656FF138F8EDA00E6094C = {
+			isa = PBXGroup;
+			children = (
+				BD66570F138F8EDA00E6094C /* UnittJSONSerializer */,
+				BD665720138F8EDA00E6094C /* UnittJSONSerializerTests */,
+				BD66570C138F8EDA00E6094C /* Frameworks */,
+				BD66570B138F8EDA00E6094C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		BD66570B138F8EDA00E6094C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BD66570A138F8EDA00E6094C /* libUnittJSONSerializer.a */,
+				BD665717138F8EDA00E6094C /* UnittJSONSerializerTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		BD66570C138F8EDA00E6094C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BD66570D138F8EDA00E6094C /* Foundation.framework */,
+				BD665718138F8EDA00E6094C /* UIKit.framework */,
+				BD66571B138F8EDA00E6094C /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		BD66570F138F8EDA00E6094C /* UnittJSONSerializer */ = {
+			isa = PBXGroup;
+			children = (
+				BD665740138F941C00E6094C /* JSONKit.h */,
+				BD665741138F941C00E6094C /* JSONKit.m */,
+				BD665733138F901800E6094C /* JSONSerializer.h */,
+				BD665734138F901800E6094C /* JSONSerializer.m */,
+				BDB8F0751391FDBD00316BF7 /* JSONPropertyInfo.h */,
+				BDB8F0761391FDBD00316BF7 /* JSONPropertyInfo.m */,
+				BD665710138F8EDA00E6094C /* Supporting Files */,
+			);
+			path = UnittJSONSerializer;
+			sourceTree = "<group>";
+		};
+		BD665710138F8EDA00E6094C /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				BD665711138F8EDA00E6094C /* UnittJSONSerializer-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		BD665720138F8EDA00E6094C /* UnittJSONSerializerTests */ = {
+			isa = PBXGroup;
+			children = (
+				BD665727138F8EDA00E6094C /* UnittJSONSerializerTests.h */,
+				BD665729138F8EDA00E6094C /* UnittJSONSerializerTests.m */,
+				BD05B2A9139190B500372B4E /* TestTransportObject.h */,
+				BD05B2AA139190B500372B4E /* TestTransportObject.m */,
+				BD05B2B91391B17500372B4E /* TestSuperTransportObject.h */,
+				BD05B2BA1391B17500372B4E /* TestSuperTransportObject.m */,
+				BD665721138F8EDA00E6094C /* Supporting Files */,
+			);
+			path = UnittJSONSerializerTests;
+			sourceTree = "<group>";
+		};
+		BD665721138F8EDA00E6094C /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				BD665722138F8EDA00E6094C /* UnittJSONSerializerTests-Info.plist */,
+				BD665723138F8EDA00E6094C /* InfoPlist.strings */,
+				BD665726138F8EDA00E6094C /* UnittJSONSerializerTests-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		BD665708138F8EDA00E6094C /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BD665735138F901800E6094C /* JSONSerializer.h in Headers */,
+				BD665742138F941C00E6094C /* JSONKit.h in Headers */,
+				BDB8F0771391FDBE00316BF7 /* JSONPropertyInfo.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		BD665709138F8EDA00E6094C /* UnittJSONSerializer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BD66572D138F8EDA00E6094C /* Build configuration list for PBXNativeTarget "UnittJSONSerializer" */;
+			buildPhases = (
+				BD665706138F8EDA00E6094C /* Sources */,
+				BD665707138F8EDA00E6094C /* Frameworks */,
+				BD665708138F8EDA00E6094C /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = UnittJSONSerializer;
+			productName = UnittJSONSerializer;
+			productReference = BD66570A138F8EDA00E6094C /* libUnittJSONSerializer.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		BD665716138F8EDA00E6094C /* UnittJSONSerializerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BD665730138F8EDA00E6094C /* Build configuration list for PBXNativeTarget "UnittJSONSerializerTests" */;
+			buildPhases = (
+				BD665712138F8EDA00E6094C /* Sources */,
+				BD665713138F8EDA00E6094C /* Frameworks */,
+				BD665714138F8EDA00E6094C /* Resources */,
+				BD665715138F8EDA00E6094C /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BD66571E138F8EDA00E6094C /* PBXTargetDependency */,
+			);
+			name = UnittJSONSerializerTests;
+			productName = UnittJSONSerializerTests;
+			productReference = BD665717138F8EDA00E6094C /* UnittJSONSerializerTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BD665701138F8EDA00E6094C /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = BD665704138F8EDA00E6094C /* Build configuration list for PBXProject "UnittJSONSerializer" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = BD6656FF138F8EDA00E6094C;
+			productRefGroup = BD66570B138F8EDA00E6094C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				BD665709138F8EDA00E6094C /* UnittJSONSerializer */,
+				BD665716138F8EDA00E6094C /* UnittJSONSerializerTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		BD665714138F8EDA00E6094C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BD665725138F8EDA00E6094C /* InfoPlist.strings in Resources */,
+				BD665728138F8EDA00E6094C /* UnittJSONSerializerTests.h in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		BD665715138F8EDA00E6094C /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		BD665706138F8EDA00E6094C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BD665736138F901800E6094C /* JSONSerializer.m in Sources */,
+				BD665743138F941C00E6094C /* JSONKit.m in Sources */,
+				BDB8F0781391FDBE00316BF7 /* JSONPropertyInfo.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BD665712138F8EDA00E6094C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BD66572A138F8EDA00E6094C /* UnittJSONSerializerTests.m in Sources */,
+				BD665737138F901800E6094C /* JSONSerializer.m in Sources */,
+				BD665744138F941C00E6094C /* JSONKit.m in Sources */,
+				BD05B2AB139190B500372B4E /* TestTransportObject.m in Sources */,
+				BD05B2BB1391B17500372B4E /* TestSuperTransportObject.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		BD66571E138F8EDA00E6094C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BD665709138F8EDA00E6094C /* UnittJSONSerializer */;
+			targetProxy = BD66571D138F8EDA00E6094C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		BD665723138F8EDA00E6094C /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BD665724138F8EDA00E6094C /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		BD66572B138F8EDA00E6094C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		BD66572C138F8EDA00E6094C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				SDKROOT = iphoneos;
+			};
+			name = Release;
+		};
+		BD66572E138F8EDA00E6094C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				DSTROOT = /tmp/UnittJSONSerializer.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "UnittJSONSerializer/UnittJSONSerializer-Prefix.pch";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		BD66572F138F8EDA00E6094C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				DSTROOT = /tmp/UnittJSONSerializer.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "UnittJSONSerializer/UnittJSONSerializer-Prefix.pch";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		BD665731138F8EDA00E6094C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "UnittJSONSerializerTests/UnittJSONSerializerTests-Prefix.pch";
+				INFOPLIST_FILE = "UnittJSONSerializerTests/UnittJSONSerializerTests-Info.plist";
+				OTHER_LDFLAGS = (
+					"-framework",
+					SenTestingKit,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		BD665732138F8EDA00E6094C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "UnittJSONSerializerTests/UnittJSONSerializerTests-Prefix.pch";
+				INFOPLIST_FILE = "UnittJSONSerializerTests/UnittJSONSerializerTests-Info.plist";
+				OTHER_LDFLAGS = (
+					"-framework",
+					SenTestingKit,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		BD665704138F8EDA00E6094C /* Build configuration list for PBXProject "UnittJSONSerializer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BD66572B138F8EDA00E6094C /* Debug */,
+				BD66572C138F8EDA00E6094C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BD66572D138F8EDA00E6094C /* Build configuration list for PBXNativeTarget "UnittJSONSerializer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BD66572E138F8EDA00E6094C /* Debug */,
+				BD66572F138F8EDA00E6094C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BD665730138F8EDA00E6094C /* Build configuration list for PBXNativeTarget "UnittJSONSerializerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BD665731138F8EDA00E6094C /* Debug */,
+				BD665732138F8EDA00E6094C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = BD665701138F8EDA00E6094C /* Project object */;
+}

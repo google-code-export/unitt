@@ -1,0 +1,7 @@
+//
+// Prefix header for all source files of the 'UnittJSONSerializerTests' target in the 'UnittJSONSerializerTests' project
+//
+
+#ifdef __OBJC__
+    #import <UIKit/UIKit.h>
+#endif
