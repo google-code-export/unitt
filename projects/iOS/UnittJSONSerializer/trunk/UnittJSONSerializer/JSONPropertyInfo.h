@@ -23,16 +23,16 @@
 
 enum 
 {
-    JSNSString = 0,
-    JSNSDate = 1,
-    JSNSNumber = 2,
-    JSNSArray = 3,
-    JSNSDictionary = 4,
-    JSInt = 5,
-    JSLong = 6,
-    JSDouble = 7,
-    JSBoolean = 8,
-    JSCustomClass = 9
+    JSDataTypeNSString = 0,
+    JSDataTypeNSDate = 1,
+    JSDataTypeNSNumber = 2,
+    JSDataTypeNSArray = 3,
+    JSDataTypeNSDictionary = 4,
+    JSDataTypeInt = 5,
+    JSDataTypeLong = 6,
+    JSDataTypeDouble = 7,
+    JSDataTypeBoolean = 8,
+    JSDataTypeCustomClass = 9
 };
 typedef NSUInteger JSDataType;
 

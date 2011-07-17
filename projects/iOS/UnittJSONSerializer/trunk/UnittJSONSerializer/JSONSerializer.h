@@ -59,10 +59,13 @@ typedef NSUInteger JSSerializeOptionFlags;
 @interface JSONSerializer : NSObject 
 {
 @private
-    JSONDecoder* decoder;
+    JKParseOptionFlags parseOptions;
     JKSerializeOptionFlags serializeOptions;
     NSMutableDictionary* classDefs;
 }
+
+- (Class) readConcreteClassFromDictionary:(NSDictionary*) aData;
+- (void) writeConcreteClass:(Class) aType dictionary:(NSDictionary*) aData;
 
 /**
  * Takes a JSON data stream and fills the specified object's properties with
@@ -107,7 +110,7 @@ typedef NSUInteger JSSerializeOptionFlags;
  * in the JSON data. This is a deep deserialization process that does not handle
  * circular references.
  */
-- (NSArray*) deserializeArrayFromType:(Class) aClass data:(NSData*) aData;
+- (NSArray*) deserializeArrayFromType:(NSArray*) aClass data:(NSData*) aData;
 
 /**
  * Takes a JSON unicode string and deserializes it into an array of objects of the 
@@ -116,17 +119,27 @@ typedef NSUInteger JSSerializeOptionFlags;
  * in the JSON data. This is a deep deserialization process that does not handle
  * circular references.
  */
-- (NSArray*) deserializeArrayFromType:(Class) aClass string:(NSString*) aData;
+- (NSArray*) deserializeArrayFromType:(NSArray*) aClass string:(NSString*) aData;
 
 /**
  * Serializes the specified object into a JSON data stream.
  */
-- (NSData*) serializeToData:(id) aObject;
+- (NSData*) serializeToDataFromObject:(id) aObject;
 
 /**
  * Serializes the specified object into a JSON unicode (default UTF8) string.
  */
-- (NSString*) serializeToString:(id) aObject;
+- (NSString*) serializeToStringFromObject:(id) aObject;
+
+/**
+ * Serializes the specified array into a JSON data stream.
+ */
+- (NSData*) serializeToDataFromArray:(id) aObject;
+
+/**
+ * Serializes the specified array into a JSON unicode (default UTF8) string.
+ */
+- (NSString*) serializeToStringFromArray:(id) aObject;
 
 
 + (id) serializerWithParseOptions: (JSParseOptionFlags) aParseOptions serializeOptions: (JSSerializeOptionFlags) aSerializeOptions;

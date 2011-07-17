@@ -37,7 +37,7 @@
     if (self)
     {
         self.isComplex = false;
-        self.dataType = JSNSString;
+        self.dataType = JSDataTypeNSString;
     }
     return self;
 }
