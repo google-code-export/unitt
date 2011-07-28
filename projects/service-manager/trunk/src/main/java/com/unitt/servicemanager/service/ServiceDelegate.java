@@ -142,7 +142,7 @@ public abstract class ServiceDelegate
 
             // execute method & apply result
             Object[] args = getArguments( aInfo );
-            Object result = method.invoke( args );
+            Object result = method.invoke( getService(), args );
             response.getHeader().setResultType( MessageResultType.CompleteSuccess );
             response.setBody( result );
         }
@@ -194,7 +194,7 @@ public abstract class ServiceDelegate
         {
             try
             {
-                parameterTypes[i] = Class.forName( parameterTypeNames[i] );
+                parameterTypes[i] = getClassFromName( parameterTypeNames[i] );
             }
             catch ( ClassNotFoundException e )
             {
@@ -213,6 +213,40 @@ public abstract class ServiceDelegate
         }
         
         return null;
+    }
+    
+    protected Class<?> getClassFromName(String aClassname) throws ClassNotFoundException
+    {
+        if ("boolean".equals(aClassname))
+        {
+            return boolean.class;
+        }
+        else if ("byte".equals(aClassname))
+        {
+            return byte.class;
+        }
+        else if ("short".equals(aClassname))
+        {
+            return short.class;
+        }
+        else if ("int".equals(aClassname))
+        {
+            return int.class;
+        }
+        else if ("long".equals(aClassname))
+        {
+            return long.class;
+        }
+        else if ("double".equals(aClassname))
+        {
+            return double.class;
+        }
+        else if ("float".equals(aClassname))
+        {
+            return float.class;
+        }
+        
+        return Class.forName(aClassname);
     }
 
     public abstract ConcurrentMap<String, MessageBody> getBodyMap( MessageRoutingInfo aInfo );
