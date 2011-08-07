@@ -43,15 +43,15 @@ public class HazelcastWebSocketFactory extends MessagingWebSocketManager
         // validate we have all properties
         if ( getHazelcastClient() == null )
         {
-            ValidationUtil.appendMessage( missing, "Missing hazelcast client. " );
+            missing = ValidationUtil.appendMessage( missing, "Missing hazelcast client. " );
         }
         if ( getResponseQueueManager() == null )
         {
-            ValidationUtil.appendMessage( missing, "Missing response queue manager. " );
+            missing = ValidationUtil.appendMessage( missing, "Missing response queue manager. " );
         }
         if ( getSerializerRegistry() == null )
         {
-            ValidationUtil.appendMessage( missing, "Missing serializer registry. " );
+            missing = ValidationUtil.appendMessage( missing, "Missing serializer registry. " );
         }
 
         // fail out with appropriate message if missing anything

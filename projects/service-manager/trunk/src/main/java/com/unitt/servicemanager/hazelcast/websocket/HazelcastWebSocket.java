@@ -54,15 +54,15 @@ public class HazelcastWebSocket extends MessagingWebSocket
         // validate we have all properties
         if ( getHazelcastClient() == null )
         {
-            ValidationUtil.appendMessage( missing, "Missing hazelcast client. " );
+            missing = ValidationUtil.appendMessage( missing, "Missing hazelcast client. " );
         }
         if ( getHazelcastClient().getQueue( getSocketId() ) != null )
         {
-            ValidationUtil.appendMessage( missing, "Missing socket queue. " );
+            missing = ValidationUtil.appendMessage( missing, "Missing socket queue. " );
         }
         if ( getHazelcastClient().getMap( getSocketId() ) != null )
         {
-            ValidationUtil.appendMessage( missing, "Missing socket map. " );
+            missing = ValidationUtil.appendMessage( missing, "Missing socket map. " );
         }
 
         // fail out with appropriate message if missing anything

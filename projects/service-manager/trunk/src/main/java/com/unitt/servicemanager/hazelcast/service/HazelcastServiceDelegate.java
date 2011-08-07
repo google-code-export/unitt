@@ -40,19 +40,19 @@ public class HazelcastServiceDelegate extends ServiceDelegate
         //validate we have all properties
         if ( getSerializerRegistry() == null )
         {
-            ValidationUtil.appendMessage( missing, "Missing serializer registry. " );
+            missing = ValidationUtil.appendMessage( missing, "Missing serializer registry. " );
         }
         if (getService() == null)
         {
-            ValidationUtil.appendMessage( missing, "Missing service instance. ");
+            missing = ValidationUtil.appendMessage( missing, "Missing service instance. ");
         }
         if (hazelcastClient == null)
         {
-            ValidationUtil.appendMessage( missing, "Missing hazelcast client. ");
+            missing = ValidationUtil.appendMessage( missing, "Missing hazelcast client. ");
         }
         if (getQueueTimeoutInMillis() < 1)
         {
-            ValidationUtil.appendMessage( missing, "Missing valid queue timeout: " + getQueueTimeoutInMillis() + ". ");
+            missing = ValidationUtil.appendMessage( missing, "Missing valid queue timeout: " + getQueueTimeoutInMillis() + ". ");
         }
         
         //fail out with appropriate message if missing anything

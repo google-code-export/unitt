@@ -49,15 +49,15 @@ public class ServerSocketAdapter implements WebSocket, WebSocket.OnBinaryMessage
         // validate we have all properties
         if ( getManager() == null )
         {
-            ValidationUtil.appendMessage( missing, "Missing websocket manager. " );
+            missing = ValidationUtil.appendMessage( missing, "Missing websocket manager. " );
         }
         if ( getConnection() == null )
         {
-            ValidationUtil.appendMessage( missing, "Missing websocket connection. " );
+            missing = ValidationUtil.appendMessage( missing, "Missing websocket connection. " );
         }
         if ( getSocket() == null )
         {
-            ValidationUtil.appendMessage( missing, "Missing websocket. " );
+            missing = ValidationUtil.appendMessage( missing, "Missing websocket. " );
         }
 
         // fail out with appropriate message if missing anything

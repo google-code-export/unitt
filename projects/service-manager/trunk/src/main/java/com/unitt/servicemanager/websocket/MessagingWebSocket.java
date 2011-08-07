@@ -80,15 +80,15 @@ public abstract class MessagingWebSocket implements Initializable, Destructable
         // validate we have all properties
         if ( getSerializerRegistry() == null )
         {
-            ValidationUtil.appendMessage( missing, "Missing serializer registry. " );
+            missing = ValidationUtil.appendMessage( missing, "Missing serializer registry. " );
         }
         if ( getServerWebSocket() == null )
         {
-            ValidationUtil.appendMessage( missing, "Missing server web socket. " );
+            missing = ValidationUtil.appendMessage( missing, "Missing server web socket. " );
         }
         if ( getHeaderQueue() == null )
         {
-            ValidationUtil.appendMessage( missing, "Missing header queue: " + getSocketId() + ". " );
+            missing = ValidationUtil.appendMessage( missing, "Missing header queue: " + getSocketId() + ". " );
         }
 
         // fail out with appropriate message if missing anything

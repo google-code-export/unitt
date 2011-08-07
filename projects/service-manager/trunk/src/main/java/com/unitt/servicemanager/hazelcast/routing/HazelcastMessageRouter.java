@@ -39,11 +39,11 @@ public class HazelcastMessageRouter extends MessageRouter
         //validate we have all properties
         if (hazelcastClient == null)
         {
-            ValidationUtil.appendMessage( missing, "Missing hazelcast client. ");
+            missing = ValidationUtil.appendMessage( missing, "Missing hazelcast client. ");
         }
         if (getQueueTimeoutInMillis() < 1)
         {
-            ValidationUtil.appendMessage( missing, "Missing valid queue timeout: " + getQueueTimeoutInMillis() + ". ");
+            missing = ValidationUtil.appendMessage( missing, "Missing valid queue timeout: " + getQueueTimeoutInMillis() + ". ");
         }
         
         //fail out with appropriate message if missing anything

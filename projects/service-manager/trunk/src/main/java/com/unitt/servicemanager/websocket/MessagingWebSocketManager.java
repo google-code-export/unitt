@@ -45,11 +45,11 @@ public abstract class MessagingWebSocketManager implements Initializable, Destru
         // validate we have all properties
         if ( getResponseQueueManager() == null )
         {
-            ValidationUtil.appendMessage( missing, "Missing response queue manager. " );
+            missing = ValidationUtil.appendMessage( missing, "Missing response queue manager. " );
         }
         if ( getSerializerRegistry() == null )
         {
-            ValidationUtil.appendMessage( missing, "Missing serializer registry. " );
+            missing = ValidationUtil.appendMessage( missing, "Missing serializer registry. " );
         }
         if (getQueueTimeout() == 0)
         {

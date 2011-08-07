@@ -47,11 +47,11 @@ public class HazelcastResponseQueueManager extends ResponseQueueManager
         //validate we have all properties
         if (hazelcastClient == null)
         {
-            ValidationUtil.appendMessage( missing, "Missing hazelcast client. ");
+            missing = ValidationUtil.appendMessage( missing, "Missing hazelcast client. ");
         }
         if (getSockets() == null)
         {
-            ValidationUtil.appendMessage( missing, "Missing sockets map. ");
+            missing = ValidationUtil.appendMessage( missing, "Missing sockets map. ");
         }
         
         //fail out with appropriate message if missing anything

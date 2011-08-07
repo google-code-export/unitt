@@ -50,7 +50,7 @@ public class MessagingWebSocketServlet extends WebSocketServlet
         // validate we have all properties
         if ( getFactory() == null )
         {
-            ValidationUtil.appendMessage( missing, "Missing factory. " );
+            missing = ValidationUtil.appendMessage( missing, "Missing factory. " );
         }
 
         // fail out with appropriate message if missing anything
