@@ -3,7 +3,7 @@ package com.unitt.servicemanager.websocket;
 import java.io.Serializable;
 import java.util.Date;
 
-public class MessageBody implements Serializable
+public class SerializedMessageBody implements Serializable
 {
     private static final long serialVersionUID = 3985635432751666961L;
     
@@ -13,17 +13,17 @@ public class MessageBody implements Serializable
     
     // constructors
     // ---------------------------------------------------------------------------
-    public MessageBody()
+    public SerializedMessageBody()
     {
         //default
     }
     
-    public MessageBody(byte[] aContents)
+    public SerializedMessageBody(byte[] aContents)
     {
         this(aContents, null);
     }
     
-    public MessageBody(byte[] aContents, Date aExpiryTime)
+    public SerializedMessageBody(byte[] aContents, Date aExpiryTime)
     {
         setContents(aContents);
         setExpiryTime( aExpiryTime );

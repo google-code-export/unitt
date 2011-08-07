@@ -200,7 +200,7 @@ public abstract class MessagingWebSocket implements Initializable, Destructable
             MessageSerializer serializer = getSerializerRegistry().getSerializer(serializerType);
             MessageRoutingInfo header = serializer.deserializeHeader( headerBytes );
             header.setSerializerType( serializerType );
-            MessageBody body = new MessageBody( bodyBytes );
+            SerializedMessageBody body = new SerializedMessageBody( bodyBytes );
 
             // put body bytes in map
             pushBody( header.getUid(), body );
@@ -226,7 +226,7 @@ public abstract class MessagingWebSocket implements Initializable, Destructable
         }
     }
 
-    public void pushBody( String aUid, MessageBody aBody )
+    public void pushBody( String aUid, SerializedMessageBody aBody )
     {
         getBodyMap().put( aUid, aBody );
     }
@@ -236,7 +236,7 @@ public abstract class MessagingWebSocket implements Initializable, Destructable
         getBodyMap().remove( aUid );
     }
 
-    public abstract ConcurrentMap<String, MessageBody> getBodyMap();
+    public abstract ConcurrentMap<String, SerializedMessageBody> getBodyMap();
 
     public abstract BlockingQueue<MessageRoutingInfo> getHeaderQueue();
 

@@ -5,7 +5,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import com.unitt.servicemanager.websocket.MessageBody;
+import com.unitt.servicemanager.websocket.SerializedMessageBody;
 import com.unitt.servicemanager.websocket.MessageResponse;
 import com.unitt.servicemanager.websocket.MessageRoutingInfo;
 
@@ -15,14 +15,14 @@ public class MockServiceDelegate extends ServiceDelegate
     public static final String SERVICE_ARG_VALUE = "TestValue";
     
     protected BlockingQueue<MessageResponse> destQueue;
-    protected ConcurrentMap<String, MessageBody> bodyMap;
+    protected ConcurrentMap<String, SerializedMessageBody> bodyMap;
     
     public MockServiceDelegate(Object aService)
     {
         super(aService, 10000);
         
         destQueue = new ArrayBlockingQueue<MessageResponse>( 10 );
-        bodyMap = new ConcurrentHashMap<String, MessageBody>();
+        bodyMap = new ConcurrentHashMap<String, SerializedMessageBody>();
     }
     
     @Override
@@ -32,7 +32,7 @@ public class MockServiceDelegate extends ServiceDelegate
     }
 
     @Override
-    public ConcurrentMap<String, MessageBody> getBodyMap( MessageRoutingInfo aInfo )
+    public ConcurrentMap<String, SerializedMessageBody> getBodyMap( MessageRoutingInfo aInfo )
     {
         return bodyMap;
     }

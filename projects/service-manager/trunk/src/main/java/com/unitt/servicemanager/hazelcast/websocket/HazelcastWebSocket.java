@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import com.hazelcast.core.HazelcastInstance;
 import com.unitt.servicemanager.util.ValidationUtil;
-import com.unitt.servicemanager.websocket.MessageBody;
+import com.unitt.servicemanager.websocket.SerializedMessageBody;
 import com.unitt.servicemanager.websocket.MessageRoutingInfo;
 import com.unitt.servicemanager.websocket.MessageSerializerRegistry;
 import com.unitt.servicemanager.websocket.MessagingWebSocket;
@@ -123,7 +123,7 @@ public class HazelcastWebSocket extends MessagingWebSocket
 
     // service logic
     // ---------------------------------------------------------------------------
-    public ConcurrentMap<String, MessageBody> getBodyMap()
+    public ConcurrentMap<String, SerializedMessageBody> getBodyMap()
     {
         return getHazelcastClient().getMap( "body:" + getSocketId() );
     }

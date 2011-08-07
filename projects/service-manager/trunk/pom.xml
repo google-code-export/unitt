@@ -69,6 +69,18 @@
             <version>1.9.3</version>
             <type>jar</type>
         </dependency>
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-core-asl</artifactId>
+            <version>1.8.5</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+            <version>1.8.5</version>
+            <type>jar</type>
+        </dependency>
         <!-- TEST SCOPE DEPENDENCIES -->
         <dependency>
             <groupId>junit</groupId>

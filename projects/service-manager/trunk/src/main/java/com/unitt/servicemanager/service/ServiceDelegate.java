@@ -12,11 +12,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.unitt.servicemanager.routing.MessageRouterExecutor;
-import com.unitt.servicemanager.websocket.MessageBody;
+import com.unitt.servicemanager.websocket.DeserializedMessageBody;
 import com.unitt.servicemanager.websocket.MessageResponse;
 import com.unitt.servicemanager.websocket.MessageRoutingInfo;
 import com.unitt.servicemanager.websocket.MessageSerializer;
 import com.unitt.servicemanager.websocket.MessageSerializerRegistry;
+import com.unitt.servicemanager.websocket.SerializedMessageBody;
 import com.unitt.servicemanager.websocket.MessageRoutingInfo.MessageResultType;
 
 
@@ -178,9 +179,14 @@ public abstract class ServiceDelegate
     public Object[] getArguments( MessageRoutingInfo aInfo )
     {
         //grab arguments & deserialize
-        MessageBody body = getBodyMap( aInfo ).remove( aInfo.getUid() );
+        SerializedMessageBody body = getBodyMap( aInfo ).remove( aInfo.getUid() );
         MessageSerializer serializer = getSerializerRegistry().getSerializer( aInfo.getSerializerType() );
-        return serializer.deserializeBody( body.getContents() );
+        DeserializedMessageBody args = serializer.deserializeBody( aInfo, body.getContents() );
+        if (args != null && args.getServiceMethodArguments() != null)
+        {
+            return (Object[]) args.getServiceMethodArguments().toArray( new Object[args.getServiceMethodArguments().size()] );
+        }
+        return new Object[] {};
     }
 
     public Method findMethod( String aSignature )
@@ -249,7 +255,7 @@ public abstract class ServiceDelegate
         return Class.forName(aClassname);
     }
 
-    public abstract ConcurrentMap<String, MessageBody> getBodyMap( MessageRoutingInfo aInfo );
+    public abstract ConcurrentMap<String, SerializedMessageBody> getBodyMap( MessageRoutingInfo aInfo );
 
     public abstract BlockingQueue<MessageResponse> getDestinationQueue( MessageRoutingInfo aInfo );
 }
