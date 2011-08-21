@@ -3,7 +3,7 @@
 
 = Introduction =
 
-!UnittWebSocketClient is an API that allows you to use web sockets in your iOS Objective-C projects. It conforms to the initial & latest versions of web sockets. Simply import whichever implementation you desire, !WebSocket00.h or !WebSocket07.h. It tries to follow the client specification from javascript using Objective-C constructs. Web sockets provide a low latency, bi-directional, full-duplex communication channel over TCP. The new draft version of the specification allows for text messages (must be UTF-8), as well as, binary messages. For more information, see [http://en.wikipedia.org/wiki/WebSockets Wikipedia].
+!UnittWebSocketClient is an API that allows you to use web sockets in your iOS Objective-C projects. It conforms to the initial & latest versions of web sockets. Simply import whichever implementation you desire, !WebSocket00.h, !WebSocket07.h, !WebSocket08.h, or !WebSocket10.h. It tries to follow the client specification from javascript using Objective-C constructs. Web sockets provide a low latency, bi-directional, full-duplex communication channel over TCP. The new draft version of the specification allows for text messages (must be UTF-8), as well as, binary messages. For more information, see [http://en.wikipedia.org/wiki/WebSockets Wikipedia].
 
 = Setup Your Project =
 
@@ -140,7 +140,7 @@ MyWebSocket* myWS = [[MyWebSocket alloc] init];
 
 
 = More Info =
-  * Check out the [http://code.google.com/p/unitt/source/browse/projects/iOS/UnittWebSocketClient/tags/2.2/UnittWebSocketClient/WebSocket07.h WebSocket07.h] for more information on how to use this class
+  * Check out the [http://code.google.com/p/unitt/source/browse/projects/iOS/UnittWebSocketClient/tags/2.5/UnittWebSocketClient/WebSocket07.h WebSocket07.h], [http://code.google.com/p/unitt/source/browse/projects/iOS/UnittWebSocketClient/tags/2.5/UnittWebSocketClient/WebSocket08.h WebSocket08.h], [http://code.google.com/p/unitt/source/browse/projects/iOS/UnittWebSocketClient/tags/2.5/UnittWebSocketClient/WebSocket10.h WebSocket10.h] for more information on how to use these classes.
   * For more information on web sockets, see [http://en.wikipedia.org/wiki/WebSockets Wikipedia]
 
 == !WebSocket v00 ==
