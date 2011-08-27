@@ -78,6 +78,19 @@ public class ClientWebsocketFactory
     }
 
     /**
+     * Creates a client websocket that will attach to the specified url.
+     * 
+     * @param aConfig config used to setup websocket
+     * @param aObserver observer that will respond to lifecycle events and messages
+     */
+    public static WebSocket create( WebSocketConnectConfig aConfig, WebSocketObserver aObserver )
+    {
+        ClientBootstrap bootstrap = new ClientBootstrap( socketChannelFactory );
+        NettyClientNetworkSocket networkSocket = new NettyClientNetworkSocket(bootstrap, aObserver);
+        return wsFactory.createClient( networkSocket, aConfig, networkSocket );
+    }
+
+    /**
      * Creates a client websocket and opens it to the specified url. The listener will have
      * to respond as opening is not a synchronous operation.
      * 
@@ -91,4 +104,17 @@ public class ClientWebsocketFactory
         return socket;
     }
 
+    /**
+     * Creates a client websocket and opens it to the specified url. The listener will have
+     * to respond as opening is not a synchronous operation.
+     * 
+     * @param aConfig config used to setup websocket
+     * @param aObserver observer that will respond to lifecycle events and messages
+     */
+    public static WebSocket open( WebSocketConnectConfig aConfig, WebSocketObserver aObserver )
+    {
+        WebSocket socket = create( aConfig, aObserver );
+        socket.open();
+        return socket;
+    }
 }

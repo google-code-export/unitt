@@ -61,18 +61,22 @@ public class WebSocketClientConnection extends WebSocketConnection
     
     protected void handleHandshake(byte[] aHandshakeBytes)
     {
-        if (getHandshake().verifyServerHandshake( aHandshakeBytes ))
+        if (aHandshakeBytes != null && aHandshakeBytes.length > 0)
         {
-            getNetwork().upgrade();
-            setState( WebSocketState.Connected );
-            //@todo: handle extensions
-            sendOpenToObserver( getHandshake().getServerConfig().getSelectedProtocol(), null );
-        }
-        else
-        {
-            setCloseMessage( "Invalid Handshake" );
-            setState( WebSocketState.Disconnected );
-            getNetwork().disconnect();
+            if (getHandshake().verifyServerHandshake( aHandshakeBytes ))
+            {
+                getNetwork().upgrade();
+                setState( WebSocketState.Connected );
+                //@todo: handle extensions
+                sendOpenToObserver( getHandshake().getServerConfig().getSelectedProtocol(), null );
+            }
+            else
+            {
+                System.out.println("Bad handshake: (" + aHandshakeBytes.length + ")" + new String(aHandshakeBytes));
+                setCloseMessage( "Invalid Handshake" );
+                setState( WebSocketState.Disconnected );
+                getNetwork().disconnect();
+            }
         }
     }
 }

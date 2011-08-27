@@ -2,9 +2,14 @@ package com.unitt.framework.websocket.netty;
 
 
 import java.net.InetSocketAddress;
+import java.nio.charset.Charset;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.jboss.netty.bootstrap.ClientBootstrap;
+import org.jboss.netty.buffer.ChannelBuffer;
+import org.jboss.netty.buffer.ChannelBufferFactory;
+import org.jboss.netty.buffer.HeapChannelBufferFactory;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ChannelPipeline;
@@ -16,7 +21,6 @@ import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
 import org.jboss.netty.handler.codec.http.HttpRequestEncoder;
 import org.jboss.netty.handler.codec.http.HttpResponse;
 import org.jboss.netty.handler.codec.http.HttpResponseDecoder;
-import org.jboss.netty.handler.codec.http.websocket.WebSocketFrameEncoder;
 
 import com.unitt.framework.websocket.NetworkSocketFacade;
 import com.unitt.framework.websocket.NetworkSocketObserver;
@@ -26,11 +30,14 @@ import com.unitt.framework.websocket.WebSocketObserver;
 
 public class NettyClientNetworkSocket extends SimpleChannelUpstreamHandler implements NetworkSocketFacade, ChannelPipelineFactory, WebSocketObserver
 {
+    protected static final Charset utf8Charset = Charset.forName( "UTF-8" );
+    
     private NetworkSocketObserver socketObserver;
     private ClientBootstrap       bootstrap;
     private Channel               channel;
     private WebSocketObserver     observer;
     private long                  timeOfLastActivity;
+    private ChannelBufferFactory  buffers;
 
 
     // constructors
@@ -42,6 +49,7 @@ public class NettyClientNetworkSocket extends SimpleChannelUpstreamHandler imple
 
         // set pipeline factory on bootstrap
         bootstrap.setPipelineFactory( this );
+        buffers = HeapChannelBufferFactory.getInstance();
     }
 
 
@@ -74,11 +82,26 @@ public class NettyClientNetworkSocket extends SimpleChannelUpstreamHandler imple
         Object msg = aEvent.getMessage();
         if ( msg instanceof HttpResponse )
         {
-           socketObserver.onReceivedData( ((HttpResponse) msg ).getContent().array());
+            HttpResponse message = (HttpResponse) msg ;
+            StringBuffer headers = new StringBuffer();
+            headers.append( "HTTP/1.1 " );
+            headers.append( message.getStatus().getCode() );
+            headers.append("\r\n");
+            for (Entry<String, String> header : message.getHeaders())
+            {
+                headers.append(header.getKey());
+                headers.append(":");
+                headers.append(header.getValue());
+                headers.append("\r\n");
+            }
+            socketObserver.onReceivedData( headers.toString().getBytes( utf8Charset ) );
         }
         else
         {
-            socketObserver.onReceivedData( (byte[]) msg );
+            if (msg instanceof ChannelBuffer)
+            {
+                socketObserver.onReceivedData( ((ChannelBuffer) msg).array() );
+            }
         }
     }
 
@@ -124,12 +147,14 @@ public class NettyClientNetworkSocket extends SimpleChannelUpstreamHandler imple
     public void write( byte[] aBytes )
     {
         // write bytes to channel
-        channel.write( aBytes );
+        // channel.write( aBytes );
+        channel.write( buffers.getBuffer( aBytes, 0, aBytes.length ) );
     }
 
     public void upgrade()
     {
-        channel.getPipeline().replace( "encoder", "wsencoder", new WebSocketFrameEncoder() );
+        channel.getPipeline().remove( "encoder" );
+        channel.getPipeline().remove( "decoder" );
     }
 
     public void setObserver( NetworkSocketObserver aSocketObserver )
@@ -143,7 +168,7 @@ public class NettyClientNetworkSocket extends SimpleChannelUpstreamHandler imple
     public void onOpen( String aProtocol, List<String> aExtensions )
     {
         updateLastActivity();
-        observer.onOpen(aProtocol, aExtensions);
+        observer.onOpen( aProtocol, aExtensions );
     }
 
     public void onError( Exception aException )

@@ -222,7 +222,7 @@ public class WebSocketHandshake
 
         String handshake = new String( aBytes, charset );
         // only allowed status is 101
-        if ( handshake.startsWith( "HTTP/1.1 101" ) )
+        if ( handshake.contains( "HTTP/1.1 101" ) )
         {
             // loop through headers, filling out config
             WebSocketConnectConfig config = new WebSocketConnectConfig();

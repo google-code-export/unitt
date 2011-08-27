@@ -66,6 +66,7 @@ public class ClientNetworkSocketTest implements WebSocketObserver
 
     public void onTextMessage( String aMessage )
     {
+        System.out.println("On Text Message: " + aMessage);
         response = aMessage;
     }
 }
