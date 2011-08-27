@@ -126,8 +126,8 @@ public class WebSocketFragment
     {
         payloadType = aPayloadType;
     }
-    
-    public void appendFragment(byte[] data)
+
+    public void appendFragment( byte[] data )
     {
         fragment = WebSocketUtil.appendArray( fragment, data );
     }
@@ -305,7 +305,7 @@ public class WebSocketFragment
                 payloadStart = index;
                 if ( dataLength > Integer.MAX_VALUE )
                 {
-                    throw new IllegalArgumentException( "Implementation does not support payload lengths in excess of " + Integer.MAX_VALUE + ": " + dataLength);
+                    throw new IllegalArgumentException( "Implementation does not support payload lengths in excess of " + Integer.MAX_VALUE + ": " + dataLength );
                 }
                 payloadLength = dataLength.intValue();
             }
@@ -314,6 +314,7 @@ public class WebSocketFragment
 
     public void parseContent()
     {
+        System.out.println( "Getting content: start=" + getPayloadStart() + " length=" + getPayloadLength() );
         if ( getFragment() != null && getFragment().length >= getPayloadStart() + getPayloadLength() )
         {
             // set payload
@@ -370,37 +371,37 @@ public class WebSocketFragment
         ByteBuffer output = ByteBuffer.allocate( headerLength + fullPayloadLength );
 
         // build fin & reserved
-        byte b = 0x0;
+        Integer b = 0x0;
         if ( isFinal() )
         {
-            b = (byte) 0x80;
+            b = 0x80;
         }
 
         // build opmask
-        b |= new Integer( getOpCode().opCode & 0xF ).byteValue();
+        b |= new Integer( getOpCode().opCode & 0xF );
 
         // push first byte
-        output.put( b );
+        output.put( b.byteValue() );
 
         // use mask
-        b = (byte) ( hasMask() ? 0x80 : 0x0 );
+        b = hasMask() ? 0x80 : 0x0;
 
         // payload length
         if ( fullPayloadLength <= 125 )
         {
             b |= (byte) ( fullPayloadLength & 0xFF );
-            output.put( b );
+            output.put( b.byteValue() );
         }
         else if ( fullPayloadLength <= Short.MAX_VALUE )
         {
             b |= 126;
-            output.put( b );
+            output.put( b.byteValue() );
             output.putShort( fullPayloadLength.shortValue() );
         }
         else
         {
             b |= 127;
-            output.put( b );
+            output.put( b.byteValue() );
             output.putLong( fullPayloadLength.longValue() );
         }
 
@@ -415,12 +416,15 @@ public class WebSocketFragment
         setPayloadLength( fullPayloadLength );
         if ( hasMask() )
         {
-            setFragment( mask( getMask(), output.array(), headerLength, payloadLength ) );
+            output.put( mask( getMask(), getPayloadData(), 0, payloadLength ) );
         }
         else
         {
-            setFragment( output.array() );
+            output.put( getPayloadData() );
         }
+
+        // set fragment
+        setFragment( output.array() );
 
         // cleanup
         output = null;
@@ -449,13 +453,7 @@ public class WebSocketFragment
         if ( data != null )
         {
             // init
-            byte[] results = new byte[data.length];
-
-            // if there are bytes before our masking data, copy
-            if ( start > 0 )
-            {
-                System.arraycopy( data, 0, results, 0, start );
-            }
+            byte[] results = new byte[length];
 
             // get mask
             byte[] maskBytes = WebSocketUtil.convertIntToBytes( mask );
@@ -478,14 +476,8 @@ public class WebSocketFragment
                 current ^= maskBytes[m++ % 4];
 
                 // append result & continue
-                results[index] = current;
+                results[index - start] = current;
                 index++;
-            }
-
-            // if there are bytes after our masking data, copy
-            if ( end < data.length )
-            {
-                System.arraycopy( data, end, results, end, length - end );
             }
 
             return results;
@@ -493,6 +485,56 @@ public class WebSocketFragment
 
         return null;
     }
+
+    // public static byte[] mask( int mask, byte[] data, int start, int length )
+    // {
+    // if ( data != null )
+    // {
+    // // init
+    // byte[] results = new byte[data.length];
+    //
+    // // if there are bytes before our masking data, copy
+    // if ( start > 0 )
+    // {
+    // System.arraycopy( data, 0, results, 0, start );
+    // }
+    //
+    // // get mask
+    // byte[] maskBytes = WebSocketUtil.convertIntToBytes( mask );
+    //
+    // // loop through mask data, masking
+    // int end = start + length;
+    // byte current;
+    // int index = start;
+    // if ( end > data.length )
+    // {
+    // end = data.length;
+    // }
+    // int m = 0;
+    // while ( index < end )
+    // {
+    // // set current byte
+    // current = data[index];
+    //
+    // // mask
+    // current ^= maskBytes[m++ % 4];
+    //
+    // // append result & continue
+    // results[index] = current;
+    // index++;
+    // }
+    //
+    // // if there are bytes after our masking data, copy
+    // if ( end < data.length )
+    // {
+    // System.arraycopy( data, end, results, end, length - end );
+    // }
+    //
+    // return results;
+    // }
+    //
+    // return null;
+    // }
 
     public static byte[] unmask( int mask, byte[] data )
     {
