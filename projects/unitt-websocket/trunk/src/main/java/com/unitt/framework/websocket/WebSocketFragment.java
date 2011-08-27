@@ -314,7 +314,6 @@ public class WebSocketFragment
 
     public void parseContent()
     {
-        System.out.println( "Getting content: start=" + getPayloadStart() + " length=" + getPayloadLength() );
         if ( getFragment() != null && getFragment().length >= getPayloadStart() + getPayloadLength() )
         {
             // set payload
@@ -485,56 +484,6 @@ public class WebSocketFragment
 
         return null;
     }
-
-    // public static byte[] mask( int mask, byte[] data, int start, int length )
-    // {
-    // if ( data != null )
-    // {
-    // // init
-    // byte[] results = new byte[data.length];
-    //
-    // // if there are bytes before our masking data, copy
-    // if ( start > 0 )
-    // {
-    // System.arraycopy( data, 0, results, 0, start );
-    // }
-    //
-    // // get mask
-    // byte[] maskBytes = WebSocketUtil.convertIntToBytes( mask );
-    //
-    // // loop through mask data, masking
-    // int end = start + length;
-    // byte current;
-    // int index = start;
-    // if ( end > data.length )
-    // {
-    // end = data.length;
-    // }
-    // int m = 0;
-    // while ( index < end )
-    // {
-    // // set current byte
-    // current = data[index];
-    //
-    // // mask
-    // current ^= maskBytes[m++ % 4];
-    //
-    // // append result & continue
-    // results[index] = current;
-    // index++;
-    // }
-    //
-    // // if there are bytes after our masking data, copy
-    // if ( end < data.length )
-    // {
-    // System.arraycopy( data, end, results, end, length - end );
-    // }
-    //
-    // return results;
-    // }
-    //
-    // return null;
-    // }
 
     public static byte[] unmask( int mask, byte[] data )
     {

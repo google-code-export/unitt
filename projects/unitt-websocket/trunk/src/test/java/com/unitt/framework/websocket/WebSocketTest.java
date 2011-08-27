@@ -58,7 +58,6 @@ public class WebSocketTest
       int correctMask =  WebSocketUtil.convertBytesToInt( new byte[] {0x37, new Integer(0xfa).byteValue(), 0x21, 0x3d}, 0);
       Assert.assertEquals("Did not find correct mask expected=" + Integer.toHexString( correctMask ) + ", actual=" + Integer.toHexString( fragment.getMask() ), correctMask, fragment.getMask());
       String message = new String(fragment.getPayloadData(), utf8Charset);
-      System.out.println(message);
       Assert.assertEquals("Did not find the correct message.", "Hello", message);
       fragment = new WebSocketFragment( MessageOpCode.TEXT, true, true, "Hello".getBytes( utf8Charset ) );
       fragment.setMask( correctMask );
@@ -86,10 +85,30 @@ public class WebSocketTest
     @Test
     public void testFragmentedText()
     {
+        byte[] firstSample = {0x01, 0x03, 0x48, 0x65, 0x6c};
+        WebSocketFragment firstFragment = new WebSocketFragment(firstSample);
+        Assert.assertTrue("Did set final bit.", !firstFragment.isFinal());
+        Assert.assertEquals("Did not find the correct payloadtype.", PayloadType.TEXT, firstFragment.getPayloadType());
+        Assert.assertEquals("Did not set op code to text", MessageOpCode.TEXT, firstFragment.getOpCode());
+        Assert.assertTrue("Did not find the correct has mask value.", !firstFragment.hasMask());
+        Assert.assertNotNull( "Did not build any payload data", firstFragment.getPayloadData());
+        byte[] secondSample = {new Integer(0x80).byteValue(), 0x02, 0x6c, 0x6f};
+        WebSocketFragment secondFragment = new WebSocketFragment(secondSample);
+        Assert.assertTrue("Did not set final bit.", secondFragment.isFinal());
+        Assert.assertEquals("Did not set op code to continuation", MessageOpCode.CONTINUATION, secondFragment.getOpCode());
+        Assert.assertTrue("Did not find the correct has mask value.", !secondFragment.hasMask());
+        Assert.assertNotNull("Did not build any payload data", secondFragment.getPayloadData());
+        byte[] mergedSamples = WebSocketUtil.appendArray( firstFragment.getPayloadData(), secondFragment.getPayloadData() );
+        Assert.assertEquals("Did not find the correct message.", "Hello", new String(mergedSamples, utf8Charset));
     }
 
     @Test
     public void testUnmaskedBinary()
     {
+        byte[] sample = {new Integer(0x82).byteValue(), 0x7E, 0x01, 0x00};
+        WebSocketFragment fragment = new WebSocketFragment(sample);
+        Assert.assertTrue("Did not set final bit.", fragment.isFinal());
+        Assert.assertEquals("Did not find the correct payloadtype.", PayloadType.BINARY, fragment.getPayloadType());
+        Assert.assertTrue("Did not find the correct has mask value.", !fragment.hasMask());
     }
 }
