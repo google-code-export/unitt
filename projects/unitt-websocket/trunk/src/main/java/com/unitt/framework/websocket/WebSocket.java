@@ -6,8 +6,8 @@ package com.unitt.framework.websocket;
 public interface WebSocket
 {
     public void open();
-    public void close(String message);
-    public void ping(String message);
-    public void sendMessage(byte[] message);
-    public void sendMessage(String message);
+    public void close(String aMessage);
+    public void ping(String aMessage);
+    public void sendMessage(byte[] aMessage);
+    public void sendMessage(String aMessage);
 }

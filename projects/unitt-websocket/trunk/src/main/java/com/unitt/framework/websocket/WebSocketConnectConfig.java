@@ -1,6 +1,6 @@
 package com.unitt.framework.websocket;
 
-import java.net.URL;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,9 +15,9 @@ public class WebSocketConnectConfig
         
         private String specVersionValue;
         
-        private WebSocketVersion(String specVersionValue)
+        private WebSocketVersion(String aSpecVersionValue)
         {
-            this.specVersionValue = specVersionValue;
+            specVersionValue = aSpecVersionValue;
         }
         
         public String getSpecVersionValue()
@@ -25,11 +25,11 @@ public class WebSocketConnectConfig
             return specVersionValue;
         }
         
-        public static WebSocketVersion fromSpecVersionValue(String specVersionValue)
+        public static WebSocketVersion fromSpecVersionValue(String aSpecVersionValue)
         {
             for (WebSocketVersion wsv : WebSocketVersion.values())
             {
-                if (wsv.getSpecVersionValue().equals(specVersionValue))
+                if (wsv.getSpecVersionValue().equals(aSpecVersionValue))
                 {
                     return wsv;
                 }
@@ -39,7 +39,7 @@ public class WebSocketConnectConfig
         }
     };
     
-    private URL url;
+    private URI url;
     private String host;
     private String origin;
     private long timeoutInMillis;
@@ -63,12 +63,12 @@ public class WebSocketConnectConfig
     
     // getters & setters
     // ---------------------------------------------------------------------------
-    public URL getUrl()
+    public URI getUrl()
     {
         return url;
     }
 
-    public void setUrl( URL aUrl )
+    public void setUrl( URI aUrl )
     {
         url = aUrl;
     }
@@ -85,7 +85,7 @@ public class WebSocketConnectConfig
 
     public boolean isSecure()
     {
-        return getUrl() != null && getUrl().getProtocol().equalsIgnoreCase( "wss" );
+        return getUrl() != null && getUrl().getScheme().equalsIgnoreCase( "wss" );
     }
 
     public long getTimeoutInMillis()

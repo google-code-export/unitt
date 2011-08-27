@@ -27,19 +27,19 @@ public class WebSocketMessage
         // default
     }
 
-    public WebSocketMessage( WebSocketFragment fragment )
+    public WebSocketMessage( WebSocketFragment aFragment )
     {
-        add( fragment );
+        add( aFragment );
     }
 
 
     // message logic
     // ---------------------------------------------------------------------------
-    public void add( WebSocketFragment fragment )
+    public void add( WebSocketFragment aFragment )
     {
-        if ( fragment != null )
+        if ( aFragment != null )
         {
-            fragments.add( fragment );
+            fragments.add( aFragment );
         }
     }
 

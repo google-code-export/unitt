@@ -1,7 +1,7 @@
 package com.unitt.framework.websocket;
 
 
-import java.net.URL;
+import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,16 +28,16 @@ public class WebSocketHandshake
 
     // constructors
     // ---------------------------------------------------------------------------
-    public WebSocketHandshake( WebSocketConnectConfig clientConfig )
+    public WebSocketHandshake( WebSocketConnectConfig aClientConfig )
     {
-        setClientConfig( clientConfig );
+        setClientConfig( aClientConfig );
         generateSecKeys();
     }
 
-    public WebSocketHandshake( byte[] clientHandshakeBytes, WebSocketConnectConfig serverConfig )
+    public WebSocketHandshake( byte[] aClientHandshakeBytes, WebSocketConnectConfig aServerConfig )
     {
-        setServerConfig( serverConfig );
-        setClientConfig( clientHandshakeBytes );
+        setServerConfig( aServerConfig );
+        setClientConfig( aClientHandshakeBytes );
         generateSecKeys();
     }
 
@@ -49,14 +49,14 @@ public class WebSocketHandshake
         return clientConfig;
     }
 
-    protected void setClientConfig( WebSocketConnectConfig clientConfig )
+    protected void setClientConfig( WebSocketConnectConfig aClientConfig )
     {
-        this.clientConfig = clientConfig;
+        clientConfig = aClientConfig;
     }
 
-    protected void setClientConfig( byte[] clientHandshakeBytes )
+    protected void setClientConfig( byte[] aClientHandshakeBytes )
     {
-        parseClientHandshakeBytes( clientHandshakeBytes );
+        parseClientHandshakeBytes( aClientHandshakeBytes );
     }
 
     protected String getClientSecKey()
@@ -64,9 +64,9 @@ public class WebSocketHandshake
         return clientSecKey;
     }
 
-    protected void setClientSecKey( String clientSecKey )
+    protected void setClientSecKey( String aClientSecKey )
     {
-        this.clientSecKey = clientSecKey;
+        clientSecKey = aClientSecKey;
     }
 
     public WebSocketConnectConfig getServerConfig()
@@ -74,14 +74,14 @@ public class WebSocketHandshake
         return serverConfig;
     }
 
-    protected void setServerConfig( WebSocketConnectConfig serverConfig )
+    protected void setServerConfig( WebSocketConnectConfig aServerConfig )
     {
-        this.serverConfig = serverConfig;
+        serverConfig = aServerConfig;
     }
 
-    protected void setServerConfig( byte[] serverHandshakeBytes )
+    protected void setServerConfig( byte[] aServerHandshakeBytes )
     {
-        parseServerHandshakeBytes( serverHandshakeBytes );
+        parseServerHandshakeBytes( aServerHandshakeBytes );
     }
 
     protected String getExpectedServerSecKey()
@@ -89,9 +89,9 @@ public class WebSocketHandshake
         return expectedServerSecKey;
     }
 
-    protected void setExpectedServerSecKey( String expectedServerSecKey )
+    protected void setExpectedServerSecKey( String aExpectedServerSecKey )
     {
-        this.expectedServerSecKey = expectedServerSecKey;
+        expectedServerSecKey = aExpectedServerSecKey;
     }
 
     protected String getServerSecKey()
@@ -99,31 +99,31 @@ public class WebSocketHandshake
         return serverSecKey;
     }
 
-    protected void setServerSecKey( String serverSecKey )
+    protected void setServerSecKey( String aServerSecKey )
     {
-        this.serverSecKey = serverSecKey;
+        serverSecKey = aServerSecKey;
     }
 
-    protected void setClientHandshakeBytes( byte[] clientHandshakeBytes )
+    protected void setClientHandshakeBytes( byte[] aClientHandshakeBytes )
     {
-        this.clientHandshakeBytes = clientHandshakeBytes;
+        clientHandshakeBytes = aClientHandshakeBytes;
     }
 
-    protected void setServerHandshakeBytes( byte[] serverHandshakeBytes )
+    protected void setServerHandshakeBytes( byte[] aServerHandshakeBytes )
     {
-        this.serverHandshakeBytes = serverHandshakeBytes;
+        serverHandshakeBytes = aServerHandshakeBytes;
     }
 
 
     // handshake logic
     // ---------------------------------------------------------------------------
-    protected void parseClientHandshakeBytes( byte[] bytes )
+    protected void parseClientHandshakeBytes( byte[] aBytes )
     {
         // init
         Charset charset = Charset.forName( "US-ASCII" );
-        setClientHandshakeBytes( bytes );
+        setClientHandshakeBytes( aBytes );
 
-        String handshake = new String( bytes, charset );
+        String handshake = new String( aBytes, charset );
         // make sure this is a http 1.1 GET request
         if ( handshake.startsWith( "GET" ) && handshake.contains( "HTTP/1.1" ) )
         {
@@ -214,13 +214,13 @@ public class WebSocketHandshake
         }
     }
 
-    protected void parseServerHandshakeBytes( byte[] bytes )
+    protected void parseServerHandshakeBytes( byte[] aBytes )
     {
         // init
         Charset charset = Charset.forName( "US-ASCII" );
-        setServerHandshakeBytes( bytes );
+        setServerHandshakeBytes( aBytes );
 
-        String handshake = new String( bytes, charset );
+        String handshake = new String( aBytes, charset );
         // only allowed status is 101
         if ( handshake.startsWith( "HTTP/1.1 101" ) )
         {
@@ -290,9 +290,9 @@ public class WebSocketHandshake
         setExpectedServerSecKey( new String( Base64.encodeBase64( bytes ), charset ) );
     }
 
-    public boolean verifyServerHandshake( byte[] serverHandshakeBytes )
+    public boolean verifyServerHandshake( byte[] aServerHandshakeBytes )
     {
-        setServerConfig( serverHandshakeBytes );
+        setServerConfig( aServerHandshakeBytes );
 
         if ( getServerConfig() != null )
         {
@@ -323,7 +323,10 @@ public class WebSocketHandshake
             output.append( "Connection: Upgrade\r\n" );
             output.append( "Host: " + getClientConfig().getUrl().getHost() + "\r\n" );
             output.append( "Sec-WebSocket-Origin: " + getClientConfig().getOrigin() + "\r\n" );
-            output.append( "Sec-WebSocket-Protocol: " + createCommaDelimitedList( getClientConfig().getAvailableProtocols() ) + "\r\n" );
+            if(getClientConfig().getAvailableProtocols() != null)
+            {
+                output.append( "Sec-WebSocket-Protocol: " + createCommaDelimitedList( getClientConfig().getAvailableProtocols() ) + "\r\n" );
+            }
             output.append( "Sec-WebSocket-Key: " + getClientSecKey() + "\r\n" );
             output.append( "Sec-WebSocket-Version: " + getClientConfig().getWebSocketVersion().getSpecVersionValue() + "\r\n" );
             output.append( "\r\n" );
@@ -350,14 +353,14 @@ public class WebSocketHandshake
         return serverHandshakeBytes;
     }
 
-    protected String getResourcePath( URL url )
+    protected String getResourcePath( URI aUrl )
     {
-        if ( url.getQuery() != null )
+        if ( aUrl.getQuery() != null )
         {
-            return url.getPath() + "?" + url.getQuery();
+            return aUrl.getPath() + "?" + aUrl.getQuery();
         }
 
-        return url.getPath();
+        return aUrl.getPath();
     }
 
     protected String createCommaDelimitedList( List<?> aItems )
@@ -381,11 +384,11 @@ public class WebSocketHandshake
         return output.toString();
     }
 
-    protected boolean containsCaseInsensitiveValue( String value, List<String> valuesToSearch )
+    protected boolean containsCaseInsensitiveValue( String aValue, List<String> aValuesToSearch )
     {
-        for ( String itemToQuery : valuesToSearch )
+        for ( String itemToQuery : aValuesToSearch )
         {
-            if ( itemToQuery != null && itemToQuery.equalsIgnoreCase( value ) )
+            if ( itemToQuery != null && itemToQuery.equalsIgnoreCase( aValue ) )
             {
                 return true;
             }

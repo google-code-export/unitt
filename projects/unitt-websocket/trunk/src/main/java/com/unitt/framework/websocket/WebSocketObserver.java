@@ -15,11 +15,11 @@ public interface WebSocketObserver
         CLOSED //The connection has been closed or could not be opened
     };
     
-    public void onOpen(String protocol, List<String> extensions);
-    public void onError(Exception exception);
-    public void onClose(Exception exception, String message);
-    public void onPong(String message);
+    public void onOpen(String aProtocol, List<String> aExtensions);
+    public void onError(Exception aException);
+    public void onClose(Exception aException, String aMessage);
+    public void onPong(String aMessage);
     
-    public void onBinaryMessage(byte[] message);
-    public void onTextMessage(String message);
+    public void onBinaryMessage(byte[] aMessage);
+    public void onTextMessage(String aMessage);
 }

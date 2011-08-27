@@ -16,11 +16,11 @@ public class WebSocketClientConnection extends WebSocketConnection
         //default
     }
 
-    public WebSocketClientConnection( WebSocketObserver observer, NetworkSocketFacade network, WebSocketConnectConfig connectConfig )
+    public WebSocketClientConnection( WebSocketObserver aObserver, NetworkSocketFacade aNetwork, WebSocketConnectConfig aConnectConfig )
     {
-        super( observer, network, connectConfig );
+        super( aObserver, aNetwork, aConnectConfig );
         
-        setHandshake( new WebSocketHandshake( connectConfig ) );
+        setHandshake( new WebSocketHandshake( aConnectConfig ) );
     }
 
         
@@ -33,15 +33,15 @@ public class WebSocketClientConnection extends WebSocketConnection
     }
     
     @Override
-    public void onReceivedData( byte[] data )
+    public void onReceivedData( byte[] aData )
     {
         if ( getState() == WebSocketState.NeedsHandshake )
         {
-            handleHandshake( data );
+            handleHandshake( aData );
         }
         else
         {
-            super.onReceivedData( data );
+            super.onReceivedData( aData );
         }
     }
     
@@ -59,9 +59,9 @@ public class WebSocketClientConnection extends WebSocketConnection
         }
     }
     
-    protected void handleHandshake(byte[] handshakeBytes)
+    protected void handleHandshake(byte[] aHandshakeBytes)
     {
-        if (getHandshake().verifyServerHandshake( handshakeBytes ))
+        if (getHandshake().verifyServerHandshake( aHandshakeBytes ))
         {
             getNetwork().upgrade();
             setState( WebSocketState.Connected );

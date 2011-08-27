@@ -195,6 +195,7 @@ public class NetworkSocket implements NetworkSocketFacade, Runnable
     {
         try
         {
+            setConfig( aConfig );
             createSocket();
             isRunning = true;
             Thread bgThread = new Thread(this);

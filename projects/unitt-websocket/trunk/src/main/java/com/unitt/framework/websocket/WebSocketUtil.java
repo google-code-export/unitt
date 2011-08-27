@@ -5,57 +5,57 @@ package com.unitt.framework.websocket;
  */
 public class WebSocketUtil
 {
-    public static byte[] copySubArray( byte[] array, int start, int length )
+    public static byte[] copySubArray( byte[] aArray, int aStart, int aLength )
     {
-        int actualLength = length;
+        int actualLength = aLength;
 
         // if the specified length is too big, trim
-        if ( start + actualLength > array.length )
+        if ( aStart + actualLength > aArray.length )
         {
-            actualLength = array.length - start;
+            actualLength = aArray.length - aStart;
         }
 
         // copy bytes and return
         byte[] results = new byte[actualLength];
-        System.arraycopy( array, start, results, 0, actualLength );
+        System.arraycopy( aArray, aStart, results, 0, actualLength );
         return results;
     }
 
-    public static byte[] appendArray( byte[] original, byte[] additional )
+    public static byte[] appendArray( byte[] aOriginal, byte[] aAdditional )
     {
-        byte[] results = new byte[original.length + additional.length];
+        byte[] results = new byte[aOriginal.length + aAdditional.length];
 
-        System.arraycopy( original, 0, results, 0, original.length );
-        System.arraycopy( additional, 0, results, original.length, additional.length );
+        System.arraycopy( aOriginal, 0, results, 0, aOriginal.length );
+        System.arraycopy( aAdditional, 0, results, aOriginal.length, aAdditional.length );
 
         return results;
     }
 
-    public static long convertBytesToLong( byte[] bytes, int start )
+    public static long convertBytesToLong( byte[] aBytes, int aStart )
     {
-        return convertBytes( bytes, start, 8 );
+        return convertBytes( aBytes, aStart, 8 );
     }
 
-    public static int convertBytesToInt( byte[] bytes, int start )
+    public static int convertBytesToInt( byte[] aBytes, int aStart )
     {
-        return convertBytes( bytes, start, 4 ).intValue();
+        return convertBytes( aBytes, aStart, 4 ).intValue();
     }
 
-    public static short convertBytesToShort( byte[] bytes, int start )
+    public static short convertBytesToShort( byte[] aBytes, int aStart )
     {
-        return convertBytes( bytes, start, 2 ).shortValue();
+        return convertBytes( aBytes, aStart, 2 ).shortValue();
     }
 
-    protected static Long convertBytes( byte[] bytes, int start, int length )
+    protected static Long convertBytes( byte[] aBytes, int aStart, int aLength )
     {
         long result = 0;
         int count = 1;
-        for ( int i = start; i < start + length; i++ )
+        for ( int i = aStart; i < aStart + aLength; i++ )
         {
             // shift byte to correct location
-            int bitsToShift = ( length - count++ ) * 8;
+            int bitsToShift = ( aLength - count++ ) * 8;
             long mask = 0xFF;
-            long byteValue = bytes[i];
+            long byteValue = aBytes[i];
             if ( bitsToShift > 0 )
             {
                 byteValue = byteValue << bitsToShift;
@@ -69,31 +69,31 @@ public class WebSocketUtil
         return result;
     }
 
-    public static byte[] convertLongToBytes( long value )
+    public static byte[] convertLongToBytes( long aValue )
     {
-        return convertToBytes( value, 8 );
+        return convertToBytes( aValue, 8 );
     }
 
-    public static byte[] convertIntToBytes( int value )
+    public static byte[] convertIntToBytes( int aValue )
     {
-        return convertToBytes( value, 4 );
+        return convertToBytes( aValue, 4 );
     }
 
-    public static byte[] convertShortToBytes( short value )
+    public static byte[] convertShortToBytes( short aValue )
     {
-        return convertToBytes( value, 2 );
+        return convertToBytes( aValue, 2 );
     }
 
-    protected static byte[] convertToBytes( long value, int length )
+    protected static byte[] convertToBytes( long aValue, int aLength )
     {
-        byte[] bytes = new byte[length];
+        byte[] bytes = new byte[aLength];
         int count = 1;
 
         for ( int i = 0; i < bytes.length; i++ )
         {
             // shift and grab just the bytes we want
-            int bitsToShift = ( length - count++ ) * 8;
-            Long byteValue = value;
+            int bitsToShift = ( aLength - count++ ) * 8;
+            Long byteValue = aValue;
             if ( bitsToShift > 0 )
             {
                 byteValue = byteValue >>> bitsToShift;

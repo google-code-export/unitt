@@ -16,17 +16,17 @@ public class WebSocketServerConnection extends WebSocketConnection
         //default
     }
 
-    public WebSocketServerConnection( WebSocketObserver observer, NetworkSocketFacade network, WebSocketConnectConfig connectConfig, byte[] clientHandshake )
+    public WebSocketServerConnection( WebSocketObserver aObserver, NetworkSocketFacade aNetwork, WebSocketConnectConfig aConnectConfig, byte[] aClientHandshake )
     {
-        super( observer, network, connectConfig );
-        setHandshake( new WebSocketHandshake( clientHandshake, connectConfig ) );
+        super( aObserver, aNetwork, aConnectConfig );
+        setHandshake( new WebSocketHandshake( aClientHandshake, aConnectConfig ) );
     }
 
         
     // server logic
     // ---------------------------------------------------------------------------
     @Override
-    public void onReceivedData( byte[] data )
+    public void onReceivedData( byte[] aData )
     {
         if ( getState() == WebSocketState.NeedsHandshake )
         {
@@ -36,7 +36,7 @@ public class WebSocketServerConnection extends WebSocketConnection
             sendOpenToObserver( getHandshake().getServerConfig().getSelectedProtocol(), null );
         }
         
-        super.onReceivedData( data );
+        super.onReceivedData( aData );
     }
     
     @Override

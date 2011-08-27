@@ -26,19 +26,19 @@ import com.unitt.framework.websocket.WebSocketObserver;
 
 public class NettyClientNetworkSocket extends SimpleChannelUpstreamHandler implements NetworkSocketFacade, ChannelPipelineFactory, WebSocketObserver
 {
-    private NetworkSocketObserver observer;
+    private NetworkSocketObserver socketObserver;
     private ClientBootstrap       bootstrap;
     private Channel               channel;
-    private WebsocketListener     listener;
+    private WebSocketObserver     observer;
     private long                  timeOfLastActivity;
 
 
     // constructors
     // ---------------------------------------------------------------------------
-    public NettyClientNetworkSocket( ClientBootstrap bootstrap, WebsocketListener listener )
+    public NettyClientNetworkSocket( ClientBootstrap aBootstrap, WebSocketObserver aObserver )
     {
-        this.bootstrap = bootstrap;
-        this.listener = listener;
+        bootstrap = aBootstrap;
+        observer = aObserver;
 
         // set pipeline factory on bootstrap
         bootstrap.setPipelineFactory( this );
@@ -56,23 +56,29 @@ public class NettyClientNetworkSocket extends SimpleChannelUpstreamHandler imple
     // channel logic
     // ---------------------------------------------------------------------------
     @Override
-    public void channelConnected( ChannelHandlerContext ctx, ChannelStateEvent e ) throws Exception
+    public void channelConnected( ChannelHandlerContext aContext, ChannelStateEvent aEvent ) throws Exception
     {
         // we are connected - init values
-        channel = ctx.getChannel();
+        channel = aContext.getChannel();
+
+        // notify socketObserver
+        if ( socketObserver != null )
+        {
+            socketObserver.onConnect();
+        }
     }
 
     @Override
-    public void messageReceived( ChannelHandlerContext ctx, MessageEvent e ) throws Exception
+    public void messageReceived( ChannelHandlerContext aContext, MessageEvent aEvent ) throws Exception
     {
-        Object msg = e.getMessage();
+        Object msg = aEvent.getMessage();
         if ( msg instanceof HttpResponse )
         {
-           observer.onReceivedData( ((HttpResponse) msg ).getContent().array());
+           socketObserver.onReceivedData( ((HttpResponse) msg ).getContent().array());
         }
         else
         {
-            observer.onReceivedData( (byte[]) msg );
+            socketObserver.onReceivedData( (byte[]) msg );
         }
     }
 
@@ -89,15 +95,9 @@ public class NettyClientNetworkSocket extends SimpleChannelUpstreamHandler imple
 
     // facade logic
     // ---------------------------------------------------------------------------
-    public void connect( WebSocketConnectConfig config )
+    public void connect( WebSocketConnectConfig aConfig )
     {
-        bootstrap.connect( new InetSocketAddress( config.getUrl().getHost(), config.getUrl().getPort() ) );
-
-        // notify observer
-        if ( observer != null )
-        {
-            observer.onConnect();
-        }
+        bootstrap.connect( new InetSocketAddress( aConfig.getUrl().getHost(), aConfig.getUrl().getPort() ) );
     }
 
     public void disconnect()
@@ -114,67 +114,65 @@ public class NettyClientNetworkSocket extends SimpleChannelUpstreamHandler imple
             exception = e;
         }
 
-        // notify observer
-        if ( observer != null )
+        // notify socketObserver
+        if ( socketObserver != null )
         {
-            observer.onDisconnect( exception );
+            socketObserver.onDisconnect( exception );
         }
     }
 
-    public void write( byte[] bytes )
+    public void write( byte[] aBytes )
     {
         // write bytes to channel
-        channel.write( bytes );
+        channel.write( aBytes );
     }
 
     public void upgrade()
     {
-        // @todo: use actual websocket encoder or see if i can just remove and
-        // use handler?
         channel.getPipeline().replace( "encoder", "wsencoder", new WebSocketFrameEncoder() );
     }
 
-    public void setObserver( NetworkSocketObserver observer )
+    public void setObserver( NetworkSocketObserver aSocketObserver )
     {
-        this.observer = observer;
+        socketObserver = aSocketObserver;
     }
 
 
-    // websocket observer logic
+    // websocket socketObserver logic
     // ---------------------------------------------------------------------------
-    public void onOpen( String protocol, List<String> extensions )
+    public void onOpen( String aProtocol, List<String> aExtensions )
     {
         updateLastActivity();
-        listener.onOpen();
+        observer.onOpen(aProtocol, aExtensions);
     }
 
-    public void onError( Exception exception )
+    public void onError( Exception aException )
     {
         updateLastActivity();
-        listener.onError( exception );
+        observer.onError( aException );
     }
 
-    public void onClose( Exception exception, String message )
+    public void onClose( Exception aException, String aMessage )
     {
         updateLastActivity();
-        listener.onClose( exception, message );
+        observer.onClose( aException, aMessage );
     }
 
-    public void onPong( String message )
+    public void onPong( String aMessage )
     {
         updateLastActivity();
     }
 
-    public void onBinaryMessage( byte[] message )
+    public void onBinaryMessage( byte[] aMessage )
     {
         updateLastActivity();
-        listener.onBinaryMessage( message );
+        observer.onBinaryMessage( aMessage );
     }
 
-    public void onTextMessage( String message )
+    public void onTextMessage( String aMessage )
     {
         updateLastActivity();
-        listener.onTextMessage( message );
+        observer.onTextMessage( aMessage );
     }
 
     protected void updateLastActivity()

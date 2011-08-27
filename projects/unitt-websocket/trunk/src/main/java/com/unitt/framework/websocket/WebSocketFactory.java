@@ -5,13 +5,13 @@ package com.unitt.framework.websocket;
  */
 public class WebSocketFactory
 {
-    public WebSocket createClient(WebSocketObserver observer, WebSocketConnectConfig config, NetworkSocketFacade network)
+    public WebSocket createClient(WebSocketObserver aObserver, WebSocketConnectConfig aConfig, NetworkSocketFacade aNetwork)
     {
-        return new WebSocketClientConnection( observer, network, config );
+        return new WebSocketClientConnection( aObserver, aNetwork, aConfig );
     }
     
-    public WebSocket createServer(WebSocketObserver observer, WebSocketConnectConfig config, NetworkSocketFacade network, byte[] clientHandshakeBytes)
+    public WebSocket createServer(WebSocketObserver aObserver, WebSocketConnectConfig aConfig, NetworkSocketFacade aNetwork, byte[] aClientHandshakeBytes)
     {
-        return new WebSocketServerConnection( observer, network, config, clientHandshakeBytes );
+        return new WebSocketServerConnection( aObserver, aNetwork, aConfig, aClientHandshakeBytes );
     }
 }

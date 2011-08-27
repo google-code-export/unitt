@@ -51,24 +51,24 @@ public class WebSocketFragment
 
     // constructors
     // ---------------------------------------------------------------------------
-    public WebSocketFragment( MessageOpCode opCode, boolean isFinal, boolean useMask, byte[] payload )
+    public WebSocketFragment( MessageOpCode aOpCode, boolean aIsFinal, boolean aUseMask, byte[] aPayload )
     {
-        if ( useMask )
+        if ( aUseMask )
         {
             setMask( generateMask() );
         }
-        setOpCode( opCode );
-        setFinal( isFinal );
-        setPayloadData( payload );
+        setOpCode( aOpCode );
+        setFinal( aIsFinal );
+        setPayloadData( aPayload );
         buildFragment();
     }
 
-    public WebSocketFragment( byte[] fragment )
+    public WebSocketFragment( byte[] aFragment )
     {
         setOpCode( MessageOpCode.ILLEGAL );
-        setFragment( fragment );
+        setFragment( aFragment );
         parseHeader();
-        if ( getMessageLength() <= fragment.length )
+        if ( getMessageLength() <= getFragment().length )
         {
             parseContent();
         }
@@ -82,9 +82,9 @@ public class WebSocketFragment
         return isFinal;
     }
 
-    public void setFinal( boolean isFinal )
+    public void setFinal( boolean aIsFinal )
     {
-        this.isFinal = isFinal;
+        isFinal = aIsFinal;
     }
 
     public int getMask()
@@ -92,9 +92,9 @@ public class WebSocketFragment
         return mask;
     }
 
-    public void setMask( int mask )
+    public void setMask( int aMask )
     {
-        this.mask = mask;
+        mask = aMask;
     }
 
     public int getPayloadStart()
@@ -102,9 +102,9 @@ public class WebSocketFragment
         return payloadStart;
     }
 
-    public void setPayloadStart( int payloadStart )
+    public void setPayloadStart( int aPayloadStart )
     {
-        this.payloadStart = payloadStart;
+        payloadStart = aPayloadStart;
     }
 
     public int getPayloadLength()
@@ -112,9 +112,9 @@ public class WebSocketFragment
         return payloadLength;
     }
 
-    public void setPayloadLength( int payloadLength )
+    public void setPayloadLength( int aPayloadLength )
     {
-        this.payloadLength = payloadLength;
+        payloadLength = aPayloadLength;
     }
 
     public PayloadType getPayloadType()
@@ -127,9 +127,9 @@ public class WebSocketFragment
         payloadType = aPayloadType;
     }
 
-    public void appendFragment( byte[] data )
+    public void appendFragment( byte[] aData )
     {
-        fragment = WebSocketUtil.appendArray( fragment, data );
+        fragment = WebSocketUtil.appendArray( fragment, aData );
     }
 
     public byte[] getPayloadData()
@@ -137,9 +137,9 @@ public class WebSocketFragment
         return payloadData;
     }
 
-    public void setPayloadData( byte[] payloadData )
+    public void setPayloadData( byte[] aPayloadData )
     {
-        this.payloadData = payloadData;
+        payloadData = aPayloadData;
     }
 
     public MessageOpCode getOpCode()
@@ -147,12 +147,12 @@ public class WebSocketFragment
         return opCode;
     }
 
-    public void setOpCode( MessageOpCode opCode )
+    public void setOpCode( MessageOpCode aOpCode )
     {
-        this.opCode = opCode;
+        opCode = aOpCode;
     }
 
-    public void setOpCode( int opCode )
+    public void setOpCode( int aOpCode )
     {
         // set default value
         setOpCode( MessageOpCode.ILLEGAL );
@@ -160,7 +160,7 @@ public class WebSocketFragment
         // see if the specified value matches an enum to use instead
         for ( MessageOpCode opCodeEnum : MessageOpCode.values() )
         {
-            if ( opCodeEnum.getOpCode() == opCode )
+            if ( opCodeEnum.getOpCode() == aOpCode )
             {
                 setOpCode( opCodeEnum );
                 return;
@@ -173,9 +173,9 @@ public class WebSocketFragment
         return fragment;
     }
 
-    public void setFragment( byte[] fragment )
+    public void setFragment( byte[] aFragment )
     {
-        this.fragment = fragment;
+        fragment = aFragment;
     }
 
 
@@ -437,45 +437,45 @@ public class WebSocketFragment
         return randomizer.nextInt();
     }
 
-    public static byte[] mask( int mask, byte[] data )
+    public static byte[] mask( int aMask, byte[] aData )
     {
-        if ( data != null )
+        if ( aData != null )
         {
-            return mask( mask, data, 0, data.length );
+            return mask( aMask, aData, 0, aData.length );
         }
 
         return null;
     }
 
-    public static byte[] mask( int mask, byte[] data, int start, int length )
+    public static byte[] mask( int aMask, byte[] aData, int aStart, int aLength )
     {
-        if ( data != null )
+        if ( aData != null )
         {
             // init
-            byte[] results = new byte[length];
+            byte[] results = new byte[aLength];
 
             // get mask
-            byte[] maskBytes = WebSocketUtil.convertIntToBytes( mask );
+            byte[] maskBytes = WebSocketUtil.convertIntToBytes( aMask );
 
             // loop through mask data, masking
-            int end = start + length;
+            int end = aStart + aLength;
             byte current;
-            int index = start;
-            if ( end > data.length )
+            int index = aStart;
+            if ( end > aData.length )
             {
-                end = data.length;
+                end = aData.length;
             }
             int m = 0;
             while ( index < end )
             {
                 // set current byte
-                current = data[index];
+                current = aData[index];
 
                 // mask
                 current ^= maskBytes[m++ % 4];
 
                 // append result & continue
-                results[index - start] = current;
+                results[index - aStart] = current;
                 index++;
             }
 
@@ -485,13 +485,13 @@ public class WebSocketFragment
         return null;
     }
 
-    public static byte[] unmask( int mask, byte[] data )
+    public static byte[] unmask( int aMask, byte[] aData )
     {
-        return mask( mask, data );
+        return mask( aMask, aData );
     }
 
-    public static byte[] unmask( int mask, byte[] data, int start, int length )
+    public static byte[] unmask( int aMask, byte[] aData, int aStart, int aLength )
     {
-        return mask( mask, data, start, length );
+        return mask( aMask, aData, aStart, aLength );
     }
 }

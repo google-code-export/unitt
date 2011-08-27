@@ -1,15 +1,16 @@
 package com.unitt.framework.websocket.netty;
 
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
 import java.util.concurrent.Executors;
 
 import org.jboss.netty.bootstrap.ClientBootstrap;
 import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 
+import com.unitt.framework.websocket.WebSocket;
 import com.unitt.framework.websocket.WebSocketConnectConfig;
 import com.unitt.framework.websocket.WebSocketFactory;
+import com.unitt.framework.websocket.WebSocketObserver;
 
 
 public class ClientWebsocketFactory
@@ -24,27 +25,28 @@ public class ClientWebsocketFactory
         wsFactory = new WebSocketFactory();
     }
     
-    protected static WebSocketConnectConfig getConfig(String urlString)
+    protected static WebSocketConnectConfig getConfig(String aUrlString)
     {
         //use websocket protocol, if missing
-        if ( urlString.indexOf( "://" ) == -1 )
+        if ( aUrlString.indexOf( "://" ) == -1 )
         {
-            urlString = "ws://" + urlString;
+            aUrlString = "ws://" + aUrlString;
         }
 
         //create url
-        URL url;
+        URI url;
         try
         {
-            url = new URL(urlString);
+            url = new URI(aUrlString);
         }
-        catch ( MalformedURLException e )
+        catch ( Exception e )
         {
-            throw new RuntimeException( "invalid url syntax: " + urlString );
+            e.printStackTrace();
+            throw new RuntimeException( "invalid url syntax: " + aUrlString );
         }
 
         //validate websocket protocols
-        String protocol = url.getProtocol();
+        String protocol = url.getScheme();
         if ( !protocol.equals( "ws" ) && !protocol.equals( "wss" ) )
         {
             throw new IllegalArgumentException( "Unsupported protocol: " + protocol );
@@ -64,27 +66,27 @@ public class ClientWebsocketFactory
     /**
      * Creates a client websocket that will attach to the specified url.
      * 
-     * @param url url to server websocket
-     * @param listener listener that will respond to lifecycle events and messages
+     * @param aUrl url to server websocket
+     * @param aObserver observer that will respond to lifecycle events and messages
      */
-    public static ClientWebsocket create( String url, WebsocketListener listener )
+    public static WebSocket create( String aUrl, WebSocketObserver aObserver )
     {
         ClientBootstrap bootstrap = new ClientBootstrap( socketChannelFactory );
-        WebSocketConnectConfig config = getConfig( url );
-        NettyClientNetworkSocket networkSocket = new NettyClientNetworkSocket(bootstrap, listener);
-        return new ClientWebSocketAdapter( wsFactory.createClient( networkSocket, config, networkSocket ) );
+        WebSocketConnectConfig config = getConfig( aUrl );
+        NettyClientNetworkSocket networkSocket = new NettyClientNetworkSocket(bootstrap, aObserver);
+        return wsFactory.createClient( networkSocket, config, networkSocket );
     }
 
     /**
      * Creates a client websocket and opens it to the specified url. The listener will have
      * to respond as opening is not a synchronous operation.
      * 
-     * @param url url to server websocket
-     * @param listener listener that will respond to lifecycle events and messages
+     * @param aUrl url to server websocket
+     * @param aObserver observer that will respond to lifecycle events and messages
      */
-    public static ClientWebsocket connect( String url, WebsocketListener listener )
+    public static WebSocket connect( String aUrl, WebSocketObserver aObserver )
     {
-        ClientWebsocket socket = create( url, listener );
+        WebSocket socket = create( aUrl, aObserver );
         socket.open();
         return socket;
     }

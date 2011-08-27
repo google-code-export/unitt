@@ -6,6 +6,6 @@ package com.unitt.framework.websocket;
 public interface NetworkSocketObserver
 {
     public void onConnect();
-    public void onDisconnect(Exception exception);
-    public void onReceivedData(byte[] data);
+    public void onDisconnect(Exception aException);
+    public void onReceivedData(byte[] aData);
 }
