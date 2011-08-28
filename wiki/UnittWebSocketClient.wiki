@@ -140,7 +140,7 @@ MyWebSocket* myWS = [[MyWebSocket alloc] init];
 
 
 = More Info =
-  * Check out the [http://code.google.com/p/unitt/source/browse/projects/iOS/UnittWebSocketClient/tags/2.5/UnittWebSocketClient/WebSocket07.h WebSocket07.h], [http://code.google.com/p/unitt/source/browse/projects/iOS/UnittWebSocketClient/tags/2.5/UnittWebSocketClient/WebSocket08.h WebSocket08.h], [http://code.google.com/p/unitt/source/browse/projects/iOS/UnittWebSocketClient/tags/2.5/UnittWebSocketClient/WebSocket10.h WebSocket10.h] for more information on how to use these classes.
+  * Check out the [http://code.google.com/p/unitt/source/browse/projects/iOS/UnittWebSocketClient/tags/0.9.3/UnittWebSocketClient/WebSocket00.h WebSocket00.h], [http://code.google.com/p/unitt/source/browse/projects/iOS/UnittWebSocketClient/tags/0.9.3/UnittWebSocketClient/WebSocket07.h WebSocket07.h], [http://code.google.com/p/unitt/source/browse/projects/iOS/UnittWebSocketClient/tags/0.9.3/UnittWebSocketClient/WebSocket08.h WebSocket08.h], [http://code.google.com/p/unitt/source/browse/projects/iOS/UnittWebSocketClient/tags/0.9.3/UnittWebSocketClient/WebSocket10.h WebSocket10.h] for more information on how to use these classes.
   * For more information on web sockets, see [http://en.wikipedia.org/wiki/WebSockets Wikipedia]
 
 == !WebSocket v00 ==
