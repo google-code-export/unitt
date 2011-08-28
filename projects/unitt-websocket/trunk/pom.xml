@@ -90,4 +90,20 @@
 		</plugins>
 	</build>
 
+    <!-- Repositories -->
+    <repositories>
+        <repository>
+            <id>unitt</id>
+            <name>UnitT Repository</name>
+            <url>http://unitt.googlecode.com/svn/repository</url>
+        </repository>
+    </repositories>
+    <distributionManagement>
+        <repository>
+            <id>unitt</id>
+            <name>UnitT Repository</name>
+            <url>https://unitt.googlecode.com/svn/repository</url>
+        </repository>
+    </distributionManagement>
+
 </project>
