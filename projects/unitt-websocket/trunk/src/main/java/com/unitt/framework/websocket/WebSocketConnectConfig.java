@@ -47,7 +47,7 @@ public class WebSocketConnectConfig
     private List<String> availableProtocols;
     private String selectedProtocol;
     private boolean verifySecurityKey;
-    private int maxPayloadSize;
+    private int maxPayloadSize = 32 * 1024;
     private String proxyHost;
     private int proxyPort = -1;
     private WebSocketVersion webSocketVersion = WebSocketVersion.Version07;
@@ -161,7 +161,10 @@ public class WebSocketConnectConfig
 
     public void setMaxPayloadSize( int aMaxPayloadSize )
     {
-        maxPayloadSize = aMaxPayloadSize;
+        if (aMaxPayloadSize > 0)
+        {
+            maxPayloadSize = aMaxPayloadSize;
+        }
     }
 
     public WebSocketVersion getWebSocketVersion()

@@ -5,6 +5,26 @@ package com.unitt.framework.websocket;
  */
 public class WebSocketUtil
 {
+    public static void printBytes(byte[] aData)
+    {
+        StringBuffer out = new StringBuffer("Bytes: ");
+        
+        if (aData != null)
+        {
+            for (byte item : aData)
+            {
+                out.append(Integer.toHexString( item & 0xFF ) );
+                out.append( "," );
+            }
+        }
+        else
+        {
+            out.append("null");
+        }
+        
+        System.out.println(out.toString());
+    }
+    
     public static byte[] copySubArray( byte[] aArray, int aStart, int aLength )
     {
         int actualLength = aLength;
@@ -81,7 +101,7 @@ public class WebSocketUtil
 
     public static byte[] convertShortToBytes( short aValue )
     {
-        return convertToBytes( aValue, 2 );
+        return  convertToBytes( aValue, 2 );
     }
 
     protected static byte[] convertToBytes( long aValue, int aLength )

@@ -9,7 +9,7 @@ import org.junit.Test;
 public class WebSocketUtilTest
 {
     @Test
-    public void testConvertToBytes()
+    public void testConvertIntToBytes()
     {
         byte[] bytes = new byte[] {0x37, new Integer(0xfa).byteValue(), 0x21, 0x3d};
         int bytesIn = WebSocketUtil.convertBytesToInt( bytes, 0);
@@ -18,5 +18,14 @@ public class WebSocketUtilTest
         {
 			Assert.assertEquals("Byte #" + i + " is different. Should be '" + Integer.toHexString( bytes[i] ) + "'. It was '" + Integer.toHexString( bytesOut[i] ), bytes[i], bytesOut[i]);
         }
+    }
+
+    @Test
+    public void testConvertBytesToShort()
+    {
+        short valueIn = 1000;
+        byte[] bytes = WebSocketUtil.convertShortToBytes( valueIn );
+        short valueOut = WebSocketUtil.convertBytesToShort( bytes, 0 );
+        Assert.assertEquals( "Did not convert correctly.", valueIn, valueOut );
     }
 }

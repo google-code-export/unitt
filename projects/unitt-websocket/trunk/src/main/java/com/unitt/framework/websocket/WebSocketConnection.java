@@ -3,7 +3,12 @@ package com.unitt.framework.websocket;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CharsetEncoder;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +16,7 @@ import java.util.Queue;
 
 import org.slf4j.LoggerFactory;
 
+import com.unitt.framework.websocket.WebSocketConnectConfig.WebSocketVersion;
 import com.unitt.framework.websocket.WebSocketFragment.MessageOpCode;
 
 
@@ -24,18 +30,18 @@ public abstract class WebSocketConnection implements WebSocket, NetworkSocketObs
         NeedsHandshake, Connected, Disconnecting, Disconnected
     };
 
-    protected static final Charset utf8Charset = Charset.forName( "UTF-8" );
-    private static org.slf4j.Logger          logger = LoggerFactory.getLogger( WebSocketConnection.class );
+    protected static final Charset   utf8Charset      = Charset.forName( "UTF-8" );
+    private static org.slf4j.Logger  logger           = LoggerFactory.getLogger( WebSocketConnection.class );
 
-    private WebSocketObserver      observer;
-    private WebSocketConnectConfig connectConfig;
-    private NetworkSocketFacade    network;
-    private WebSocketHandshake     handshake;
-    private String                 closeMessage;
-    private WebSocketState         state = WebSocketState.Disconnected;
+    private WebSocketObserver        observer;
+    private WebSocketConnectConfig   connectConfig;
+    private NetworkSocketFacade      network;
+    private WebSocketHandshake       handshake;
+    private String                   closeMessage;
+    private int                      closeStatus;
+    private WebSocketState           state            = WebSocketState.Disconnected;
     private Queue<WebSocketFragment> pendingFragments = new ArrayDeque<WebSocketFragment>();
-    private boolean isClosing = false;
-    private int maxPayloadSize = 4 * 1024;;
+    private boolean                  isClosing        = false;
 
 
     // constructors
@@ -65,10 +71,6 @@ public abstract class WebSocketConnection implements WebSocket, NetworkSocketObs
     public void setConnectConfig( WebSocketConnectConfig aConnectConfig )
     {
         connectConfig = aConnectConfig;
-        if (aConnectConfig.getMaxPayloadSize() > 0)
-        {
-            setMaxPayloadSize( aConnectConfig.getMaxPayloadSize() );
-        }
     }
 
     public WebSocketObserver getObserver()
@@ -101,17 +103,24 @@ public abstract class WebSocketConnection implements WebSocket, NetworkSocketObs
         handshake = aHandshake;
     }
 
-    protected int getMaxPayloadSize()
+    protected boolean throwsErrorOnInvalidUtf8()
     {
-        return maxPayloadSize;
+        return WebSocketVersion.Version10.equals( getConnectConfig().getWebSocketVersion() );
     }
 
-    protected void setMaxPayloadSize( int aMaxPayloadSize )
+    protected int getDefaultStatusCode( Exception aException )
     {
-        if (aMaxPayloadSize > 0)
+        if ( aException != null )
         {
-            maxPayloadSize = aMaxPayloadSize;
+            return WebSocketCloseStatusNormalButMissingStatus;
         }
+
+        return WebSocketCloseStatusAbnormalButMissingStatus;
+    }
+
+    protected int getMaxPayloadSize()
+    {
+        return connectConfig.getMaxPayloadSize();
     }
 
     protected WebSocketState getState()
@@ -133,7 +142,17 @@ public abstract class WebSocketConnection implements WebSocket, NetworkSocketObs
     {
         closeMessage = aCloseMessage;
     }
-    
+
+    protected int getCloseStatus()
+    {
+        return closeStatus;
+    }
+
+    protected void setCloseStatus( int aCloseStatus )
+    {
+        closeStatus = aCloseStatus;
+    }
+
     protected boolean isClosing()
     {
         return isClosing;
@@ -156,7 +175,7 @@ public abstract class WebSocketConnection implements WebSocket, NetworkSocketObs
 
     public void onDisconnect( Exception exception )
     {
-        sendCloseToObserver( exception, getCloseMessage() );
+        sendCloseToObserver( getCloseStatus(), getCloseMessage(), exception );
     }
 
     public void onReceivedData( byte[] aData )
@@ -170,9 +189,14 @@ public abstract class WebSocketConnection implements WebSocket, NetworkSocketObs
 
     // websocket interface
     // ---------------------------------------------------------------------------
-    public void close( String aMessage )
+    public void close( int aStatus, String aMessage )
     {
-        sendClose( aMessage );
+        sendClose( aStatus, aMessage );
+    }
+
+    public void close()
+    {
+        close( 0, null );
     }
 
     public void open()
@@ -182,7 +206,16 @@ public abstract class WebSocketConnection implements WebSocket, NetworkSocketObs
 
     public void ping( String aMessage )
     {
-        sendPing( getSingleMessageBytes( aMessage ) );
+        try
+        {
+            sendPing( getSingleMessageBytes( aMessage ) );
+        }
+        catch ( CharacterCodingException e )
+        {
+            logger.error( "An error occurred while encoding to UTF8 to send text in ping message.", e );
+            sendErrorToObserver( e );
+            close( WebSocketCloseStatusInvalidUtf8, null );
+        }
     }
 
     public void sendMessage( byte[] aMessage )
@@ -195,12 +228,29 @@ public abstract class WebSocketConnection implements WebSocket, NetworkSocketObs
         sendText( aMessage );
     }
 
+    public WebSocketReadyState getReadyState()
+    {
+        switch ( state )
+        {
+            case NeedsHandshake:
+                return WebSocketReadyState.CONNECTING;
+            case Connected:
+                return WebSocketReadyState.OPEN;
+            case Disconnecting:
+                return WebSocketReadyState.CLOSING;
+            case Disconnected:
+                return WebSocketReadyState.CLOSED;
+        }
+
+        return WebSocketReadyState.CLOSED;
+    }
+
 
     // observer handling logic
     // ---------------------------------------------------------------------------
-    protected void sendOpenToObserver(String aProtocol, List<String> aExtensions)
+    protected void sendOpenToObserver( String aProtocol, List<String> aExtensions )
     {
-        if (getObserver() != null)
+        if ( getObserver() != null )
         {
             try
             {
@@ -208,7 +258,7 @@ public abstract class WebSocketConnection implements WebSocket, NetworkSocketObs
             }
             catch ( Exception e )
             {
-                logger.warn("Observer threw an exception while handling open: protocol=" + aProtocol + ", extensions=" + aExtensions, e);
+                logger.warn( "Observer threw an exception while handling open: protocol=" + aProtocol + ", extensions=" + aExtensions, e );
             }
         }
         else
@@ -216,10 +266,10 @@ public abstract class WebSocketConnection implements WebSocket, NetworkSocketObs
             logger.warn( "Missing observer. Cannot send open." );
         }
     }
-    
-    protected void sendErrorToObserver(Exception exception)
+
+    protected void sendErrorToObserver( Exception exception )
     {
-        if (getObserver() != null)
+        if ( getObserver() != null )
         {
             try
             {
@@ -227,7 +277,7 @@ public abstract class WebSocketConnection implements WebSocket, NetworkSocketObs
             }
             catch ( Exception e )
             {
-                logger.warn("Observer threw an exception while handling error: exception=" + exception, e);
+                logger.warn( "Observer threw an exception while handling error: exception=" + exception, e );
             }
         }
         else
@@ -235,18 +285,23 @@ public abstract class WebSocketConnection implements WebSocket, NetworkSocketObs
             logger.warn( "Missing observer. Cannot send error." );
         }
     }
-    
-    protected void sendCloseToObserver(Exception exception, String aMessage)
+
+    protected void sendCloseToObserver( int aStatusCode, String aCloseMessage, Exception aException )
     {
-        if (getObserver() != null)
+        if ( getObserver() != null )
         {
             try
             {
-                getObserver().onClose( exception, getCloseMessage() );
+                int statusCode = aStatusCode;
+                if ( statusCode <= 0 )
+                {
+                    statusCode = getDefaultStatusCode(aException);
+                }
+                getObserver().onClose( statusCode, aCloseMessage, aException );
             }
             catch ( Exception e )
             {
-                logger.warn("Observer threw an exception while handling close: message=" + aMessage + ", exception=" + exception, e);
+                logger.warn( "Observer threw an exception while handling close: status=" + aStatusCode + ", message=" + aCloseMessage + ", exception=" + aException, e );
             }
         }
         else
@@ -254,10 +309,10 @@ public abstract class WebSocketConnection implements WebSocket, NetworkSocketObs
             logger.warn( "Missing observer. Cannot send close." );
         }
     }
-    
-    protected void sendPongToObserver(String aMessage)
+
+    protected void sendPongToObserver( String aMessage )
     {
-        if (getObserver() != null)
+        if ( getObserver() != null )
         {
             try
             {
@@ -265,7 +320,7 @@ public abstract class WebSocketConnection implements WebSocket, NetworkSocketObs
             }
             catch ( Exception e )
             {
-                logger.warn("Observer threw an exception while handling pong: message=" + aMessage, e);
+                logger.warn( "Observer threw an exception while handling pong: message=" + aMessage, e );
             }
         }
         else
@@ -273,10 +328,10 @@ public abstract class WebSocketConnection implements WebSocket, NetworkSocketObs
             logger.warn( "Missing observer. Cannot send pong." );
         }
     }
-    
-    protected void sendBinaryMessageToObserver(byte[] aMessage)
+
+    protected void sendBinaryMessageToObserver( byte[] aMessage )
     {
-        if (getObserver() != null)
+        if ( getObserver() != null )
         {
             try
             {
@@ -284,7 +339,7 @@ public abstract class WebSocketConnection implements WebSocket, NetworkSocketObs
             }
             catch ( Exception e )
             {
-                logger.warn("Observer threw an exception while handling binary message: " + aMessage.length + " bytes.", e);
+                logger.warn( "Observer threw an exception while handling binary message: " + aMessage.length + " bytes.", e );
             }
         }
         else
@@ -292,10 +347,10 @@ public abstract class WebSocketConnection implements WebSocket, NetworkSocketObs
             logger.warn( "Missing observer. Cannot send binary message." );
         }
     }
-    
-    protected void sendTextMessageToObserver(String aMessage)
+
+    protected void sendTextMessageToObserver( String aMessage )
     {
-        if (getObserver() != null)
+        if ( getObserver() != null )
         {
             try
             {
@@ -303,7 +358,7 @@ public abstract class WebSocketConnection implements WebSocket, NetworkSocketObs
             }
             catch ( Exception e )
             {
-                logger.warn("Observer threw an exception while handling text message: " + aMessage.length() + " characters.", e);
+                logger.warn( "Observer threw an exception while handling text message: " + aMessage.length() + " characters.", e );
             }
         }
         else
@@ -317,23 +372,23 @@ public abstract class WebSocketConnection implements WebSocket, NetworkSocketObs
     // ---------------------------------------------------------------------------
     protected void closeSocket()
     {
-        setState(WebSocketState.Disconnecting);
+        setState( WebSocketState.Disconnecting );
         getNetwork().disconnect();
     }
 
-    protected void handleCompleteFragment(WebSocketFragment aFragment)
+    protected void handleCompleteFragment( WebSocketFragment aFragment )
     {
-        //if we are not in continuation and its final, dequeue
-        if (aFragment.isFinal() && aFragment.getOpCode() != MessageOpCode.CONTINUATION)
+        // if we are not in continuation and its final, dequeue
+        if ( aFragment.isFinal() && aFragment.getOpCode() != MessageOpCode.CONTINUATION )
         {
             pendingFragments.poll();
         }
-        
-        //continue to process
-        switch (aFragment.getOpCode()) 
+
+        // continue to process
+        switch ( aFragment.getOpCode() )
         {
             case CONTINUATION:
-                if (aFragment.isFinal())
+                if ( aFragment.isFinal() )
                 {
                     try
                     {
@@ -341,28 +396,37 @@ public abstract class WebSocketConnection implements WebSocket, NetworkSocketObs
                     }
                     catch ( IOException e )
                     {
-                        logger.error("Could not handle complete fragments.", e);
+                        logger.error( "Could not handle complete fragments.", e );
                         sendErrorToObserver( e );
                     }
                 }
                 break;
             case TEXT:
-                if (aFragment.isFinal())
+                if ( aFragment.isFinal() )
                 {
-                    sendTextMessageToObserver( new String(aFragment.getPayloadData(), utf8Charset ) );
+                    try
+                    {
+                        sendTextMessageToObserver( convertFromBytesToString( aFragment.getPayloadData() ) );
+                    }
+                    catch ( CharacterCodingException e )
+                    {
+                        logger.error( "An error occurred while decoding from UTF8 to receive a text message.", e );
+                        sendErrorToObserver( e );
+                        close( WebSocketCloseStatusInvalidUtf8, null );
+                    }
                 }
                 break;
             case BINARY:
-                if (aFragment.isFinal())
+                if ( aFragment.isFinal() )
                 {
                     sendBinaryMessageToObserver( aFragment.getPayloadData() );
                 }
                 break;
             case CLOSE:
-                handleClose(aFragment);
+                handleClose( aFragment );
                 break;
             case PING:
-                handlePing(aFragment.getPayloadData());
+                handlePing( aFragment.getPayloadData() );
                 break;
         }
     }
@@ -370,24 +434,26 @@ public abstract class WebSocketConnection implements WebSocket, NetworkSocketObs
     protected void handleCompleteFragments() throws IOException
     {
         WebSocketFragment fragment = pendingFragments.poll();
-        if (fragment != null)
+        if ( fragment != null )
         {
-            //init
+            int count = 0;
+            // init
             ByteArrayOutputStream messageData = new ByteArrayOutputStream();
             MessageOpCode messageOpCode = fragment.getOpCode();
-        
-            //loop through, constructing single message
-            while (fragment != null) 
+
+            // loop through, constructing single message
+            while ( fragment != null )
             {
                 messageData.write( fragment.getPayloadData() );
                 fragment = pendingFragments.poll();
+                count++;
             }
             
-            //handle final message contents        
-            switch (messageOpCode) 
-            {            
+            // handle final message contents
+            switch ( messageOpCode )
+            {
                 case TEXT:
-                    sendTextMessageToObserver( new String(messageData.toByteArray(), utf8Charset ) );
+                    sendTextMessageToObserver( convertFromBytesToString( messageData.toByteArray() ) );
                     break;
                 case BINARY:
                     sendBinaryMessageToObserver( messageData.toByteArray() );
@@ -396,166 +462,253 @@ public abstract class WebSocketConnection implements WebSocket, NetworkSocketObs
         }
     }
 
-    protected void handleClose(WebSocketFragment aFragment)
+    protected void handleClose( WebSocketFragment aFragment )
     {
-        if (isClosing())
+        // parse close message
+        boolean hasInvalidUtf8 = false;
+
+        try
+        {
+            byte[] data = aFragment.getPayloadData();
+            if ( data != null )
+            {
+                if ( data.length >= 2 )
+                {
+                    closeStatus = WebSocketUtil.convertBytesToShort( data, 0 );
+                    if ( data.length > 2 )
+                    {
+                        closeMessage = convertFromBytesToString( WebSocketUtil.copySubArray( data, 2, data.length - 2 ) );
+                    }
+                }
+            }
+        }
+        catch ( CharacterCodingException e )
+        {
+            logger.error( "An error occurred while decoding from UTF8 to get text in close message.", e );
+            sendErrorToObserver( e );
+            hasInvalidUtf8 = true;
+        }
+
+        // actually close
+        if ( isClosing() )
         {
             closeSocket();
         }
         else
         {
-            setClosing(true);
-            close(getMessageFromBytes(aFragment.getPayloadData()));
+            setClosing( true );
+            if ( hasInvalidUtf8 )
+            {
+                close( WebSocketCloseStatusInvalidUtf8, null );
+            }
+            else
+            {
+                close( 0, null );
+            }
         }
     }
 
-    protected void handlePing(byte[] aMessage)
+    protected void handlePing( byte[] aMessage )
     {
-        sendMessage(aMessage, MessageOpCode.PONG);
-        sendPongToObserver( getMessageFromBytes(aMessage) );
+        try
+        {
+            String message = getMessageFromBytes( aMessage );
+            sendMessage( aMessage, MessageOpCode.PONG );
+            sendPongToObserver( message );
+        }
+        catch ( CharacterCodingException e )
+        {
+            logger.error( "An error occurred while decoding from UTF8 to receive text in ping.", e );
+            sendErrorToObserver( e );
+            close( WebSocketCloseStatusInvalidUtf8, null );
+        }
     }
 
-    protected void handleMessageData(byte[] aData)
+    protected void handleMessageData( byte[] aData )
     {
-        //grab last fragment, use if not complete
+        // grab last fragment, use if not complete
         WebSocketFragment fragment = pendingFragments.peek();
-        if (fragment == null || fragment.isValid())
+        if ( fragment == null || fragment.isValid() )
         {
-            //assign web socket fragment since the last one was complete
-            fragment =  new WebSocketFragment( aData );
+            // assign web socket fragment since the last one was complete
+            fragment = new WebSocketFragment( aData );
+            
             pendingFragments.offer( fragment );
         }
-        else if (fragment != null)
+        else if ( fragment != null )
         {
             fragment.appendFragment( aData );
-            if (fragment.isValid()) 
+            if ( fragment.isValid() )
             {
                 fragment.parseContent();
             }
         }
-        
-        
-        //if we have a complete fragment, handle it
-        if (fragment.isValid()) 
+
+
+        // if we have a complete fragment, handle it
+        if ( fragment.isValid() )
         {
-            //handle complete fragment
-            handleCompleteFragment(fragment);
-            
-            //if we have extra data, handle it
-            if (aData.length > fragment.getMessageLength())
+            // handle complete fragment
+            handleCompleteFragment( fragment );
+
+            // if we have extra data, handle it
+            if ( aData.length > fragment.getMessageLength() )
             {
                 handleMessageData( WebSocketUtil.copySubArray( aData, fragment.getMessageLength(), aData.length - fragment.getMessageLength() ) );
             }
         }
     }
-    
-    protected String getMessageFromBytes(byte[] aMessage)
+
+    protected String getMessageFromBytes( byte[] aMessage ) throws CharacterCodingException
     {
-        if (aMessage != null && aMessage.length > 0)
+        if ( aMessage != null && aMessage.length > 0 )
         {
-            return new String(aMessage, utf8Charset );
+            return convertFromBytesToString( aMessage );
         }
-        
+
         return null;
     }
-    
-    protected byte[] getSingleMessageBytes(String aMessage)
+
+    protected byte[] getCloseMessageBytes( Integer aStatus, String aMessage ) throws CharacterCodingException
     {
-        if (aMessage != null)
+        byte[] results = null;
+
+        if ( aMessage != null )
         {
-            byte[] results = aMessage.getBytes( utf8Charset );
-            if (results.length <= getMaxPayloadSize())
+            byte[] temp = convertFromStringToBytes( aMessage );
+            if ( temp.length + 2 <= getMaxPayloadSize() )
+            {
+                byte[] statusBytes = new byte[] { new Integer(aStatus%0x100).byteValue(), new Integer(aStatus/0x100).byteValue() };
+                results = WebSocketUtil.appendArray( statusBytes, temp );
+            }
+        }
+        else if ( aStatus != null && aStatus > 0 )
+        {
+            results = new byte[] { new Integer(aStatus%0x100).byteValue(), new Integer(aStatus/0x100).byteValue() };
+        }
+
+        return results;
+    }
+
+    protected byte[] getSingleMessageBytes( String aMessage ) throws CharacterCodingException
+    {
+        if ( aMessage != null )
+        {
+            byte[] results = convertFromStringToBytes( aMessage );
+            if ( results.length <= getMaxPayloadSize() )
             {
                 return results;
             }
         }
-        
+
         return null;
     }
-    
-    protected void sendClose(String aMessage)
-    {
-        sendMessage(new WebSocketFragment(MessageOpCode.CLOSE, true, sendWithMask(), getSingleMessageBytes(aMessage)));
-    }
 
-    protected void sendText(String aMessage)
+    protected void sendClose( int aStatus, String aMessage )
     {
-        System.out.println("Sending text message: " + !isClosing());
-        //no reason to grab data if we won't send it anyways
-        if (!isClosing())
+        try
         {
-            sendMessage(aMessage.getBytes( utf8Charset ), MessageOpCode.TEXT);
+            setClosing( true );
+            System.out.println("Closing with (" + aStatus + "): " + aMessage);
+            System.out.println("Message Bytes:");
+            WebSocketFragment message = new WebSocketFragment( MessageOpCode.CLOSE, true, sendWithMask(), getCloseMessageBytes( aStatus, aMessage ) );
+            byte[] messageBytes = message.getFragment();
+            System.out.println("Fragment:");
+            WebSocketUtil.printBytes( messageBytes );
+            sendMessage( message );
+        }
+        catch ( CharacterCodingException e )
+        {
+            logger.error( "An error occurred while encoding UTF8 to send text in close message.", e );
+            sendErrorToObserver( e );
+            close( WebSocketCloseStatusInvalidUtf8, null );
         }
     }
 
-    protected void sendBinary(byte[] aMessage)
+    protected void sendText( String aMessage )
     {
-        sendMessage(aMessage, MessageOpCode.BINARY);
+        // no reason to grab data if we won't send it anyways
+        if ( !isClosing() )
+        {
+            try
+            {
+                sendMessage( convertFromStringToBytes( aMessage ), MessageOpCode.TEXT );
+            }
+            catch ( CharacterCodingException e )
+            {
+                logger.error( "An error occurred while encoding UTF8 to send text message.", e );
+                sendErrorToObserver( e );
+                close( WebSocketCloseStatusInvalidUtf8, null );
+            }
+        }
     }
 
-    protected void sendPing(byte[] aMessage)
+    protected void sendBinary( byte[] aMessage )
     {
-        sendMessage(aMessage, MessageOpCode.PING);
+        sendMessage( aMessage, MessageOpCode.BINARY );
     }
 
-    protected void sendMessage(byte[] aMessage, MessageOpCode aOpCode)
+    protected void sendPing( byte[] aMessage )
     {
-        System.out.println("Creating fragment & sending: " + !isClosing());
-        if (!isClosing())
+        sendMessage( aMessage, MessageOpCode.PING );
+    }
+
+    protected void sendMessage( byte[] aMessage, MessageOpCode aOpCode )
+    {
+        if ( !isClosing() )
         {
             int messageLength = aMessage.length;
-            System.out.println("Message length = " + messageLength);
-            if (messageLength <= getMaxPayloadSize())
+            if ( messageLength <= getMaxPayloadSize() )
             {
-                System.out.println("Sending one fragment.");
-                //create and send fragment
+                // create and send fragment
                 WebSocketFragment fragment = new WebSocketFragment( aOpCode, true, sendWithMask(), aMessage );
                 sendMessage( fragment );
             }
             else
             {
-                System.out.println("Length is greater than max payload size: " + getMaxPayloadSize());
                 List<WebSocketFragment> fragments = new ArrayList<WebSocketFragment>();
                 int fragmentCount = messageLength / getMaxPayloadSize();
-                if (messageLength % getMaxPayloadSize() > 0)
+                if ( messageLength % getMaxPayloadSize() > 0 )
                 {
                     fragmentCount++;
                 }
-                
-                //build fragments
-                for (int i = 0; i < fragmentCount; i++)
+
+                // build fragments
+                for ( int i = 0; i < fragmentCount; i++ )
                 {
                     WebSocketFragment fragment = null;
                     int fragmentLength = getMaxPayloadSize();
-                    if (i == 0)
+                    if ( i == 0 )
                     {
                         fragment = new WebSocketFragment( aOpCode, false, sendWithMask(), WebSocketUtil.copySubArray( aMessage, i * getMaxPayloadSize(), fragmentLength ) );
                     }
-                    else if (i == fragmentCount - 1)
+                    else if ( i == fragmentCount - 1 )
                     {
                         fragmentLength = messageLength % getMaxPayloadSize();
+                        if (fragmentLength == 0)
+                        {
+                            fragmentLength = getMaxPayloadSize();
+                        }
                         fragment = new WebSocketFragment( MessageOpCode.CONTINUATION, true, sendWithMask(), WebSocketUtil.copySubArray( aMessage, i * getMaxPayloadSize(), fragmentLength ) );
                     }
                     else
                     {
                         fragment = new WebSocketFragment( MessageOpCode.CONTINUATION, false, sendWithMask(), WebSocketUtil.copySubArray( aMessage, i * getMaxPayloadSize(), fragmentLength ) );
                     }
-                    fragments.add(fragment);
+                    fragments.add( fragment );
                 }
-                System.out.println("Sending " + fragments.size() + " fragments.");
-                //send fragments
-                for (WebSocketFragment fragment : fragments) 
+                // send fragments
+                for ( WebSocketFragment fragment : fragments )
                 {
-                    sendMessage(fragment);
+                    sendMessage( fragment );
                 }
-            }  
+            }
         }
     }
 
-    protected void sendMessage(WebSocketFragment aFragment)
+    protected void sendMessage( WebSocketFragment aFragment )
     {
-        System.out.println("Sending Fragment: " + aFragment.getOpCode().name());
-        if (!isClosing() || aFragment.getOpCode() == MessageOpCode.CLOSE)
+        if ( !isClosing() || aFragment.getOpCode() == MessageOpCode.CLOSE )
         {
             try
             {
@@ -566,5 +719,56 @@ public abstract class WebSocketConnection implements WebSocket, NetworkSocketObs
                 sendErrorToObserver( e );
             }
         }
+    }
+
+
+    // charset logic
+    // ---------------------------------------------------------------------------
+    protected String convertFromBytesToString( byte[] aData ) throws CharacterCodingException
+    {
+        if ( aData != null )
+        {
+            if ( aData.length > 0 )
+            {
+                if ( throwsErrorOnInvalidUtf8() )
+                {
+                    CharsetDecoder decoder = utf8Charset.newDecoder();
+                    CharBuffer buffer = decoder.decode( ByteBuffer.wrap( aData ) );
+                    return buffer.toString();
+                }
+            }
+            else
+            {
+                return "";
+            }
+
+            return new String( aData, utf8Charset );
+        }
+
+        return null;
+    }
+
+    protected byte[] convertFromStringToBytes( String aData ) throws CharacterCodingException
+    {
+        if ( aData != null )
+        {
+            if ( aData.length() > 0 )
+            {
+                if ( throwsErrorOnInvalidUtf8() )
+                {
+                    CharsetEncoder encoder = utf8Charset.newEncoder();
+                    ByteBuffer buffer = encoder.encode( CharBuffer.wrap( aData ) );
+                    return buffer.array();
+                }
+            }
+            else
+            {
+                return new byte[] {};
+            }
+
+            return aData.getBytes( utf8Charset );
+        }
+
+        return null;
     }
 }

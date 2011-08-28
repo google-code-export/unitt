@@ -177,10 +177,10 @@ public class NettyClientNetworkSocket extends SimpleChannelUpstreamHandler imple
         observer.onError( aException );
     }
 
-    public void onClose( Exception aException, String aMessage )
+    public void onClose( int aStatusCode, String aMessage, Exception aException )
     {
         updateLastActivity();
-        observer.onClose( aException, aMessage );
+        observer.onClose( aStatusCode, aMessage, aException );
     }
 
     public void onPong( String aMessage )

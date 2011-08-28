@@ -47,6 +47,7 @@ public class WebSocketMessage
     {
         try
         {
+            System.out.println("Getting data from " + fragments.size() + " fragments");
             ByteArrayOutputStream output = new ByteArrayOutputStream();
             for ( WebSocketFragment fragment : fragments )
             {

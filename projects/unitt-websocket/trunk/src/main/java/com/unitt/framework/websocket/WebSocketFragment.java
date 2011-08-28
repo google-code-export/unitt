@@ -339,7 +339,7 @@ public class WebSocketFragment
         int length = 1;
 
         // account for including payload length
-        int fullPayloadLength = getPayloadData().length;
+        int fullPayloadLength = (getPayloadData() != null) ? getPayloadData().length : 0;
         if ( fullPayloadLength <= 125 )
         {
             length += 1;
@@ -365,7 +365,7 @@ public class WebSocketFragment
     public void buildFragment()
     {
         // init
-        Integer fullPayloadLength = getPayloadData().length;
+        Integer fullPayloadLength =  (getPayloadData() != null) ? getPayloadData().length : 0;
         int headerLength = determineHeaderLength();
         ByteBuffer output = ByteBuffer.allocate( headerLength + fullPayloadLength );
 
@@ -413,13 +413,16 @@ public class WebSocketFragment
         // payload data
         setPayloadStart( headerLength );
         setPayloadLength( fullPayloadLength );
-        if ( hasMask() )
+        if (fullPayloadLength > 0)
         {
-            output.put( mask( getMask(), getPayloadData(), 0, payloadLength ) );
-        }
-        else
-        {
-            output.put( getPayloadData() );
+            if ( hasMask() )
+            {
+                output.put( mask( getMask(), getPayloadData(), 0, payloadLength ) );
+            }
+            else
+            {
+                output.put( getPayloadData() );
+            }
         }
 
         // set fragment
