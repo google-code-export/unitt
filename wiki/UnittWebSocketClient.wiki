@@ -37,32 +37,56 @@
 
 
 #pragma mark Web Socket
+/**
+ * Called when the web socket connects and is ready for reading and writing.
+ **/
 - (void) didOpen
 {
     NSLog(@"Socket is open for business.");
 }
 
-- (void) didClose: (NSError*) aError
+/**
+ * Called when the web socket closes. aError will be nil if it closes cleanly.
+ **/
+- (void) didClose:(NSUInteger) aStatusCode message:(NSString*) aMessage error:(NSError*) aError
 {
     NSLog(@"Oops. It closed.");
 }
 
-- (void) didReceiveError: (NSError*) aError
+/**
+ * Called when the web socket receives an error. Such an error can result in the
+ socket being closed.
+ **/
+- (void) didReceiveError:(NSError*) aError
 {
     NSLog(@"Oops. An error occurred.");
 }
 
-- (void) didReceiveTextMessage: (NSString*) aMessage
+/**
+ * Called when the web socket receives a message.
+ **/
+- (void) didReceiveTextMessage:(NSString*) aMessage
 {
     //Hooray! I got a message to print.
     NSLog(@"Did receive message: %@", aMessage);
 }
 
-- (void) didReceiveBinaryMessage: (NSData*) aMessage
+/**
+ * Called when the web socket receives a message.
+ **/
+- (void) didReceiveBinaryMessage:(NSData*) aMessage
 {
-    //Hooray! I got a message to print.
-    NSLog(@"Did receive message: %@", aMessage);
+    //Hooray! I got a binary message.
 }
+
+/**
+ * Called when pong is sent... For keep-alive optimization.
+ **/
+- (void) didSendPong:(NSData*) aMessage
+{
+    NSLog(@"Yay! Pong was sent!");
+}
+
 
 @end
 }}}
