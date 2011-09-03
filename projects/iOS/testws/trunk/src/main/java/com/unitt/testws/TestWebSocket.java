@@ -68,7 +68,8 @@ public class TestWebSocket implements WebSocket, WebSocket.OnTextMessage, WebSoc
         System.out.println("OnOpen");
         outbound = aConnection;
         aConnection.setMaxTextMessageSize( 32*1024 );
-    }
+        aConnection.setMaxBinaryMessageSize( 32*1024 );
+        }
 
     public void onMessage( String aData )
     {
@@ -92,8 +93,8 @@ public class TestWebSocket implements WebSocket, WebSocket.OnTextMessage, WebSoc
     {
         try
         {
-            System.out.println("OnBinaryMessage: " + new String(aData));
-            outbound.sendMessage( "Message: " + new String(aData) );
+            System.out.println("OnBinaryMessage: length=" + aLength);
+            outbound.sendMessage( aData, aOffset, aLength );
         }
         catch ( IOException e )
         {
@@ -109,8 +110,13 @@ public class TestWebSocket implements WebSocket, WebSocket.OnTextMessage, WebSoc
 
     public boolean onFrame( byte aFlags, byte aOpcode, byte[] aData, int aOffset, int aLength )
     {
-        System.out.println("OnFrame: " + new Integer(aOpcode));
+        System.out.println("OnFrame: opCode=" + new Integer(aOpcode) + ", isFinal=" + isLastFrame(aFlags)); 
         return false;
+    }
+    
+    private boolean isLastFrame(byte flags)
+    {
+        return (flags&0x8)!=0;
     }
 
     public void onHandshake( FrameConnection aConnection )
