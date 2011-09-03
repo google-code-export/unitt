@@ -321,7 +321,14 @@ public class WebSocketHandshake
             output.append( "GET " + getResourcePath( getClientConfig().getUrl() ) + " HTTP/1.1\r\n" );
             output.append( "Upgrade: WebSocket\r\n" );
             output.append( "Connection: Upgrade\r\n" );
-            output.append( "Host: " + getClientConfig().getUrl().getHost() + "\r\n" );
+            if (getClientConfig().getUrl().getPort() <= 0 && (getClientConfig().getUrl().getPort() == 80 || getClientConfig().getUrl().getPort() == 443))
+            {
+                output.append( "Host: " + getClientConfig().getUrl().getHost() + "\r\n" );
+            }
+            else
+            {
+                output.append( "Host: " + getClientConfig().getUrl().getHost() + ":" + getClientConfig().getUrl().getPort() + "\r\n" );
+            }
             output.append( "Sec-WebSocket-Origin: " + getClientConfig().getOrigin() + "\r\n" );
             if(getClientConfig().getAvailableProtocols() != null)
             {
