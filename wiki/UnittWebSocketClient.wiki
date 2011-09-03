@@ -167,5 +167,8 @@ MyWebSocket* myWS = [[MyWebSocket alloc] init];
   * Check out the [http://code.google.com/p/unitt/source/browse/projects/iOS/UnittWebSocketClient/tags/0.9.3/UnittWebSocketClient/WebSocket00.h WebSocket00.h], [http://code.google.com/p/unitt/source/browse/projects/iOS/UnittWebSocketClient/tags/0.9.3/UnittWebSocketClient/WebSocket07.h WebSocket07.h], [http://code.google.com/p/unitt/source/browse/projects/iOS/UnittWebSocketClient/tags/0.9.3/UnittWebSocketClient/WebSocket08.h WebSocket08.h], [http://code.google.com/p/unitt/source/browse/projects/iOS/UnittWebSocketClient/tags/0.9.3/UnittWebSocketClient/WebSocket10.h WebSocket10.h] for more information on how to use these classes.
   * For more information on web sockets, see [http://en.wikipedia.org/wiki/WebSockets Wikipedia]
 
+= Sample Code =
+You can check out the [http://code.google.com/p/unitt/source/browse/projects/iOS/UnittWebSocketClient/tags/0.9.3.1/UnittWebSocketClientTests/UnittWebSocketClient07Tests.m UnittWebSocketClient07Tests] class for sample code on connecting and talking to a web socket. You can also run your own server for the test using the [http://code.google.com/p/unitt/source/browse/projects#projects%2FiOS%2Ftestws%2Ftrunk testws] project. To start the server using maven type "mvn jetty:run" at the command line.
+
 == !WebSocket v00 ==
 !WebSocket00.h is based on an earlier specification that was not as clear on how binary messages were handled. Therefore, this class only supports UTF8 text messages, so there is only send: and didReceiveMessage: instead of the text/binary variants.
