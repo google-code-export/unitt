@@ -28,7 +28,7 @@
 - (JSONPropertyInfo*) getPropertyInfoForObject:(id) aObject name:(NSString*) aName;
 - (void) fillPropertiesForClass:(Class) aClass;
 - (void) fillObjectFromDictionary:(NSDictionary*) aData object:(id) aObject;
-- (id) performSelectorSafelyForObject:(id) aObject selector:(SEL) aSelector argument:(id) argument;
+- (id) performSelectorSafelyForObject:(id) aObject selector:(SEL) aSelector argument:(id) argument type:(JSDataType) aType;
 - (NSDictionary*) objectToDictionary:(id) aObject;
 
 @end
@@ -41,60 +41,36 @@
 
 
 #pragma mark Property Handling
-//- (id) getPropertyValueForObject:(id) aObject name:(NSString*) aName
-//{    
-//    JSONPropertyInfo* info = [self getPropertyInfoForObject:aObject name:aName];
-//    
-//    //if we have a property, set it
-//    if (info)
-//    {
-//        //verify we are not write only
-//        if (info.getter)
-//        {
-//            //return getter value
-//            return [self performSelectorSafelyForObject:aObject selector:info.getter argument:nil];
-//        }
-//    }
-//    
-//    return nil;
-//}
-//
-//- (void) setPropertyValueForObject:(id) aObject name:(NSString*) aName value:(id) aValue
+//- (id) getValue:(id) aValue property:(JSONPropertyInfo*) aProperty
 //{
-//    JSONPropertyInfo* info = [self getPropertyInfoForObject:aObject name:aName];
-//    
-//    //if we have a property, set it
-//    if (info)
+//    //convert object based on type
+//    switch (aProperty.dataType)
 //    {
-//        //verify we are not read-only
-//        if (info.setter)
-//        {
-//            //apply setter
-//            [self performSelectorSafelyForObject:aObject selector:info.setter argument:aValue];
-//        }
+//        case JSDataTypeCustomClass:
+//            if ([aValue isKindOfClass:[NSDictionary class]])
+//            {
+//                Class valueConcreteClass = [self readConcreteClassFromDictionary:aValue];
+//                if (valueConcreteClass == nil)
+//                {
+//                    valueConcreteClass = aProperty.customClass;
+//                }
+//                id newValue = [[valueConcreteClass alloc] init];
+//                [self fillObjectFromDictionary:aValue object:newValue];
+//                return newValue;
+//            }
+//            break;
+//        case JSDataTypeInt:
+//            if ([aValue isKindOfClass:[NSString class]])
+//            {
+//                return [NSNumber numberWithInt:[((NSString*) aValue) intValue]];
+//            }
+//            break;
 //    }
+//    
+//    return aValue;
 //}
 
-//- (id) performSelectorSafelyForObject:(id) aObject selector:(SEL) aSelector argument:(id) argument
-//{
-//    if (aSelector != nil && aObject != nil)
-//    {
-//        //execute selector
-//        if (argument)
-//        {
-//            return [aObject performSelector:aSelector withObject:argument];
-//        }
-//        else
-//        {
-//            return [aObject performSelector:aSelector];
-//        }
-//    }
-//    
-//    return nil;
-//}
-
-// TODO: handle type conversion on argument (should be done on caller, not this method)
-- (id) performSelectorSafelyForObject:(id) aObject selector:(SEL) aSelector argument:(id) argument
+- (id) performSelectorSafelyForObject:(id) aObject selector:(SEL) aSelector argument:(id) aArgument type:(JSDataType) aType
 {
     if (aSelector != nil && aObject != nil)
     {
@@ -111,9 +87,48 @@
         const char* retType = [methodSig methodReturnType];
         if(strcmp(retType, @encode(id)) == 0 || strcmp(retType, @encode(void)) == 0)
         {
-            if (argument)
+            if (aArgument)
             {
-                return [aObject performSelector:aSelector withObject:argument];
+                //handle primitive data types
+                NSInvocation* invocation = [NSInvocation invocationWithMethodSignature:methodSig];
+                [invocation setSelector:aSelector];
+                [invocation setTarget:aObject];
+                switch (aType) 
+                {
+                    case JSDataTypeInt:
+                        if ([aArgument isKindOfClass:[NSString class]])
+                        {
+                            int value = [((NSString*) aArgument) intValue];
+                            [invocation setArgument:&value atIndex:2];
+                            NSLog(@"Setting int value %i", value);
+                            [invocation invoke];
+                        }
+                        else
+                        {
+                            NSLog(@"No custom handling logic to convert from %@ to int", NSStringFromClass([aArgument class]));
+                            return nil;
+                        }
+                        break;
+                    case JSDataTypeLong:
+                        if ([aArgument isKindOfClass:[NSString class]])
+                        {
+                            long long value = [((NSString*) aArgument) longLongValue];
+                            [invocation setArgument:&value atIndex:2];
+                            [invocation invoke];
+                        }
+                        else
+                        {
+                            NSLog(@"No custom handling logic to convert from %@ to long", NSStringFromClass([aArgument class]));
+                            return nil;
+                        }
+                        break;
+                        
+                    default:
+                        [invocation setArgument:&aArgument atIndex:2];
+                        [invocation invoke];
+                        break;
+                }
+                return nil;
             }
             else
             {
@@ -183,139 +198,150 @@
 - (void) fillPropertiesForClass:(Class) aClass
 {
     NSMutableDictionary* classDef = [NSMutableDictionary dictionary];
-    //loop through properties - creating metadata for getters/setters
-    unsigned int outCount, i;
-    objc_property_t *properties = class_copyPropertyList(aClass, &outCount);
-    for (i = 0; i < outCount; i++) 
+    
+    //traverse class hierarchy, creating property info
+    Class classToFillFor = aClass;
+    while (classToFillFor != nil && classToFillFor != [NSObject class])
     {
-        //grab property
-        objc_property_t property = properties[i];
-        
-        if (property != NULL)
+        //loop through properties - creating metadata for getters/setters
+        unsigned int outCount, i;
+        objc_property_t *properties = class_copyPropertyList(classToFillFor, &outCount);
+        for (i = 0; i < outCount; i++) 
         {
-            //init property info
-            JSONPropertyInfo* propertyInfo = [[[JSONPropertyInfo alloc] init] autorelease];
-            const char *propertyName = property_getName(property);
-            const char *propertyAttr = property_getAttributes(property);
-            propertyInfo.name = [NSString stringWithCString:propertyName encoding:[NSString defaultCStringEncoding]];
+            //grab property
+            objc_property_t property = properties[i];
             
-            //handle type
-            BOOL isObject = false;
-            switch(propertyAttr[1]) 
+            if (property != NULL)
             {
-                case 'd' : //double
-                    propertyInfo.dataType = JSDataTypeDouble;
-                    break;
-                case 'l' : //long
-                    propertyInfo.dataType = JSDataTypeLong;
-                    break;
-                case 'i' : //int
-                    propertyInfo.dataType = JSDataTypeInt;
-                    break;
-                case 'c' : //BOOL
-                    propertyInfo.dataType = JSDataTypeBoolean;
-                    break;
-                case '@' : //ObjC object
-                    isObject = true;
-                    break;
-            }
-            
-            //handle custom class - if applicable
-            if (isObject)
-            {
-                //determine custom class
-                const char* typeInitialFragment = strstr( propertyAttr, "T@\"" );
-                if ( typeInitialFragment != NULL )
-                {   
-                    typeInitialFragment += 3;
-                    const char* typeSecondFragment = strstr( typeInitialFragment, "\"," );
-                    if ( typeSecondFragment != NULL && typeInitialFragment != typeSecondFragment )
-                    {
-                        //we have a customer class - grab the name
-                        int length = (int)(typeSecondFragment - typeInitialFragment);
-                        char* typeName = malloc( length + 1 );
-                        memcpy( typeName, typeInitialFragment, length );
-                        typeName[length] = '\0';
-                        
-                        //get class and set type
-                        propertyInfo.customClass = NSClassFromString([NSString stringWithCString:typeName encoding:[NSString defaultCStringEncoding]]);
-                        if (propertyInfo.customClass) 
-                        {
-                            if ([NSArray class] == propertyInfo.customClass)
-                            {
-                                propertyInfo.dataType = JSDataTypeNSArray;
-                            }
-                            else if ([NSDictionary class] == propertyInfo.customClass)
-                            {
-                                propertyInfo.dataType = JSDataTypeNSDictionary;
-                            }
-                            else if ([NSNumber class] == propertyInfo.customClass)
-                            {
-                                propertyInfo.dataType = JSDataTypeNSNumber;
-                            }
-                            else if ([NSDate class] == propertyInfo.customClass)
-                            {
-                                propertyInfo.dataType = JSDataTypeNSDate;
-                            }
-                            else if ([NSString class] == propertyInfo.customClass)
-                            {
-                                propertyInfo.dataType = JSDataTypeNSString;
-                            }
-                        }
-                        free( typeName );
-                    }
-                }
-            }
-            
-            //handle custom getter
-            const char* custGetterInitialFragment = strstr( propertyAttr, ",G" );
-            if ( custGetterInitialFragment != NULL )
-            {   
-                custGetterInitialFragment += 2;
-                const char* custGetterSecondFragment = strchr( custGetterInitialFragment, ',' );
-                if ( custGetterSecondFragment != NULL && custGetterInitialFragment != custGetterSecondFragment )
+                //init property info
+                JSONPropertyInfo* propertyInfo = [[[JSONPropertyInfo alloc] init] autorelease];
+                const char *propertyName = property_getName(property);
+                const char *propertyAttr = property_getAttributes(property);
+                propertyInfo.name = [NSString stringWithCString:propertyName encoding:[NSString defaultCStringEncoding]];
+                
+                //handle type
+                BOOL isObject = false;
+                switch(propertyAttr[1]) 
                 {
-                    //we have a customer getter, grab selector from name
-                    int length = (int)(custGetterSecondFragment - custGetterInitialFragment);
-                    char* custGetterName = malloc( length + 1 );
-                    memcpy( custGetterName, custGetterInitialFragment, length );
-                    custGetterName[length] = '\0';
-                    propertyInfo.getter = sel_getUid( custGetterName );
-                    free( custGetterName );
+                    case 'd' : //double
+                        propertyInfo.dataType = JSDataTypeDouble;
+                        break;
+                    case 'l' : //long
+                        propertyInfo.dataType = JSDataTypeLong;
+                        break;
+                    case 'i' : //int
+                        propertyInfo.dataType = JSDataTypeInt;
+                        break;
+                    case 'c' : //BOOL
+                        propertyInfo.dataType = JSDataTypeBoolean;
+                        break;
+                    case '@' : //ObjC object
+                        isObject = true;
+                        break;
                 }
-            }
-            
-            //if missing getter - use default
-            propertyInfo.getter = NSSelectorFromString(propertyInfo.name);
-            
-            //if not readonly - handle setter
-            if (strstr(propertyAttr, ",R,") ==  NULL)
-            {
-                //handle custom setter
-                const char* custSetterInitialFragment = strstr( propertyAttr, ",S" );
-                if ( custSetterInitialFragment != NULL )
-                {   
-                    custSetterInitialFragment += 2;
-                    const char* custSetterSecondFragment = strchr( custSetterInitialFragment, ',' );
-                    if ( custSetterSecondFragment != NULL && custSetterInitialFragment != custSetterSecondFragment )
-                    {
-                        //we have a customer setter, grab selector from name
-                        int length = (int)(custSetterSecondFragment - custSetterInitialFragment);
-                        char* custSetterName = malloc( length + 1 );
-                        memcpy( custSetterName, custSetterInitialFragment, length );
-                        custSetterName[length] = '\0';
-                        propertyInfo.setter = sel_getUid( custSetterName );
-                        free( custSetterName );
+                
+                //handle custom class - if applicable
+                if (isObject)
+                {
+                    //determine custom class
+                    const char* typeInitialFragment = strstr( propertyAttr, "T@\"" );
+                    if ( typeInitialFragment != NULL )
+                    {   
+                        typeInitialFragment += 3;
+                        const char* typeSecondFragment = strstr( typeInitialFragment, "\"," );
+                        if ( typeSecondFragment != NULL && typeInitialFragment != typeSecondFragment )
+                        {
+                            //we have a customer class - grab the name
+                            int length = (int)(typeSecondFragment - typeInitialFragment);
+                            char* typeName = malloc( length + 1 );
+                            memcpy( typeName, typeInitialFragment, length );
+                            typeName[length] = '\0';
+                            
+                            //get class and set type
+                            propertyInfo.customClass = NSClassFromString([NSString stringWithCString:typeName encoding:[NSString defaultCStringEncoding]]);
+                            if (propertyInfo.customClass) 
+                            {
+                                if ([NSArray class] == propertyInfo.customClass)
+                                {
+                                    propertyInfo.dataType = JSDataTypeNSArray;
+                                }
+                                else if ([NSDictionary class] == propertyInfo.customClass)
+                                {
+                                    propertyInfo.dataType = JSDataTypeNSDictionary;
+                                }
+                                else if ([NSNumber class] == propertyInfo.customClass)
+                                {
+                                    propertyInfo.dataType = JSDataTypeNSNumber;
+                                }
+                                else if ([NSDate class] == propertyInfo.customClass)
+                                {
+                                    propertyInfo.dataType = JSDataTypeNSDate;
+                                }
+                                else if ([NSString class] == propertyInfo.customClass)
+                                {
+                                    propertyInfo.dataType = JSDataTypeNSString;
+                                }
+                            }
+                            free( typeName );
+                        }
                     }
                 }
                 
-                //if missing Setter - use default
-                propertyInfo.setter = NSSelectorFromString([NSString stringWithFormat:@"set%@:", [propertyInfo.name stringByReplacingCharactersInRange:NSMakeRange(0,1) withString:[[propertyInfo.name substringToIndex:1] capitalizedString]]]);
+                //handle custom getter
+                const char* custGetterInitialFragment = strstr( propertyAttr, ",G" );
+                if ( custGetterInitialFragment != NULL )
+                {   
+                    custGetterInitialFragment += 2;
+                    const char* custGetterSecondFragment = strchr( custGetterInitialFragment, ',' );
+                    if ( custGetterSecondFragment != NULL && custGetterInitialFragment != custGetterSecondFragment )
+                    {
+                        //we have a customer getter, grab selector from name
+                        int length = (int)(custGetterSecondFragment - custGetterInitialFragment);
+                        char* custGetterName = malloc( length + 1 );
+                        memcpy( custGetterName, custGetterInitialFragment, length );
+                        custGetterName[length] = '\0';
+                        propertyInfo.getter = sel_getUid( custGetterName );
+                        free( custGetterName );
+                    }
+                }
+                
+                //if missing getter - use default
+                propertyInfo.getter = NSSelectorFromString(propertyInfo.name);
+                
+                //if not readonly - handle setter
+                if (strstr(propertyAttr, ",R,") ==  NULL)
+                {
+                    //handle custom setter
+                    const char* custSetterInitialFragment = strstr( propertyAttr, ",S" );
+                    if ( custSetterInitialFragment != NULL )
+                    {   
+                        custSetterInitialFragment += 2;
+                        const char* custSetterSecondFragment = strchr( custSetterInitialFragment, ',' );
+                        if ( custSetterSecondFragment != NULL && custSetterInitialFragment != custSetterSecondFragment )
+                        {
+                            //we have a customer setter, grab selector from name
+                            int length = (int)(custSetterSecondFragment - custSetterInitialFragment);
+                            char* custSetterName = malloc( length + 1 );
+                            memcpy( custSetterName, custSetterInitialFragment, length );
+                            custSetterName[length] = '\0';
+                            propertyInfo.setter = sel_getUid( custSetterName );
+                            free( custSetterName );
+                        }
+                    }
+                    
+                    //if missing Setter - use default
+                    propertyInfo.setter = NSSelectorFromString([NSString stringWithFormat:@"set%@:", [propertyInfo.name stringByReplacingCharactersInRange:NSMakeRange(0,1) withString:[[propertyInfo.name substringToIndex:1] capitalizedString]]]);
+                }
+                
+                //push property into class descripton, if not there
+                if ([classDef objectForKey:propertyInfo.name] == nil)
+                {
+                    [classDef setObject:propertyInfo forKey:propertyInfo.name];
+                }
             }
-            
-            //push property into class descripton
-            [classDef setObject:propertyInfo forKey:propertyInfo.name];
         }
+        
+        classToFillFor = class_getSuperclass(classToFillFor);
     }
     
     //if we have properties - save them
@@ -343,23 +369,22 @@
             id value = [aData objectForKey:key];
             
             //verify we have a value to set
-            
             id newValue = value;
             
-            //deserialize custom object
-            if (property.dataType == JSDataTypeCustomClass)
+            //handle custom objects
+            if ([value isKindOfClass:[NSDictionary class]])
             {
                 Class valueConcreteClass = [self readConcreteClassFromDictionary:value];
                 if (valueConcreteClass == nil)
                 {
                     valueConcreteClass = property.customClass;
                 }
-                newValue = [[valueConcreteClass alloc] init];
+                id newValue = [[valueConcreteClass alloc] init];
                 [self fillObjectFromDictionary:value object:newValue];
             }
             
             //set value
-            [self performSelectorSafelyForObject:aObject selector:property.setter argument:newValue];
+            [self performSelectorSafelyForObject:aObject selector:property.setter argument:newValue type:property.dataType];
         }
     }
 }
@@ -453,7 +478,7 @@
             JSONPropertyInfo* property = [properties objectForKey:key];
             if (property && property.getter)
             {
-                id value = [self performSelectorSafelyForObject:aObject selector:property.getter argument:nil];
+                id value = [self performSelectorSafelyForObject:aObject selector:property.getter argument:nil type:property.dataType];
                 if (property.dataType == JSDataTypeCustomClass)
                 {
                     value = [self objectToDictionary:value];

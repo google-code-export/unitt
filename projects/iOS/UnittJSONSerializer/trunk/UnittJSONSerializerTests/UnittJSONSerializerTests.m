@@ -32,9 +32,11 @@
 - (void) testDeserialize
 {
     JSONSerializer* serializer = [[JSONSerializer serializerWithParseOptions:JSParseOptionsStrict serializeOptions:JSSerializeOptionPretty] retain];
-    NSString* serialized = @"{\"testString\":\"testStringValue\",\"testInt\":\"100\",\"testDouble\":\"100.1\",\"testNumber\":\"102\",\"testDate\":[\"java.util.Date\",1315153697500],\"testBool\":\"true\"}";
+    NSString* serialized = @"{\"testString\":\"testStringValue\",\"testInt\":\"100\",\"superInt\":\"1001\",\"testDouble\":\"100.1\",\"testNumber\":\"102\",\"testDate\":[\"java.util.Date\",1315153697500],\"testBool\":\"true\"}";
     TestTransportObject* result = [serializer deserializeObjectFromString:serialized type:[TestTransportObject class]];
-    STAssertEqualObjects(result.testString, @"testStringValue", @"Did not have the correct method signature: expected=%@, actual=%@",@"testStringValue", result.testString);
+    STAssertEqualObjects(result.testString, @"testStringValue", @"Did not have the correct string value: expected=%@, actual=%@",@"testStringValue", result.testString);
+    STAssertEquals(result.testInt, 100, @"Did not have the correct int value");
+    STAssertEquals(result.superInt, 1001, @"Did not have the correct super int value");
 }
 
 @end

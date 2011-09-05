@@ -31,6 +31,13 @@
 @synthesize testBool;
 
 
+- (void) setTestInt:(int)aTestInt
+{
+    NSLog(@"Setting Test Int to %i", aTestInt);
+    testInt = aTestInt;
+}
+
+
 #pragma mark Lifecycle
 - (id) init
 {

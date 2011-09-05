@@ -33,7 +33,7 @@
     BOOL testBool;
 }
 
-@property (assign) int testInt;
+@property (nonatomic, assign) int testInt;
 @property (assign) double testDouble;
 @property (retain) NSString* testString;
 @property (retain) NSNumber* testNumber;
