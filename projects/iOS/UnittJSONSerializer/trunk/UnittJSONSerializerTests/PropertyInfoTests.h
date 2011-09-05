@@ -1,6 +1,6 @@
 //
-//  JsonSerializerTests.h
-//  UnittMessageServiceClient
+//  PropertyInfoTests.h
+//  UnittJSONSerializer
 //
 //  Created by Josh Morris on 9/4/11.
 //  Copyright 2011 UnitT Software. All rights reserved.
@@ -16,20 +16,18 @@
 //  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 //  License for the specific language governing permissions and limitations under
 //  the License.
-
+//
 
 #import <SenTestingKit/SenTestingKit.h>
-#import <UIKit/UIKit.h>
-#import "JSONSerializer.h"
+#import <Foundation/Foundation.h>
+#import <Foundation/NSObjCRuntime.h>
+#import <objc/runtime.h>
 #import "TestTransportObject.h"
-#import "JSONKit.h"
 
-@interface UnittJSONSerializerTests : SenTestCase
+@interface PropertyInfoTests : SenTestCase
 {
 @private
+    
 }
-
-- (void) testSerialize;
-- (void) testDeserialize;
 
 @end

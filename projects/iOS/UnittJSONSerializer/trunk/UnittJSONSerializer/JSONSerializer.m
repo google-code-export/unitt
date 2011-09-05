@@ -26,8 +26,6 @@
 @property (retain) NSMutableDictionary* classDefs;
 
 - (JSONPropertyInfo*) getPropertyInfoForObject:(id) aObject name:(NSString*) aName;
-- (id) getPropertyValueForObject:(id) aObject name:(NSString*) aName;
-- (void) setPropertyValueForObject:(id) aObject name:(NSString*) aName value:(id) aValue;
 - (void) fillPropertiesForClass:(Class) aClass;
 - (void) fillObjectFromDictionary:(NSDictionary*) aData object:(id) aObject;
 - (id) performSelectorSafelyForObject:(id) aObject selector:(SEL) aSelector argument:(id) argument;
@@ -43,40 +41,59 @@
 
 
 #pragma mark Property Handling
-- (id) getPropertyValueForObject:(id) aObject name:(NSString*) aName
-{    
-    JSONPropertyInfo* info = [self getPropertyInfoForObject:aObject name:aName];
-    
-    //if we have a property, set it
-    if (info)
-    {
-        //verify we are not write only
-        if (info.getter)
-        {
-            //return getter value
-            return [self performSelectorSafelyForObject:aObject selector:info.getter argument:nil];
-        }
-    }
-    
-    return nil;
-}
+//- (id) getPropertyValueForObject:(id) aObject name:(NSString*) aName
+//{    
+//    JSONPropertyInfo* info = [self getPropertyInfoForObject:aObject name:aName];
+//    
+//    //if we have a property, set it
+//    if (info)
+//    {
+//        //verify we are not write only
+//        if (info.getter)
+//        {
+//            //return getter value
+//            return [self performSelectorSafelyForObject:aObject selector:info.getter argument:nil];
+//        }
+//    }
+//    
+//    return nil;
+//}
+//
+//- (void) setPropertyValueForObject:(id) aObject name:(NSString*) aName value:(id) aValue
+//{
+//    JSONPropertyInfo* info = [self getPropertyInfoForObject:aObject name:aName];
+//    
+//    //if we have a property, set it
+//    if (info)
+//    {
+//        //verify we are not read-only
+//        if (info.setter)
+//        {
+//            //apply setter
+//            [self performSelectorSafelyForObject:aObject selector:info.setter argument:aValue];
+//        }
+//    }
+//}
 
-- (void) setPropertyValueForObject:(id) aObject name:(NSString*) aName value:(id) aValue
-{
-    JSONPropertyInfo* info = [self getPropertyInfoForObject:aObject name:aName];
-    
-    //if we have a property, set it
-    if (info)
-    {
-        //verify we are not read-only
-        if (info.setter)
-        {
-            //apply setter
-            [self performSelectorSafelyForObject:aObject selector:info.setter argument:aValue];
-        }
-    }
-}
+//- (id) performSelectorSafelyForObject:(id) aObject selector:(SEL) aSelector argument:(id) argument
+//{
+//    if (aSelector != nil && aObject != nil)
+//    {
+//        //execute selector
+//        if (argument)
+//        {
+//            return [aObject performSelector:aSelector withObject:argument];
+//        }
+//        else
+//        {
+//            return [aObject performSelector:aSelector];
+//        }
+//    }
+//    
+//    return nil;
+//}
 
+// TODO: handle type conversion on argument (should be done on caller, not this method)
 - (id) performSelectorSafelyForObject:(id) aObject selector:(SEL) aSelector argument:(id) argument
 {
     if (aSelector != nil && aObject != nil)
@@ -84,7 +101,11 @@
         NSMethodSignature* methodSig = [aObject methodSignatureForSelector:aSelector];
         if(methodSig == nil)
         {
-            return nil;
+            methodSig = [[aObject class] methodSignatureForSelector:aSelector];
+            if (methodSig == nil)
+            {
+                return nil;
+            }
         }
         
         const char* retType = [methodSig methodReturnType];
@@ -110,14 +131,14 @@
 
 - (JSONPropertyInfo*) getPropertyInfoForObject:(id) aObject name:(NSString*) aName
 {
-    NSString* className = NSStringFromClass([aObject class]);
-    id value = [classDefs objectForKey:className];
+    Class objectClass = [aObject class];
+    id value = [classDefs objectForKey:objectClass];
     
     //create missing class definition
     if (!value)
     {
         [self fillPropertiesForClass:[aObject class]];
-        value = [classDefs objectForKey:className];
+        value = [classDefs objectForKey:objectClass];
     }
     
     //use class definition
@@ -289,7 +310,7 @@
                 }
                 
                 //if missing Setter - use default
-                propertyInfo.setter = NSSelectorFromString([NSString stringWithFormat:@"set%@", propertyInfo.name]);
+                propertyInfo.setter = NSSelectorFromString([NSString stringWithFormat:@"set%@:", [propertyInfo.name stringByReplacingCharactersInRange:NSMakeRange(0,1) withString:[[propertyInfo.name substringToIndex:1] capitalizedString]]]);
             }
             
             //push property into class descripton
@@ -300,7 +321,7 @@
     //if we have properties - save them
     if ([classDef count] > 0)
     {
-        [self.classDefs setObject:classDef forKey:NSStringFromClass(aClass)];
+        [self.classDefs setObject:classDef forKey:aClass];
     }
 }
 
@@ -320,10 +341,13 @@
         if (property && property.setter)
         {
             id value = [aData objectForKey:key];
+            
+            //verify we have a value to set
+            
             id newValue = value;
             
             //deserialize custom object
-            if (property.dataType != JSDataTypeCustomClass)
+            if (property.dataType == JSDataTypeCustomClass)
             {
                 Class valueConcreteClass = [self readConcreteClassFromDictionary:value];
                 if (valueConcreteClass == nil)

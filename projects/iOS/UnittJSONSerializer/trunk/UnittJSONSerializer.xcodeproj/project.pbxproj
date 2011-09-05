@@ -9,11 +9,11 @@
 /* Begin PBXBuildFile section */
 		BD05B2AB139190B500372B4E /* TestTransportObject.m in Sources */ = {isa = PBXBuildFile; fileRef = BD05B2AA139190B500372B4E /* TestTransportObject.m */; };
 		BD05B2BB1391B17500372B4E /* TestSuperTransportObject.m in Sources */ = {isa = PBXBuildFile; fileRef = BD05B2BA1391B17500372B4E /* TestSuperTransportObject.m */; };
+		BD56B14914152B1500E00068 /* JSONPropertyInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = BDB8F0761391FDBD00316BF7 /* JSONPropertyInfo.m */; };
 		BD66570E138F8EDA00E6094C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD66570D138F8EDA00E6094C /* Foundation.framework */; };
 		BD665719138F8EDA00E6094C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD665718138F8EDA00E6094C /* UIKit.framework */; };
 		BD66571A138F8EDA00E6094C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD66570D138F8EDA00E6094C /* Foundation.framework */; };
 		BD66571C138F8EDA00E6094C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD66571B138F8EDA00E6094C /* CoreGraphics.framework */; };
-		BD66571F138F8EDA00E6094C /* libUnittJSONSerializer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BD66570A138F8EDA00E6094C /* libUnittJSONSerializer.a */; };
 		BD665725138F8EDA00E6094C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BD665723138F8EDA00E6094C /* InfoPlist.strings */; };
 		BD665728138F8EDA00E6094C /* UnittJSONSerializerTests.h in Resources */ = {isa = PBXBuildFile; fileRef = BD665727138F8EDA00E6094C /* UnittJSONSerializerTests.h */; };
 		BD66572A138F8EDA00E6094C /* UnittJSONSerializerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BD665729138F8EDA00E6094C /* UnittJSONSerializerTests.m */; };
@@ -57,6 +57,8 @@
 		BD665734138F901800E6094C /* JSONSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONSerializer.m; sourceTree = "<group>"; };
 		BD665740138F941C00E6094C /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
 		BD665741138F941C00E6094C /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
+		BDA164D31413F01A007BB0F7 /* PropertyInfoTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PropertyInfoTests.h; sourceTree = "<group>"; };
+		BDA164D41413F01A007BB0F7 /* PropertyInfoTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PropertyInfoTests.m; sourceTree = "<group>"; };
 		BDB8F0751391FDBD00316BF7 /* JSONPropertyInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONPropertyInfo.h; sourceTree = "<group>"; };
 		BDB8F0761391FDBD00316BF7 /* JSONPropertyInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONPropertyInfo.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -77,7 +79,6 @@
 				BD665719138F8EDA00E6094C /* UIKit.framework in Frameworks */,
 				BD66571A138F8EDA00E6094C /* Foundation.framework in Frameworks */,
 				BD66571C138F8EDA00E6094C /* CoreGraphics.framework in Frameworks */,
-				BD66571F138F8EDA00E6094C /* libUnittJSONSerializer.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -138,6 +139,8 @@
 		BD665720138F8EDA00E6094C /* UnittJSONSerializerTests */ = {
 			isa = PBXGroup;
 			children = (
+				BDA164D31413F01A007BB0F7 /* PropertyInfoTests.h */,
+				BDA164D41413F01A007BB0F7 /* PropertyInfoTests.m */,
 				BD665727138F8EDA00E6094C /* UnittJSONSerializerTests.h */,
 				BD665729138F8EDA00E6094C /* UnittJSONSerializerTests.m */,
 				BD05B2A9139190B500372B4E /* TestTransportObject.h */,
@@ -277,6 +280,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BD56B14914152B1500E00068 /* JSONPropertyInfo.m in Sources */,
 				BD66572A138F8EDA00E6094C /* UnittJSONSerializerTests.m in Sources */,
 				BD665737138F901800E6094C /* JSONSerializer.m in Sources */,
 				BD665744138F941C00E6094C /* JSONKit.m in Sources */,
@@ -319,6 +323,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				LD_OPENMP_FLAGS = "-fopenmp -all_load -ObjC";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -332,6 +337,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				LD_OPENMP_FLAGS = "-fopenmp -all_load -ObjC";
 				SDKROOT = iphoneos;
 			};
 			name = Release;
