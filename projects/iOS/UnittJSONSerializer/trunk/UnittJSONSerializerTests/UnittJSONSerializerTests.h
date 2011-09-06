@@ -30,6 +30,7 @@
 }
 
 - (void) testSerialize;
-- (void) testDeserialize;
+- (void) testDeserializeWithStrings;
+- (void) testDeserializeWithValues;
 
 @end

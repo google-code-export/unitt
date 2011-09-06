@@ -41,35 +41,6 @@
 
 
 #pragma mark Property Handling
-//- (id) getValue:(id) aValue property:(JSONPropertyInfo*) aProperty
-//{
-//    //convert object based on type
-//    switch (aProperty.dataType)
-//    {
-//        case JSDataTypeCustomClass:
-//            if ([aValue isKindOfClass:[NSDictionary class]])
-//            {
-//                Class valueConcreteClass = [self readConcreteClassFromDictionary:aValue];
-//                if (valueConcreteClass == nil)
-//                {
-//                    valueConcreteClass = aProperty.customClass;
-//                }
-//                id newValue = [[valueConcreteClass alloc] init];
-//                [self fillObjectFromDictionary:aValue object:newValue];
-//                return newValue;
-//            }
-//            break;
-//        case JSDataTypeInt:
-//            if ([aValue isKindOfClass:[NSString class]])
-//            {
-//                return [NSNumber numberWithInt:[((NSString*) aValue) intValue]];
-//            }
-//            break;
-//    }
-//    
-//    return aValue;
-//}
-
 - (id) performSelectorSafelyForObject:(id) aObject selector:(SEL) aSelector argument:(id) aArgument type:(JSDataType) aType
 {
     if (aSelector != nil && aObject != nil)
@@ -84,21 +55,27 @@
             }
         }
         
-        const char* retType = [methodSig methodReturnType];
-        if(strcmp(retType, @encode(id)) == 0 || strcmp(retType, @encode(void)) == 0)
-        {
+//        const char* retType = [methodSig methodReturnType];
+//        if(strcmp(retType, @encode(id)) == 0 || strcmp(retType, @encode(void)) == 0)
+//        {
+            NSInvocation* invocation = [NSInvocation invocationWithMethodSignature:methodSig];
+            [invocation setSelector:aSelector];
+            [invocation setTarget:aObject];
             if (aArgument)
             {
-                //handle primitive data types
-                NSInvocation* invocation = [NSInvocation invocationWithMethodSignature:methodSig];
-                [invocation setSelector:aSelector];
-                [invocation setTarget:aObject];
+                //handle data types for setters
                 switch (aType) 
                 {
                     case JSDataTypeInt:
                         if ([aArgument isKindOfClass:[NSString class]])
                         {
                             int value = [((NSString*) aArgument) intValue];
+                            [invocation setArgument:&value atIndex:2];
+                            [invocation invoke];
+                        }
+                        else if ([aArgument isKindOfClass:[NSNumber class]])
+                        {
+                            int value = [((NSNumber*) aArgument) intValue];
                             [invocation setArgument:&value atIndex:2];
                             [invocation invoke];
                         }
@@ -115,6 +92,12 @@
                             [invocation setArgument:&value atIndex:2];
                             [invocation invoke];
                         }
+                        else if ([aArgument isKindOfClass:[NSNumber class]])
+                        {
+                            long long value = [((NSNumber*) aArgument) longLongValue];
+                            [invocation setArgument:&value atIndex:2];
+                            [invocation invoke];
+                        }
                         else
                         {
                             NSLog(@"No custom handling logic to convert from %@ to long", NSStringFromClass([aArgument class]));
@@ -128,6 +111,12 @@
                             [invocation setArgument:&value atIndex:2];
                             [invocation invoke];
                         }
+                        else if ([aArgument isKindOfClass:[NSNumber class]])
+                        {
+                            int value = [((NSNumber*) aArgument) doubleValue];
+                            [invocation setArgument:&value atIndex:2];
+                            [invocation invoke];
+                        }
                         else
                         {
                             NSLog(@"No custom handling logic to convert from %@ to double", NSStringFromClass([aArgument class]));
@@ -137,7 +126,7 @@
                     case JSDataTypeBoolean:
                         if ([aArgument isKindOfClass:[NSString class]])
                         {
-                            double value = [((NSString*) aArgument) boolValue];
+                            BOOL value = [((NSString*) aArgument) boolValue];
                             [invocation setArgument:&value atIndex:2];
                             [invocation invoke];
                         }
@@ -155,6 +144,11 @@
                             [invocation setArgument:&value atIndex:2];
                             [invocation invoke];
                         }
+                        else if ([aArgument isKindOfClass:[NSNumber class]])
+                        {
+                            [invocation setArgument:&aArgument atIndex:2];
+                            [invocation invoke];
+                        }
                         else
                         {
                             NSLog(@"No custom handling logic to convert from %@ to NSNumber", NSStringFromClass([aArgument class]));
@@ -170,13 +164,65 @@
             }
             else
             {
-                return [aObject performSelector:aSelector];
+                //handle data types for getters
+                switch (aType) 
+                {
+                    case JSDataTypeInt:
+                    {
+                        int value;
+                        [invocation invoke];
+                        [invocation getReturnValue:&value];
+                        return [NSNumber numberWithInt:value];
+                        break;
+                    }
+                    case JSDataTypeLong:
+                    {
+                        long long value = 0;
+                        [invocation invoke];
+                        [invocation getReturnValue:&value];
+                        return [NSNumber numberWithLongLong:value];
+                        break;
+                    }
+                    case JSDataTypeDouble:
+                    {
+                        double value = 0;
+                        [invocation invoke];
+                        [invocation getReturnValue:&value];
+                        return [NSNumber numberWithDouble:value];
+                        break;
+                    }
+                    case JSDataTypeBoolean:
+                    {
+                        BOOL value = NO;
+                        [invocation invoke];
+                        [invocation getReturnValue:&value];
+                        return value ? @"true" : @"false";
+                        break;
+                    }
+                    case JSDataTypeNSNumber:
+                    {
+                        NSNumber* value = [[NSNumber alloc] init];
+                        [invocation invoke];
+                        [invocation getReturnValue:&value];
+                        return value;
+                        break;
+                    }
+                    default:
+                    {
+                        id value;
+                        [invocation invoke];
+                        [invocation getReturnValue:&value];
+                        return value;
+                        break;
+                    }
+                }
+                return nil;
             }
-        } 
-        else 
-        {
-            NSLog(@"-[%@ performSelector:@selector(%@)] shouldn't be used. The selector doesn't return an object or void", NSStringFromClass([aObject class]), NSStringFromSelector(aSelector));
-        }
+//        } 
+//        else 
+//        {
+//            NSLog(@"-[%@ performSelector:@selector(%@)] shouldn't be used. The selector doesn't return an object or void", NSStringFromClass([aObject class]), NSStringFromSelector(aSelector));
+//        }
     }
     
     return nil;
@@ -522,7 +568,10 @@
                 {
                     value = [self objectToDictionary:value];
                 }
-                [results setObject:value forKey:property.name];
+                if (value != nil)
+                {
+                    [results setObject:value forKey:property.name];
+                }
             }
         }
     }
@@ -540,7 +589,10 @@
 - (NSString*) serializeToStringFromObject:(id) aObject
 {
     //convert the object to a JSON string
-    return [[self objectToDictionary:aObject] JSONStringWithOptions:serializeOptions error:nil];
+    NSError* error;
+    NSString* value = [[self objectToDictionary:aObject] JSONStringWithOptions:serializeOptions error:&error];
+    NSLog(@"Error serializing: %@", error.localizedDescription);
+    return value;
 }
 
 - (NSData*) serializeToDataFromArray:(NSArray*) aObjects
