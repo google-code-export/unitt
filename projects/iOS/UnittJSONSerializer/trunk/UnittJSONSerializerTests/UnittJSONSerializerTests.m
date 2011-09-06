@@ -32,11 +32,16 @@
 - (void) testDeserialize
 {
     JSONSerializer* serializer = [[JSONSerializer serializerWithParseOptions:JSParseOptionsStrict serializeOptions:JSSerializeOptionPretty] retain];
-    NSString* serialized = @"{\"testString\":\"testStringValue\",\"testInt\":\"100\",\"superInt\":\"1001\",\"testDouble\":\"100.1\",\"testNumber\":\"102\",\"testDate\":[\"java.util.Date\",1315153697500],\"testBool\":\"true\"}";
+    NSString* serialized = @"{\"testString\":\"testStringValue\",\"testInt\":\"100\",\"superInt\":\"1001\",\"testLong\":\"103\",\"testDouble\":\"100.1\",\"testNumber\":\"102\",\"testDate\":[\"java.util.Date\",1315153697500],\"testBool\":\"true\"}";
     TestTransportObject* result = [serializer deserializeObjectFromString:serialized type:[TestTransportObject class]];
+    long long longValue = 103;
     STAssertEqualObjects(result.testString, @"testStringValue", @"Did not have the correct string value: expected=%@, actual=%@",@"testStringValue", result.testString);
     STAssertEquals(result.testInt, 100, @"Did not have the correct int value");
     STAssertEquals(result.superInt, 1001, @"Did not have the correct super int value");
+    STAssertEquals(result.testBool, NO, @"Did not have the correct bool value");
+    STAssertEquals(result.testDouble, 100.1, @"Did not have the correct double value");
+    STAssertEquals(result.testLong, longValue, @"Did not have the correct long long value");
+    STAssertEqualObjects(result.testNumber, [NSNumber numberWithInt:102], @"Did not have the correct number value");
 }
 
 @end

@@ -31,6 +31,7 @@
     NSNumber* testNumber;
     NSDate* testDate;
     BOOL testBool;
+    long long testLong;
 }
 
 @property (nonatomic, assign) int testInt;
@@ -39,8 +40,9 @@
 @property (retain) NSNumber* testNumber;
 @property (retain) NSDate* testDate;
 @property (assign) BOOL testBool;
+@property (assign) long long testLong;
 
 - (id) init;
-- (id) initWithTestInt: (int) aTestInt  testDouble: (double) aTestDouble  testString: (NSString *) aTestString  testNumber: (NSNumber *) aTestNumber  testDate: (NSDate *) aTestDate testBool: (BOOL) aTestBool supertInt: (int) aSuperInt  readOnlyInt:(int) aReadOnlyInt;
+- (id) initWithTestInt: (int) aTestInt  testDouble: (double) aTestDouble  testString: (NSString *) aTestString  testNumber: (NSNumber *) aTestNumber  testDate: (NSDate *) aTestDate testBool: (BOOL) aTestBool testLong: (long long) aTestLong supertInt: (int) aSuperInt  readOnlyInt:(int) aReadOnlyInt;
 
 @end

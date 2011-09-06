@@ -100,7 +100,6 @@
                         {
                             int value = [((NSString*) aArgument) intValue];
                             [invocation setArgument:&value atIndex:2];
-                            NSLog(@"Setting int value %i", value);
                             [invocation invoke];
                         }
                         else
@@ -122,7 +121,46 @@
                             return nil;
                         }
                         break;
-                        
+                    case JSDataTypeDouble:
+                        if ([aArgument isKindOfClass:[NSString class]])
+                        {
+                            double value = [((NSString*) aArgument) doubleValue];
+                            [invocation setArgument:&value atIndex:2];
+                            [invocation invoke];
+                        }
+                        else
+                        {
+                            NSLog(@"No custom handling logic to convert from %@ to double", NSStringFromClass([aArgument class]));
+                            return nil;
+                        }
+                        break;
+                    case JSDataTypeBoolean:
+                        if ([aArgument isKindOfClass:[NSString class]])
+                        {
+                            double value = [((NSString*) aArgument) boolValue];
+                            [invocation setArgument:&value atIndex:2];
+                            [invocation invoke];
+                        }
+                        else
+                        {
+                            NSLog(@"No custom handling logic to convert from %@ to boolean", NSStringFromClass([aArgument class]));
+                            return nil;
+                        }
+                        break;
+                    case JSDataTypeNSNumber:
+                        if ([aArgument isKindOfClass:[NSString class]])
+                        {
+                            long long almostValue = [((NSString*) aArgument) longLongValue];
+                            NSNumber* value = [NSNumber numberWithLongLong:almostValue];
+                            [invocation setArgument:&value atIndex:2];
+                            [invocation invoke];
+                        }
+                        else
+                        {
+                            NSLog(@"No custom handling logic to convert from %@ to NSNumber", NSStringFromClass([aArgument class]));
+                            return nil;
+                        }
+                        break;
                     default:
                         [invocation setArgument:&aArgument atIndex:2];
                         [invocation invoke];
@@ -227,6 +265,7 @@
                         propertyInfo.dataType = JSDataTypeDouble;
                         break;
                     case 'l' : //long
+                    case 'q' : //long long
                         propertyInfo.dataType = JSDataTypeLong;
                         break;
                     case 'i' : //int

@@ -29,6 +29,7 @@
 @synthesize testNumber;
 @synthesize testDate;
 @synthesize testBool;
+@synthesize testLong;
 
 
 - (void) setTestInt:(int)aTestInt
@@ -48,7 +49,7 @@
     return self;
 }
 
-- (id) initWithTestInt:  (int) aTestInt  testDouble: (double) aTestDouble  testString: (NSString *) aTestString  testNumber: (NSNumber *) aTestNumber  testDate: (NSDate *) aTestDate testBool: (BOOL) aTestBool supertInt: (int) aSuperInt  readOnlyInt:(int) aReadOnlyInt
+- (id) initWithTestInt:  (int) aTestInt  testDouble: (double) aTestDouble  testString: (NSString *) aTestString  testNumber: (NSNumber *) aTestNumber  testDate: (NSDate *) aTestDate testBool: (BOOL) aTestBool testLong: (long long) aTestLong supertInt: (int) aSuperInt  readOnlyInt:(int) aReadOnlyInt
 {
     self = [super initWithTestInt:aSuperInt readOnlyInt:aReadOnlyInt];
     if (self)
@@ -59,6 +60,7 @@
         self.testNumber = aTestNumber;
         self.testDate = aTestDate;
         self.testBool = aTestBool;
+        self.testLong = aTestLong;
     }
     return self;
 }
