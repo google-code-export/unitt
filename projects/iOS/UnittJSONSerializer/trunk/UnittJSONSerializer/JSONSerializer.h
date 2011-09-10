@@ -23,6 +23,8 @@
 #import <Foundation/NSObjCRuntime.h>
 #import <objc/runtime.h>
 #import "JSONPropertyInfo.h"
+#import "ObjectHandler.h"
+#import "FieldHandler.h"
 
 enum 
 {
@@ -52,6 +54,9 @@ enum
 typedef NSUInteger JSSerializeOptionFlags;
 
 
+@class ObjectHandler;
+
+
 /**
  * JSONSerializer uses JSONKit to convert to/from JSON. For more information, 
  * see https://github.com/johnezang/JSONKit
@@ -61,11 +66,15 @@ typedef NSUInteger JSSerializeOptionFlags;
 @private
     JKParseOptionFlags parseOptions;
     JKSerializeOptionFlags serializeOptions;
-    NSMutableDictionary* classDefs;
+    ObjectHandler* objectHandler;
 }
 
-- (Class) readConcreteClassFromDictionary:(NSDictionary*) aData;
-- (void) writeConcreteClass:(Class) aType dictionary:(NSDictionary*) aData;
+
+/**
+ * Custom serializer that can handle converting objects to/from the values in the JSON data.
+ */
+@property (retain) ObjectHandler* objectHandler;
+
 
 /**
  * Takes a JSON data stream and fills the specified object's properties with
@@ -142,7 +151,9 @@ typedef NSUInteger JSSerializeOptionFlags;
 - (NSString*) serializeToStringFromArray:(id) aObject;
 
 
-+ (id) serializerWithParseOptions: (JSParseOptionFlags) aParseOptions serializeOptions: (JSSerializeOptionFlags) aSerializeOptions;
-- (id) initWithParseOptions: (JSParseOptionFlags) aParseOptions serializeOptions: (JSSerializeOptionFlags) aSerializeOptions;
++ (id) serializerWithParseOptions:(JSParseOptionFlags) aParseOptions serializeOptions:(JSSerializeOptionFlags) aSerializeOptions;
++ (id) serializerWithParseOptions:(JSParseOptionFlags) aParseOptions serializeOptions:(JSSerializeOptionFlags) aSerializeOptions objectHandler:(ObjectHandler*) aObjectHandler;
+- (id) initWithParseOptions:(JSParseOptionFlags) aParseOptions serializeOptions:(JSSerializeOptionFlags) aSerializeOptions;
+- (id) initWithParseOptions:(JSParseOptionFlags) aParseOptions serializeOptions:(JSSerializeOptionFlags) aSerializeOptions objectHandler:(ObjectHandler*) aObjectHandler;
 
 @end

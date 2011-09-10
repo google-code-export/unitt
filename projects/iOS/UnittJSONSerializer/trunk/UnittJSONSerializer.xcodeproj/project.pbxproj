@@ -23,6 +23,12 @@
 		BD665742138F941C00E6094C /* JSONKit.h in Headers */ = {isa = PBXBuildFile; fileRef = BD665740138F941C00E6094C /* JSONKit.h */; };
 		BD665743138F941C00E6094C /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = BD665741138F941C00E6094C /* JSONKit.m */; };
 		BD665744138F941C00E6094C /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = BD665741138F941C00E6094C /* JSONKit.m */; };
+		BDB27263141B323A00C1C0E8 /* FieldHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = BDB27261141B323A00C1C0E8 /* FieldHandler.h */; };
+		BDB27264141B323A00C1C0E8 /* FieldHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = BDB27262141B323A00C1C0E8 /* FieldHandler.m */; };
+		BDB27268141B35C100C1C0E8 /* ObjectHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = BDB27266141B35C100C1C0E8 /* ObjectHandler.h */; };
+		BDB27269141B35C100C1C0E8 /* ObjectHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = BDB27267141B35C100C1C0E8 /* ObjectHandler.m */; };
+		BDB2726A141B35C100C1C0E8 /* ObjectHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = BDB27267141B35C100C1C0E8 /* ObjectHandler.m */; };
+		BDB2726B141B3BEC00C1C0E8 /* FieldHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = BDB27262141B323A00C1C0E8 /* FieldHandler.m */; };
 		BDB8F0771391FDBE00316BF7 /* JSONPropertyInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = BDB8F0751391FDBD00316BF7 /* JSONPropertyInfo.h */; };
 		BDB8F0781391FDBE00316BF7 /* JSONPropertyInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = BDB8F0761391FDBD00316BF7 /* JSONPropertyInfo.m */; };
 /* End PBXBuildFile section */
@@ -59,6 +65,10 @@
 		BD665741138F941C00E6094C /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
 		BDA164D31413F01A007BB0F7 /* PropertyInfoTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PropertyInfoTests.h; sourceTree = "<group>"; };
 		BDA164D41413F01A007BB0F7 /* PropertyInfoTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PropertyInfoTests.m; sourceTree = "<group>"; };
+		BDB27261141B323A00C1C0E8 /* FieldHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FieldHandler.h; sourceTree = "<group>"; };
+		BDB27262141B323A00C1C0E8 /* FieldHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FieldHandler.m; sourceTree = "<group>"; };
+		BDB27266141B35C100C1C0E8 /* ObjectHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectHandler.h; sourceTree = "<group>"; };
+		BDB27267141B35C100C1C0E8 /* ObjectHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjectHandler.m; sourceTree = "<group>"; };
 		BDB8F0751391FDBD00316BF7 /* JSONPropertyInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONPropertyInfo.h; sourceTree = "<group>"; };
 		BDB8F0761391FDBD00316BF7 /* JSONPropertyInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONPropertyInfo.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -123,6 +133,10 @@
 				BD665734138F901800E6094C /* JSONSerializer.m */,
 				BDB8F0751391FDBD00316BF7 /* JSONPropertyInfo.h */,
 				BDB8F0761391FDBD00316BF7 /* JSONPropertyInfo.m */,
+				BDB27261141B323A00C1C0E8 /* FieldHandler.h */,
+				BDB27262141B323A00C1C0E8 /* FieldHandler.m */,
+				BDB27266141B35C100C1C0E8 /* ObjectHandler.h */,
+				BDB27267141B35C100C1C0E8 /* ObjectHandler.m */,
 				BD665710138F8EDA00E6094C /* Supporting Files */,
 			);
 			path = UnittJSONSerializer;
@@ -172,6 +186,8 @@
 				BD665735138F901800E6094C /* JSONSerializer.h in Headers */,
 				BD665742138F941C00E6094C /* JSONKit.h in Headers */,
 				BDB8F0771391FDBE00316BF7 /* JSONPropertyInfo.h in Headers */,
+				BDB27263141B323A00C1C0E8 /* FieldHandler.h in Headers */,
+				BDB27268141B35C100C1C0E8 /* ObjectHandler.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -273,6 +289,8 @@
 				BD665736138F901800E6094C /* JSONSerializer.m in Sources */,
 				BD665743138F941C00E6094C /* JSONKit.m in Sources */,
 				BDB8F0781391FDBE00316BF7 /* JSONPropertyInfo.m in Sources */,
+				BDB27264141B323A00C1C0E8 /* FieldHandler.m in Sources */,
+				BDB27269141B35C100C1C0E8 /* ObjectHandler.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -280,12 +298,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BDB2726B141B3BEC00C1C0E8 /* FieldHandler.m in Sources */,
 				BD56B14914152B1500E00068 /* JSONPropertyInfo.m in Sources */,
 				BD66572A138F8EDA00E6094C /* UnittJSONSerializerTests.m in Sources */,
 				BD665737138F901800E6094C /* JSONSerializer.m in Sources */,
 				BD665744138F941C00E6094C /* JSONKit.m in Sources */,
 				BD05B2AB139190B500372B4E /* TestTransportObject.m in Sources */,
 				BD05B2BB1391B17500372B4E /* TestSuperTransportObject.m in Sources */,
+				BDB2726A141B35C100C1C0E8 /* ObjectHandler.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

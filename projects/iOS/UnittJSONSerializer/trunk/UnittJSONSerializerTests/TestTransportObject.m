@@ -30,12 +30,20 @@
 @synthesize testDate;
 @synthesize testBool;
 @synthesize testLong;
+@synthesize testArray;
+@synthesize testDictionary;
 
 
 - (void) setTestInt:(int)aTestInt
 {
     NSLog(@"Setting Test Int to %i", aTestInt);
     testInt = aTestInt;
+}
+
+- (void) setTestDouble:(double) aTestDouble
+{
+    NSLog(@"Setting Test Double to %f", aTestDouble);
+    testDouble = aTestDouble;
 }
 
 
@@ -61,6 +69,8 @@
         self.testDate = aTestDate;
         self.testBool = aTestBool;
         self.testLong = aTestLong;
+        self.testArray = [NSArray array];
+        self.testDictionary = [NSDictionary dictionary];
     }
     return self;
 }
