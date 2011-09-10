@@ -32,6 +32,8 @@ static int currentRequestId;
 @synthesize methodSignature;
 @synthesize timeToLiveInMillis;
 @synthesize sent;
+@synthesize serializerType;
+@synthesize resultType;
 
 
 - (NSString*) uid

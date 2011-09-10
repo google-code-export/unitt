@@ -52,6 +52,6 @@
 - (void) transportDidOpen;
 - (void) handleCallback:(id<ServiceCallback>) aCallback result:(id) aResult;
 
-extern NSString *const MessageServiceException;
+extern NSString *const UnittMessageServiceException;
 
 @end

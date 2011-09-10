@@ -29,7 +29,7 @@
 @synthesize serializer;
 @synthesize isOpen;
 
-NSString* const MessageServiceException = @"MessageServiceClientException";
+NSString* const UnittMessageServiceException = @"MessageServiceClientException";
 
 
 #pragma mark Properties
@@ -85,12 +85,12 @@ NSString* const MessageServiceException = @"MessageServiceClientException";
         }
         else
         {
-            [NSException raise:MessageServiceException format:@"Missing Transport"];
+            [NSException raise:UnittMessageServiceException format:@"Missing Transport"];
         }
     }
     else
     {
-        [NSException raise:MessageServiceException format:@"Missing Serializer"];
+        [NSException raise:UnittMessageServiceException format:@"Missing Serializer"];
     }
 }
 

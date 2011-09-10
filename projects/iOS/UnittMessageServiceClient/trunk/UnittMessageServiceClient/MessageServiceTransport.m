@@ -113,7 +113,7 @@
     }
 }
 
-- (void) didClose: (NSError*) aError
+- (void) didClose:(NSUInteger) aStatusCode message:(NSString*) aMessage error:(NSError*) aError
 {
     if (self.client)
     {

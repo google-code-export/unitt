@@ -24,6 +24,7 @@
 #import "ServiceCallback.h"
 
 @class ServiceMessage;
+@class MessageRoutingInfo;
 
 @protocol MessageSerializer <NSObject>
 
@@ -31,6 +32,13 @@
 - (ServiceMessage*) deserializeMessage:(NSData*) aData;
 
 @end
+
+enum 
+{
+    MessageResultTypeError = 0, //result is an error condition.
+    MessageResultTypeCompleteSuccess = 1 //result is a complete object, do not wait for more data.
+};
+typedef NSUInteger MessageResultType;
 
 
 @interface ServiceMessage : NSObject 

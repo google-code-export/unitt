@@ -19,6 +19,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ServiceMessage.h"
 
 
 @interface MessageRoutingInfo : NSObject 
@@ -29,6 +30,8 @@
     NSString* methodSignature;
     NSUInteger timeToLiveInMillis;
     NSDate* sent;
+    NSUInteger serializerType;
+    MessageResultType resultType;
 }
 
 @property (copy) NSString* sessionId;
@@ -38,6 +41,8 @@
 @property (assign) NSUInteger timeToLiveInMillis;
 @property (copy) NSDate* sent;
 @property (readonly) NSString* uid;
+@property (assign) NSUInteger serializerType;
+@property (assign) MessageResultType resultType;
 
 + (NSString*) nextRequestId;
 

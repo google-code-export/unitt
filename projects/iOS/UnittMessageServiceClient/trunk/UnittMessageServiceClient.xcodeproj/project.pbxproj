@@ -34,6 +34,11 @@
 		BDAEA35613A1A54E00E8EB9C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BDAEA35413A1A54E00E8EB9C /* InfoPlist.strings */; };
 		BDAEA35913A1A54E00E8EB9C /* UnittMessageServiceClientTests.h in Resources */ = {isa = PBXBuildFile; fileRef = BDAEA35813A1A54E00E8EB9C /* UnittMessageServiceClientTests.h */; };
 		BDAEA35B13A1A54E00E8EB9C /* UnittMessageServiceClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BDAEA35A13A1A54E00E8EB9C /* UnittMessageServiceClientTests.m */; };
+		BDC439AB141BE522002633CD /* MessageSerializerJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = BDC439A9141BE522002633CD /* MessageSerializerJSON.h */; };
+		BDC439AC141BE522002633CD /* MessageSerializerJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = BDC439AA141BE522002633CD /* MessageSerializerJSON.m */; };
+		BDC439AD141BE522002633CD /* MessageSerializerJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = BDC439AA141BE522002633CD /* MessageSerializerJSON.m */; };
+		BDC439AF141BE640002633CD /* libUnittJSONSerializer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BDC439AE141BE640002633CD /* libUnittJSONSerializer.a */; };
+		BDC439B0141BE640002633CD /* libUnittJSONSerializer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BDC439AE141BE640002633CD /* libUnittJSONSerializer.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,6 +77,9 @@
 		BDAEA35713A1A54E00E8EB9C /* UnittMessageServiceClientTests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UnittMessageServiceClientTests-Prefix.pch"; sourceTree = "<group>"; };
 		BDAEA35813A1A54E00E8EB9C /* UnittMessageServiceClientTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UnittMessageServiceClientTests.h; sourceTree = "<group>"; };
 		BDAEA35A13A1A54E00E8EB9C /* UnittMessageServiceClientTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UnittMessageServiceClientTests.m; sourceTree = "<group>"; };
+		BDC439A9141BE522002633CD /* MessageSerializerJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageSerializerJSON.h; sourceTree = "<group>"; };
+		BDC439AA141BE522002633CD /* MessageSerializerJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageSerializerJSON.m; sourceTree = "<group>"; };
+		BDC439AE141BE640002633CD /* libUnittJSONSerializer.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libUnittJSONSerializer.a; path = "../../../Library/Developer/UnitTSoftware/UnittJSONSerializer/bin/Debug-iphonesimulator/libUnittJSONSerializer.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +91,7 @@
 				BD9AE72313A41F3100D4122D /* Security.framework in Frameworks */,
 				BDAEA33F13A1A54E00E8EB9C /* Foundation.framework in Frameworks */,
 				BD9AE71E13A41DD400D4122D /* libUnittWebSocketClient.a in Frameworks */,
+				BDC439AF141BE640002633CD /* libUnittJSONSerializer.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -97,6 +106,7 @@
 				BDAEA34D13A1A54E00E8EB9C /* CoreGraphics.framework in Frameworks */,
 				BDAEA35013A1A54E00E8EB9C /* libUnittMessageServiceClient.a in Frameworks */,
 				BD9AE71F13A41DD400D4122D /* libUnittWebSocketClient.a in Frameworks */,
+				BDC439B0141BE640002633CD /* libUnittJSONSerializer.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -125,11 +135,12 @@
 		BDAEA33D13A1A54E00E8EB9C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BDC439AE141BE640002633CD /* libUnittJSONSerializer.a */,
+				BD9AE71D13A41DD400D4122D /* libUnittWebSocketClient.a */,
 				BD9AE72413A41FCA00D4122D /* CFNetwork.framework */,
 				BD9AE72513A41FCA00D4122D /* Security.framework */,
 				BD9AE72013A41F3100D4122D /* CFNetwork.framework */,
 				BD9AE72113A41F3100D4122D /* Security.framework */,
-				BD9AE71D13A41DD400D4122D /* libUnittWebSocketClient.a */,
 				BDAEA33E13A1A54E00E8EB9C /* Foundation.framework */,
 				BDAEA34913A1A54E00E8EB9C /* UIKit.framework */,
 				BDAEA34C13A1A54E00E8EB9C /* CoreGraphics.framework */,
@@ -141,6 +152,7 @@
 			isa = PBXGroup;
 			children = (
 				BDAEA34113A1A54E00E8EB9C /* Supporting Files */,
+				BDC439A7141BE4F1002633CD /* Serializers */,
 				BD9AE6FF13A3DDD500D4122D /* MessageServiceClient.h */,
 				BD9AE70013A3DDD500D4122D /* MessageServiceClient.m */,
 				BD9AE70413A3E29800D4122D /* MessageRoutingInfo.h */,
@@ -182,6 +194,15 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		BDC439A7141BE4F1002633CD /* Serializers */ = {
+			isa = PBXGroup;
+			children = (
+				BDC439A9141BE522002633CD /* MessageSerializerJSON.h */,
+				BDC439AA141BE522002633CD /* MessageSerializerJSON.m */,
+			);
+			name = Serializers;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -194,6 +215,7 @@
 				BD9AE70F13A4163E00D4122D /* ServiceCallback.h in Headers */,
 				BD9AE71A13A4196300D4122D /* ServiceMessage.h in Headers */,
 				BD0B94B313BBB4F800A030F6 /* MessageServiceTransport.h in Headers */,
+				BDC439AB141BE522002633CD /* MessageSerializerJSON.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -296,6 +318,7 @@
 				BD9AE70713A3E29800D4122D /* MessageRoutingInfo.m in Sources */,
 				BD9AE71B13A4196300D4122D /* ServiceMessage.m in Sources */,
 				BD0B94B413BBB4F800A030F6 /* MessageServiceTransport.m in Sources */,
+				BDC439AC141BE522002633CD /* MessageSerializerJSON.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -308,6 +331,7 @@
 				BD9AE70813A3E29800D4122D /* MessageRoutingInfo.m in Sources */,
 				BD9AE71C13A4196300D4122D /* ServiceMessage.m in Sources */,
 				BD0B94B513BBB4F800A030F6 /* MessageServiceTransport.m in Sources */,
+				BDC439AD141BE522002633CD /* MessageSerializerJSON.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -344,9 +368,15 @@
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "\"~/Library/Developer/UnitTSoftware/UnittWebSocketClient/include\"";
+				HEADER_SEARCH_PATHS = (
+					"\"~/Library/Developer/UnitTSoftware/UnittWebSocketClient/include\"",
+					"\"~/Library/Developer/UnitTSoftware/UnittJSONSerializer/include\"",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
-				LIBRARY_SEARCH_PATHS = "\"~/Library/Developer/UnitTSoftware/UnittWebSocketClient/bin/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"";
+				LIBRARY_SEARCH_PATHS = (
+					"\"~/Library/Developer/UnitTSoftware/UnittWebSocketClient/bin/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"",
+					"\"~/Library/Developer/UnitTSoftware/UnittJSONSerializer/bin/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"",
+				);
 				OTHER_LDFLAGS = "-all_load";
 				SDKROOT = iphoneos;
 			};
@@ -360,9 +390,15 @@
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "\"~/Library/Developer/UnitTSoftware/UnittWebSocketClient/include\"";
+				HEADER_SEARCH_PATHS = (
+					"\"~/Library/Developer/UnitTSoftware/UnittWebSocketClient/include\"",
+					"\"~/Library/Developer/UnitTSoftware/UnittJSONSerializer/include\"",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
-				LIBRARY_SEARCH_PATHS = "\"~/Library/Developer/UnitTSoftware/UnittWebSocketClient/bin/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"";
+				LIBRARY_SEARCH_PATHS = (
+					"\"~/Library/Developer/UnitTSoftware/UnittWebSocketClient/bin/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"",
+					"\"~/Library/Developer/UnitTSoftware/UnittJSONSerializer/bin/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"",
+				);
 				OTHER_LDFLAGS = "-all_load";
 				SDKROOT = iphoneos;
 			};
@@ -375,6 +411,7 @@
 				DSTROOT = /tmp/UnittMessageServiceClient.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "UnittMessageServiceClient/UnittMessageServiceClient-Prefix.pch";
+				HEADER_SEARCH_PATHS = "${inherited}";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "${inherited}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -388,6 +425,7 @@
 				DSTROOT = /tmp/UnittMessageServiceClient.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "UnittMessageServiceClient/UnittMessageServiceClient-Prefix.pch";
+				HEADER_SEARCH_PATHS = "${inherited}";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "${inherited}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -404,11 +442,9 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "UnittMessageServiceClientTests/UnittMessageServiceClientTests-Prefix.pch";
+				HEADER_SEARCH_PATHS = "${inherited}";
 				INFOPLIST_FILE = "UnittMessageServiceClientTests/UnittMessageServiceClientTests-Info.plist";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../../Library/Developer/UnitTSoftware/UnittWebSocketClient/bin/Debug-iphoneos\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-framework",
 					SenTestingKit,
@@ -429,11 +465,9 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "UnittMessageServiceClientTests/UnittMessageServiceClientTests-Prefix.pch";
+				HEADER_SEARCH_PATHS = "${inherited}";
 				INFOPLIST_FILE = "UnittMessageServiceClientTests/UnittMessageServiceClientTests-Info.plist";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../../Library/Developer/UnitTSoftware/UnittWebSocketClient/bin/Debug-iphoneos\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-framework",
 					SenTestingKit,
