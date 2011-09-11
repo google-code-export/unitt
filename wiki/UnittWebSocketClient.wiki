@@ -3,7 +3,7 @@
 
 = Introduction =
 
-!UnittWebSocketClient is an API that allows you to use web sockets in your iOS Objective-C projects. It conforms to the initial & latest versions of web sockets. Simply import whichever implementation you desire, !WebSocket00.h, !WebSocket07.h, !WebSocket08.h, or !WebSocket10.h. It tries to follow the client specification from javascript using Objective-C constructs. Web sockets provide a low latency, bi-directional, full-duplex communication channel over TCP. The new draft version of the specification allows for text messages (must be UTF-8), as well as, binary messages. For more information, see [http://en.wikipedia.org/wiki/WebSockets Wikipedia].
+!UnittWebSocketClient is an API that allows you to use web sockets in your iOS Objective-C projects. It conforms to the initial & latest versions of web sockets. Simply import whichever implementation you desire, !WebSocket00.h, !WebSocket07.h, !WebSocket08.h, or !WebSocket10.h. There are many different web socket servers out there and many to do not conform to the more recent versions of the specification. Please make sure you are using the correct client version for your server version. The client API tries to follow the client specification from javascript using Objective-C constructs. Web sockets provide a low latency, bi-directional, full-duplex communication channel over TCP. The new draft version of the specification allows for text messages (must be UTF-8), as well as, binary messages. For more information, see [http://en.wikipedia.org/wiki/WebSockets Wikipedia].
 
 = Setup Your Project =
 
