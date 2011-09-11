@@ -139,6 +139,9 @@ myWS.startMyWebSocket();
 }}}
 </p>
 
+= Sample Code =
+You can check out the [http://code.google.com/p/unitt/source/browse/projects/unitt-websocket/tags/0.9.1.1/src/test/java/com/unitt/framework/websocket/simple/NetworkSocketTest.java NetworkSocketTest] class for sample code on connecting and talking to a web socket. You can also run your own server for the test using the [http://code.google.com/p/unitt/source/browse/projects#projects%2FiOS%2Ftestws%2Ftrunk testws] project. To start the server using maven type "mvn jetty:run" at the command line.
+
 
 = More Info =
   * Check out the [http://code.google.com/p/unitt/source/browse/projects/unitt-websocket/tags/0.9.1.1/src/main/java/com/unitt/framework/websocket/netty/ClientWebsocketFactory.java ClientWebsocketFactory.java], [http://code.google.com/p/unitt/source/browse/projects/unitt-websocket/tags/0.9.1.1/src/main/java/com/unitt/framework/websocket/simple/SimpleSocketFactory.java SimpleSocketFactory.java] for more information on how to use these classes.
