@@ -31,9 +31,19 @@
  */
 @interface GlossyButton : UIButton 
 {
+    UIColor *disabledGradientColor;
     UIColor *gradientColor;
     BOOL useGelAppearance;
+    UIColor *borderHighlightColor;
+    BOOL highlightBorder;
 }
+
+/**
+ * Color to use as a base for the gradient. Highlights are derived from this
+ * color so darker is better. This is used, rather than the gradientColor, when 
+ * the button is disabled.
+ */
+@property (nonatomic, retain) UIColor *disabledGradientColor;
 
 /**
  * Color to use as a base for the gradient. Highlights are derived from this
@@ -48,5 +58,15 @@
  * http://cocoawithlove.com/2008/09/drawing-gloss-gradients-in-coregraphics.html
  */
 @property (nonatomic) BOOL useGelAppearance;
+
+/**
+ * Color to use in the border highlight.
+ */
+@property (nonatomic, retain) UIColor *borderHighlightColor;
+
+/**
+ * True to show a border highlight. Typically used to indicate a preferabl action.
+ */
+@property (nonatomic) BOOL highlightBorder;
 
 @end

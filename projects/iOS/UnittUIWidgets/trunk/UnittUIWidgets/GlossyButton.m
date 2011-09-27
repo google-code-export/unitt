@@ -21,11 +21,20 @@
 #import "GlossyButton.h"
 #import "GlossyGradientFill.h"
 
+@interface GlossyButton(Private)
+
+- (void) handleEnableChange;
+
+@end
+
 
 @implementation GlossyButton
 
 @synthesize gradientColor;
 @synthesize useGelAppearance;
+@synthesize highlightBorder;
+@synthesize borderHighlightColor;
+@synthesize disabledGradientColor;
 
 - (void)setPathToRoundedRect:(CGRect)rect forInset:(NSUInteger)inset inContext:(CGContextRef)context
 {
@@ -65,10 +74,63 @@
     CGFloat color[4] = {0.0f, 0.0f, 0.0f, 1.0f};
     
     [self setPathToRoundedRect: rect forInset:0 inContext: context];   
-    CGContextSetStrokeColor(context, color);
+    
+    if (self.highlightBorder)
+    {
+        if(self.borderHighlightColor)
+        {
+            CGContextSetStrokeColorWithColor(context, [self.borderHighlightColor CGColor]);
+        }
+    
+        CGContextSetLineWidth(context, 8);
+    }
+    else
+    {
+        CGContextSetStrokeColor(context, color);
+    }
+    
     CGContextStrokePath(context);
 }
 
+- (void) setEnabled:(BOOL) aEnabled
+{
+    [super setEnabled:aEnabled];
+    [self handleEnableChange];
+}
+
+- (void) handleEnableChange
+{
+    [self setNeedsDisplay];
+}
+
+- (UIColor*) gradientColor
+{
+    if (self.enabled)
+    {
+        return gradientColor;
+    }
+    
+    return self.disabledGradientColor;
+}
+
+- (void) setGradientColor:(UIColor*) aGradientColor
+{
+    if (gradientColor != aGradientColor)
+    {
+        if (gradientColor)
+        {
+            [gradientColor release];
+        }
+        if (aGradientColor)
+        {
+            gradientColor = [aGradientColor retain];
+            if (!self.disabledGradientColor)
+            {
+                self.disabledGradientColor = [aGradientColor colorWithAlphaComponent:0.3];
+            }
+        }
+    }
+}
 
 - (void)drawGlossRect:(CGRect)rect 
 {
@@ -76,7 +138,7 @@
     [self setPathToRoundedRect: rect forInset:0 inContext: currentContext];   
     
     //paint background color    
-    CGContextSetFillColorWithColor(currentContext, gradientColor.CGColor);
+    CGContextSetFillColorWithColor(currentContext, self.gradientColor.CGColor);
     CGContextFillPath(currentContext);
     
     //create gradient info
@@ -116,7 +178,7 @@
     [self setPathToRoundedRect: rect forInset:0 inContext: currentContext];
     CGContextClip(currentContext);
     //paint gradient
-    DrawGlossGradient(currentContext, gradientColor.CGColor, self.bounds);
+    DrawGlossGradient(currentContext, self.gradientColor.CGColor, self.bounds);
     
     //draw outline
     [self drawOutline: self.bounds inContext: currentContext];
@@ -144,19 +206,6 @@
         [self drawGlossRect:rect];
     }
 
-}
-
-- (id) initWithFrame: (CGRect) frame 
-{
-    self = [super initWithFrame: frame];
-    if (self) 
-    {
-        self.layer.shadowColor = [[UIColor greenColor] CGColor];
-        self.layer.shadowOffset = CGSizeMake(1.0, 1.0);
-        self.layer.shadowOpacity = 0.40;
-        //self.layer.shadowRadius
-    }
-    return self;
 }
 
 @end

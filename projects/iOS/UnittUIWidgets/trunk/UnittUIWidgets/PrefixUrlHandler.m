@@ -54,8 +54,11 @@
         {
             controller = [[self.controllerClass alloc] initWithNibName:self.nibName bundle:self.nibBundle];
         }
+        else
+        {
+            controller = [[self.controllerClass alloc] init];
+        }
         
-        controller = [[self.controllerClass alloc] init];
         controller.currentUrl = aUrl;
     }
     

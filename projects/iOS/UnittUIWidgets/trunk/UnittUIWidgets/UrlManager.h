@@ -38,7 +38,7 @@
  * Designates a class capable of constructing an instance of a UIViewControllerHasUrl
  * from a URL.
  */
-@protocol UrlHandler
+@protocol UrlHandler <NSObject>
 
 /**
  * Returns true if the URL can be handled.
