@@ -15,7 +15,7 @@ public class ClientNetworkSocketTest extends AbstractNetworkSocketTest
     {
         super.setUp();
         WebSocketConnectConfig config = new WebSocketConnectConfig();
-        config.setUrl( new URI("ws://10.0.1.5:8080/testws/ws/test") );
+        config.setUrl( new URI("ws://10.0.1.36:8080/testws/ws/test") );
         config.setMaxPayloadSize( 40 );
         ws = ClientWebsocketFactory.create( config, this); 
     }

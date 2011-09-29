@@ -10,7 +10,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class AbstractNetworkSocketTest implements WebSocketObserver
+public abstract class AbstractNetworkSocketTest implements WebSocketObserver
 {
     protected static final Charset   utf8Charset      = Charset.forName( "UTF-8" );
     protected static final String prefix = "Message: ";

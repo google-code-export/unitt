@@ -436,7 +436,6 @@ public abstract class WebSocketConnection implements WebSocket, NetworkSocketObs
         WebSocketFragment fragment = pendingFragments.poll();
         if ( fragment != null )
         {
-            int count = 0;
             // init
             ByteArrayOutputStream messageData = new ByteArrayOutputStream();
             MessageOpCode messageOpCode = fragment.getOpCode();
@@ -446,7 +445,6 @@ public abstract class WebSocketConnection implements WebSocket, NetworkSocketObs
             {
                 messageData.write( fragment.getPayloadData() );
                 fragment = pendingFragments.poll();
-                count++;
             }
             
             // handle final message contents
