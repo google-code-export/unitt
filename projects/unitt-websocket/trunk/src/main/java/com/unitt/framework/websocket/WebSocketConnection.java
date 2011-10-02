@@ -536,7 +536,7 @@ public abstract class WebSocketConnection implements WebSocket, NetworkSocketObs
         else if ( fragment != null )
         {
             fragment.appendFragment( aData );
-            if ( fragment.isValid() )
+            if ( fragment.canBeParsed() )
             {
                 fragment.parseContent();
             }

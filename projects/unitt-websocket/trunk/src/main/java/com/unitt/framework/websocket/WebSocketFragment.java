@@ -206,6 +206,16 @@ public class WebSocketFragment
         return false;
     }
 
+    public boolean canBeParsed()
+    {
+        if ( getMessageLength() > 0 && fragment != null )
+        {
+            return fragment.length >= (getPayloadStart() + getPayloadLength());
+        }
+
+        return false;
+    }
+
     public boolean isHeaderValid()
     {
         return payloadStart > 0;
