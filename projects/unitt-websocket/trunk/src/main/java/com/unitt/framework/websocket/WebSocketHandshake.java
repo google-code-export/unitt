@@ -197,6 +197,36 @@ public class WebSocketHandshake
                     {
                         config.setHost(value);
                     }
+                    else if ( "Sec-WebSocket-Extensions".equalsIgnoreCase( key ))
+                    {
+                        //set available & selected protocols
+                        List<String> availableExtensions = new ArrayList<String>();
+                        List<String> selectedExtensions = new ArrayList<String>();
+                        String[] extensions = value.split( "," );
+                        for ( String extension : extensions )
+                        {
+                            if ( extension != null )
+                            {
+                                String cleanExtension = extension.trim();
+                                if ( cleanExtension.length() > 0 )
+                                {
+                                    if ( containsCaseInsensitiveValue( value, getServerConfig().getAvailableExtensions() ) )
+                                    {
+                                        selectedExtensions.add( cleanExtension );
+                                    }
+                                    availableExtensions.add( cleanExtension );
+                                }
+                            }
+                        }
+                        if (!availableExtensions.isEmpty())
+                        {
+                            config.setAvailableProtocols( availableExtensions );
+                        }
+                        if (!selectedExtensions.isEmpty())
+                        {
+                            config.setSelectedExtensions( selectedExtensions );
+                        }
+                    }
                 }
             }
 
@@ -257,6 +287,27 @@ public class WebSocketHandshake
                     else if ( "Sec-WebSocket-Accept".equalsIgnoreCase( key ) )
                     {
                         secKey = value;
+                    }
+                    else if ( "Sec-WebSocket-Extensions".equalsIgnoreCase( key ))
+                    {
+                        //set available & selected protocols
+                        List<String> selectedExtensions = new ArrayList<String>();
+                        String[] extensions = value.split( "," );
+                        for ( String extension : extensions )
+                        {
+                            if ( extension != null )
+                            {
+                                String cleanExtension = extension.trim();
+                                if ( cleanExtension.length() > 0 )
+                                {
+                                    selectedExtensions.add( cleanExtension );
+                                }
+                            }
+                        }
+                        if (!selectedExtensions.isEmpty())
+                        {
+                            config.setSelectedExtensions( selectedExtensions );
+                        }
                     }
                 }
             }
@@ -321,18 +372,15 @@ public class WebSocketHandshake
             output.append( "GET " + getResourcePath( getClientConfig().getUrl() ) + " HTTP/1.1\r\n" );
             output.append( "Upgrade: WebSocket\r\n" );
             output.append( "Connection: Upgrade\r\n" );
-            if (getClientConfig().getUrl().getPort() <= 0 && (getClientConfig().getUrl().getPort() == 80 || getClientConfig().getUrl().getPort() == 443))
-            {
-                output.append( "Host: " + getClientConfig().getUrl().getHost() + "\r\n" );
-            }
-            else
-            {
-                output.append( "Host: " + getClientConfig().getUrl().getHost() + ":" + getClientConfig().getUrl().getPort() + "\r\n" );
-            }
+            output.append( "Host: " + getClientConfig().getHost() + "\r\n" );
             output.append( "Sec-WebSocket-Origin: " + getClientConfig().getOrigin() + "\r\n" );
             if(getClientConfig().getAvailableProtocols() != null)
             {
                 output.append( "Sec-WebSocket-Protocol: " + createCommaDelimitedList( getClientConfig().getAvailableProtocols() ) + "\r\n" );
+            }
+            if(getClientConfig().getAvailableExtensions() != null)
+            {
+                output.append( "Sec-WebSocket-Extensions: " + createCommaDelimitedList( getClientConfig().getAvailableExtensions() ) + "\r\n" );
             }
             output.append( "Sec-WebSocket-Key: " + getClientSecKey() + "\r\n" );
             output.append( "Sec-WebSocket-Version: " + getClientConfig().getWebSocketVersion().getSpecVersionValue() + "\r\n" );
@@ -352,6 +400,7 @@ public class WebSocketHandshake
             output.append( "Upgrade: WebSocket\r\n" );
             output.append( "Connection: Upgrade\r\n" );
             output.append( "Sec-WebSocket-Protocol: " + getServerConfig().getSelectedProtocol() + "\r\n" );
+            output.append( "Sec-WebSocket-Extensions: " + getServerConfig().getSelectedExtensions() + "\r\n" );
             output.append( "Sec-WebSocket-Accept: " + getExpectedServerSecKey() + "\r\n" );
             output.append( "\r\n" );
             serverHandshakeBytes = output.toString().getBytes( Charset.forName( "US-ASCII" ) );

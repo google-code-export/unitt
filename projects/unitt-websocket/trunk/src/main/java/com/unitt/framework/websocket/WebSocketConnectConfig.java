@@ -45,6 +45,8 @@ public class WebSocketConnectConfig
     private long timeoutInMillis;
     private boolean verifyTlsDomain;
     private List<String> availableProtocols;
+    private List<String> availableExtensions;
+    private List<String> selectedExtensions;
     private String selectedProtocol;
     private boolean verifySecurityKey;
     private int maxPayloadSize = 32 * 1024;
@@ -71,6 +73,14 @@ public class WebSocketConnectConfig
     public void setUrl( URI aUrl )
     {
         url = aUrl;
+        if (getOrigin() == null)
+        {
+            setOrigin( buildOrigin() );
+        }
+        if (getHost() == null)
+        {
+            setHost( buildHost() );
+        }
     }
 
     public String getOrigin()
@@ -123,15 +133,35 @@ public class WebSocketConnectConfig
         return availableProtocols;
     }
     
-    public void setAvailableProtocol(String availableProtocol)
+    public void setAvailableProtocol(String aAvailableProtocol)
     {
         availableProtocols = new ArrayList<String>();
-        availableProtocols.add(availableProtocol);
+        availableProtocols.add(aAvailableProtocol);
     }
 
-    public void setAvailableProtocols( List<String> availableProtocols )
+    public void setAvailableProtocols( List<String> aAvailableProtocols )
     {
-        this.availableProtocols = availableProtocols;
+        availableProtocols = aAvailableProtocols;
+    }
+
+    public List<String> getAvailableExtensions()
+    {
+        return availableExtensions;
+    }
+
+    public void setAvailableExtensions( List<String> aAvailableExtensions )
+    {
+        availableExtensions = aAvailableExtensions;
+    }
+
+    public List<String> getSelectedExtensions()
+    {
+        return selectedExtensions;
+    }
+
+    public void setSelectedExtensions( List<String> aSelectedExtensions )
+    {
+        selectedExtensions = aSelectedExtensions;
     }
 
     public String getSelectedProtocol()
@@ -205,5 +235,28 @@ public class WebSocketConnectConfig
     public boolean hasProxy()
     {
         return getProxyHost() != null;
+    }
+    
+    
+    // config logic
+    // ---------------------------------------------------------------------------
+    protected String buildOrigin()
+    {
+        return (isSecure() ? "https://" : "http://") + buildHost() + (getUrl().getPath() != null && getUrl().getPath().length() > 0 ? getUrl().getPath() : "" );
+    }
+    
+    protected String buildHost()
+    {
+        if (getUrl() != null)
+        {
+            if (getUrl().getPort() != 80 && getUrl().getPort() != 443)
+            {
+                return getUrl().getHost() + ":" + getUrl().getPort();
+            }
+            
+            return getUrl().getHost();
+        }
+        
+        return null;
     }
 }
