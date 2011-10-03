@@ -1,8 +1,10 @@
 package com.unitt.framework.websocket;
 
+
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * @author Josh Morris
@@ -11,58 +13,60 @@ public class WebSocketConnectConfig
 {
     public enum WebSocketVersion
     {
-        Version07("7"), Version08("8"), Version10("10");
-        
+        Version07( "7" ), Version08( "8" ), Version10( "10" );
+
         private String specVersionValue;
-        
-        private WebSocketVersion(String aSpecVersionValue)
+
+        private WebSocketVersion( String aSpecVersionValue )
         {
             specVersionValue = aSpecVersionValue;
         }
-        
+
         public String getSpecVersionValue()
         {
             return specVersionValue;
         }
-        
-        public static WebSocketVersion fromSpecVersionValue(String aSpecVersionValue)
+
+        public static WebSocketVersion fromSpecVersionValue( String aSpecVersionValue )
         {
-            for (WebSocketVersion wsv : WebSocketVersion.values())
+            for ( WebSocketVersion wsv : WebSocketVersion.values() )
             {
-                if (wsv.getSpecVersionValue().equals(aSpecVersionValue))
+                if ( wsv.getSpecVersionValue().equals( aSpecVersionValue ) )
                 {
                     return wsv;
                 }
             }
-            
+
             return null;
         }
     };
-    
-    private URI url;
-    private String host;
-    private String origin;
-    private long timeoutInMillis;
-    private boolean verifyTlsDomain;
-    private List<String> availableProtocols;
-    private List<String> availableExtensions;
-    private List<String> selectedExtensions;
-    private String selectedProtocol;
-    private boolean verifySecurityKey;
-    private int maxPayloadSize = 32 * 1024;
-    private String proxyHost;
-    private int proxyPort = -1;
-    private WebSocketVersion webSocketVersion = WebSocketVersion.Version07;
-    
-    
+
+    private URI                   url;
+    private String                host;
+    private String                origin;
+    private long                  timeoutInMillis;
+    private boolean               verifyTlsDomain;
+    private List<String>          availableProtocols;
+    private List<String>          availableExtensions;
+    private List<String>          selectedExtensions;
+    private List<HandshakeHeader> clientHeaders;
+    private List<HandshakeHeader> serverHeaders;
+    private String                selectedProtocol;
+    private boolean               verifySecurityKey;
+    private int                   maxPayloadSize   = 32 * 1024;
+    private String                proxyHost;
+    private int                   proxyPort        = -1;
+    private WebSocketVersion      webSocketVersion = WebSocketVersion.Version07;
+
+
     // constructors
     // ---------------------------------------------------------------------------
     public WebSocketConnectConfig()
     {
-        //default
+        // default
     }
 
-    
+
     // getters & setters
     // ---------------------------------------------------------------------------
     public URI getUrl()
@@ -73,11 +77,11 @@ public class WebSocketConnectConfig
     public void setUrl( URI aUrl )
     {
         url = aUrl;
-        if (getOrigin() == null)
+        if ( getOrigin() == null )
         {
             setOrigin( buildOrigin() );
         }
-        if (getHost() == null)
+        if ( getHost() == null )
         {
             setHost( buildHost() );
         }
@@ -118,6 +122,26 @@ public class WebSocketConnectConfig
         host = aHost;
     }
 
+    public List<HandshakeHeader> getClientHeaders()
+    {
+        return clientHeaders;
+    }
+
+    public void setClientHeaders( List<HandshakeHeader> aClientHeaders )
+    {
+        clientHeaders = aClientHeaders;
+    }
+
+    public List<HandshakeHeader> getServerHeaders()
+    {
+        return serverHeaders;
+    }
+
+    public void setServerHeaders( List<HandshakeHeader> aServerHeaders )
+    {
+        serverHeaders = aServerHeaders;
+    }
+
     public boolean isVerifyTlsDomain()
     {
         return verifyTlsDomain;
@@ -132,11 +156,11 @@ public class WebSocketConnectConfig
     {
         return availableProtocols;
     }
-    
-    public void setAvailableProtocol(String aAvailableProtocol)
+
+    public void setAvailableProtocol( String aAvailableProtocol )
     {
         availableProtocols = new ArrayList<String>();
-        availableProtocols.add(aAvailableProtocol);
+        availableProtocols.add( aAvailableProtocol );
     }
 
     public void setAvailableProtocols( List<String> aAvailableProtocols )
@@ -191,7 +215,7 @@ public class WebSocketConnectConfig
 
     public void setMaxPayloadSize( int aMaxPayloadSize )
     {
-        if (aMaxPayloadSize > 0)
+        if ( aMaxPayloadSize > 0 )
         {
             maxPayloadSize = aMaxPayloadSize;
         }
@@ -219,11 +243,11 @@ public class WebSocketConnectConfig
 
     public int getProxyPort()
     {
-        if (proxyPort < 0 && getUrl() != null)
+        if ( proxyPort < 0 && getUrl() != null )
         {
             proxyPort = getUrl().getPort();
         }
-        
+
         return proxyPort;
     }
 
@@ -231,32 +255,32 @@ public class WebSocketConnectConfig
     {
         proxyPort = aProxyPort;
     }
-    
+
     public boolean hasProxy()
     {
         return getProxyHost() != null;
     }
-    
-    
+
+
     // config logic
     // ---------------------------------------------------------------------------
     protected String buildOrigin()
     {
-        return (isSecure() ? "https://" : "http://") + buildHost() + (getUrl().getPath() != null && getUrl().getPath().length() > 0 ? getUrl().getPath() : "" );
+        return ( isSecure() ? "https://" : "http://" ) + buildHost() + ( getUrl().getPath() != null && getUrl().getPath().length() > 0 ? getUrl().getPath() : "" );
     }
-    
+
     protected String buildHost()
     {
-        if (getUrl() != null)
+        if ( getUrl() != null )
         {
-            if (getUrl().getPort() != 80 && getUrl().getPort() != 443)
+            if ( getUrl().getPort() != 80 && getUrl().getPort() != 443 )
             {
                 return getUrl().getHost() + ":" + getUrl().getPort();
             }
-            
+
             return getUrl().getHost();
         }
-        
+
         return null;
     }
 }

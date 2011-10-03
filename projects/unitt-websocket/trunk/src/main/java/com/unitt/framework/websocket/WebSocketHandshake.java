@@ -4,6 +4,7 @@ package com.unitt.framework.websocket;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.codec.binary.Base64;
@@ -117,127 +118,170 @@ public class WebSocketHandshake
 
     // handshake logic
     // ---------------------------------------------------------------------------
+    protected List<HandshakeHeader> parseHeaders( String aHandshake )
+    {
+        List<HandshakeHeader> headers = new ArrayList<HandshakeHeader>();
+
+        String[] lines = aHandshake.split( "\r\n" );
+        for ( String line : lines )
+        {
+            String[] header = line.split( ":" );
+            if ( header != null && header.length == 2 )
+            {
+                // get header
+                String key = header[0] != null ? header[0].trim() : "";
+                String value = header[1] != null ? header[1].trim() : "";
+                if ( key.length() > 0 && value.length() > 0 )
+                {
+                    headers.add( new HandshakeHeader( key, value ) );
+                }
+            }
+        }
+
+        return headers;
+    }
+    
+    protected String buildHandshake(List<HandshakeHeader> aHeaders, String aResource)
+    {
+        StringBuilder output = new StringBuilder();
+        output.append( "GET " + aResource + " HTTP/1.1\r\n" );
+        for (HandshakeHeader header : aHeaders)
+        {
+            output.append( header.getKey() + ": " + header.getValue() + "\r\n" );
+        }
+        output.append( "\r\n" );
+        return output.toString();
+    }
+    
+    protected HandshakeHeader findHeader(String aCaseInsensitiveKey, List<HandshakeHeader> aHeaders)
+    {
+        for (HandshakeHeader header : aHeaders)
+        {
+            if (aCaseInsensitiveKey.equalsIgnoreCase( header.getKey() ))
+            {
+                return header;
+            }
+        }
+        
+        return null;
+    }
+
     protected void parseClientHandshakeBytes( byte[] aBytes )
     {
         // init
         Charset charset = Charset.forName( "US-ASCII" );
         setClientHandshakeBytes( aBytes );
-
         String handshake = new String( aBytes, charset );
         // make sure this is a http 1.1 GET request
         if ( handshake.startsWith( "GET" ) && handshake.contains( "HTTP/1.1" ) )
         {
-            // loop through headers, filling out config
-            WebSocketConnectConfig config = new WebSocketConnectConfig();
-            String[] lines = handshake.split( "\r\n" );
+            //create headers & validate handshake
             boolean connect = false;
             boolean upgrade = false;
             String secKey = null;
-            for ( String line : lines )
+            WebSocketConnectConfig config = new WebSocketConnectConfig();
+            List<HandshakeHeader> headers = parseHeaders( handshake );
+            config.setClientHeaders( headers );
+            HandshakeHeader header = findHeader("Upgrade", headers);
+            if (header != null && header.getValue() != null)
             {
-                String[] header = line.split( ":" );
-                if ( header != null && header.length == 2 )
+                upgrade = header.getValue().equalsIgnoreCase( "websocket" );
+            }
+            header = findHeader("Connection", headers);
+            if (header != null && header.getValue() != null)
+            {
+                connect = header.getValue().equalsIgnoreCase( "upgrade" );
+            }
+            header = findHeader("Sec-WebSocket-Protocol", headers);
+            if (header != null && header.getValue() != null)
+            {
+                // set available & selected protocols
+                List<String> availableProtocols = new ArrayList<String>();
+                String[] protocols = header.getValue().split( "," );
+                for ( String protocol : protocols )
                 {
-                    // get header
-                    String key = header[0] != null ? header[0].trim() : "";
-                    String value = header[1] != null ? header[1].trim() : "";
-
-                    // apply value, if we care about this header
-                    if ( "Upgrade".equalsIgnoreCase( key ) )
+                    if ( protocol != null )
                     {
-                        // this must be websocket
-                        upgrade = value.equalsIgnoreCase( "websocket" );
-                    }
-                    else if ( "Connection".equalsIgnoreCase( key ) )
-                    {
-                        // this must be websocket
-                        connect = value.equalsIgnoreCase( "upgrade" );
-                    }
-                    else if ( "Sec-WebSocket-Protocol".equalsIgnoreCase( key ) )
-                    {
-                        //set available & selected protocols
-                        List<String> availableProtocols = new ArrayList<String>();
-                        String[] protocols = value.split( "," );
-                        for ( String protocol : protocols )
+                        String cleanProtocol = protocol.trim();
+                        if ( cleanProtocol.length() > 0 )
                         {
-                            if ( protocol != null )
+                            // can we choose this protocol, if we are
+                            // missing one
+                            if ( config.getSelectedProtocol() == null && containsCaseInsensitiveValue( header.getValue(), getServerConfig().getAvailableProtocols() ) )
                             {
-                                String cleanProtocol = protocol.trim();
-                                if ( cleanProtocol.length() > 0 )
-                                {
-                                    // can we choose this protocol, if we are
-                                    // missing one
-                                    if ( config.getSelectedProtocol() == null && containsCaseInsensitiveValue( value, getServerConfig().getAvailableProtocols() ) )
-                                    {
-                                        config.setSelectedProtocol( cleanProtocol );
-                                    }
-                                    availableProtocols.add( cleanProtocol );
-                                }
+                                config.setSelectedProtocol( cleanProtocol );
                             }
-                        }
-                        if (!availableProtocols.isEmpty())
-                        {
-	                        config.setAvailableProtocols( availableProtocols );
+                            availableProtocols.add( cleanProtocol );
                         }
                     }
-                    else if ( "Sec-WebSocket-Key".equalsIgnoreCase( key ) )
+                }
+                if ( !availableProtocols.isEmpty() )
+                {
+                    config.setAvailableProtocols( availableProtocols );
+                }
+            }
+            header = findHeader("Sec-WebSocket-Key", headers);
+            if (header != null && header.getValue() != null)
+            {
+                secKey = header.getValue();
+            }
+            header = findHeader("Sec-WebSocket-Version", headers);
+            if (header != null && header.getValue() != null)
+            {
+                config.setWebSocketVersion( WebSocketVersion.fromSpecVersionValue( header.getValue() ) );
+            }
+            header = findHeader("Sec-WebSocket-Origin", headers);
+            if (header != null && header.getValue() != null)
+            {
+                // @todo: perform browser resource validation
+                config.setOrigin( header.getValue() );
+            }
+            header = findHeader("Host", headers);
+            if (header != null && header.getValue() != null)
+            {
+                config.setHost( header.getValue() );
+            }
+            header = findHeader("Sec-WebSocket-Extensions", headers);
+            if (header != null && header.getValue() != null)
+            {
+                // set available & selected protocols
+                List<String> availableExtensions = new ArrayList<String>();
+                List<String> selectedExtensions = new ArrayList<String>();
+                String[] extensions = header.getValue().split( "," );
+                for ( String extension : extensions )
+                {
+                    if ( extension != null )
                     {
-                        secKey = value;
-                    }
-                    else if ( "Sec-WebSocket-Version".equalsIgnoreCase( key ) )
-                    {
-                        config.setWebSocketVersion( WebSocketVersion.fromSpecVersionValue(value) );
-                    }
-                    else if ( "Sec-WebSocket-Origin".equalsIgnoreCase( key ) )
-                    {
-                        //@todo: perform browser resource validation
-                        config.setOrigin( value );
-                    }
-                    else if ( "Host".equalsIgnoreCase( key ) )
-                    {
-                        config.setHost(value);
-                    }
-                    else if ( "Sec-WebSocket-Extensions".equalsIgnoreCase( key ))
-                    {
-                        //set available & selected protocols
-                        List<String> availableExtensions = new ArrayList<String>();
-                        List<String> selectedExtensions = new ArrayList<String>();
-                        String[] extensions = value.split( "," );
-                        for ( String extension : extensions )
+                        String cleanExtension = extension.trim();
+                        if ( cleanExtension.length() > 0 )
                         {
-                            if ( extension != null )
+                            if ( containsCaseInsensitiveValue( header.getValue(), getServerConfig().getAvailableExtensions() ) )
                             {
-                                String cleanExtension = extension.trim();
-                                if ( cleanExtension.length() > 0 )
-                                {
-                                    if ( containsCaseInsensitiveValue( value, getServerConfig().getAvailableExtensions() ) )
-                                    {
-                                        selectedExtensions.add( cleanExtension );
-                                    }
-                                    availableExtensions.add( cleanExtension );
-                                }
+                                selectedExtensions.add( cleanExtension );
                             }
-                        }
-                        if (!availableExtensions.isEmpty())
-                        {
-                            config.setAvailableProtocols( availableExtensions );
-                        }
-                        if (!selectedExtensions.isEmpty())
-                        {
-                            config.setSelectedExtensions( selectedExtensions );
+                            availableExtensions.add( cleanExtension );
                         }
                     }
+                }
+                if ( !availableExtensions.isEmpty() )
+                {
+                    config.setAvailableProtocols( availableExtensions );
+                }
+                if ( !selectedExtensions.isEmpty() )
+                {
+                    config.setSelectedExtensions( selectedExtensions );
                 }
             }
 
             // verify connect/upgrade
             if ( connect && upgrade )
             {
-                //verify that if the client requested a protocol - we chose one
-                if (config.getAvailableProtocols() == null || config.getSelectedProtocol() != null)
+                // verify that if the client requested a protocol - we chose one
+                if ( config.getAvailableProtocols() == null || config.getSelectedProtocol() != null )
                 {
                     // apply parsed values
                     setClientConfig( config );
+                    getServerConfig().setClientHeaders( Collections.unmodifiableList( config.getClientHeaders() ) );
                     setClientSecKey( secKey );
                 }
             }
@@ -254,61 +298,53 @@ public class WebSocketHandshake
         // only allowed status is 101
         if ( handshake.contains( "HTTP/1.1 101" ) )
         {
-            // loop through headers, filling out config
-            WebSocketConnectConfig config = new WebSocketConnectConfig();
-            String[] lines = handshake.split( "\r\n" );
+            // build headers and validate
             boolean connect = false;
             boolean upgrade = false;
             String secKey = null;
-            for ( String line : lines )
+            WebSocketConnectConfig config = new WebSocketConnectConfig();
+            List<HandshakeHeader> headers = parseHeaders( handshake );
+            config.setServerHeaders( headers );
+            HandshakeHeader header = findHeader("Upgrade", headers);
+            if (header != null && header.getValue() != null)
             {
-                String[] header = line.split( ":" );
-                if ( header != null && header.length == 2 )
+                upgrade = header.getValue().equalsIgnoreCase( "websocket" );
+            }
+            header = findHeader("Connection", headers);
+            if (header != null && header.getValue() != null)
+            {
+                connect = header.getValue().equalsIgnoreCase( "upgrade" );
+            }
+            header = findHeader("Sec-WebSocket-Protocol", headers);
+            if (header != null && header.getValue() != null)
+            {
+                config.setSelectedProtocol( header.getValue() );
+            }
+            header = findHeader("Sec-WebSocket-Accept", headers);
+            if (header != null && header.getValue() != null)
+            {
+                secKey = header.getValue();
+            }
+            header = findHeader("Sec-WebSocket-Extensions", headers);
+            if (header != null && header.getValue() != null)
+            {
+                // set available & selected protocols
+                List<String> selectedExtensions = new ArrayList<String>();
+                String[] extensions = header.getValue().split( "," );
+                for ( String extension : extensions )
                 {
-                    // get header
-                    String key = header[0] != null ? header[0].trim() : "";
-                    String value = header[1] != null ? header[1].trim() : "";
-
-                    // apply value, if we care about this header
-                    if ( "Upgrade".equalsIgnoreCase( key ) )
+                    if ( extension != null )
                     {
-                        // this must be websocket
-                        upgrade = value.equalsIgnoreCase( "websocket" );
-                    }
-                    else if ( "Connection".equalsIgnoreCase( key ) )
-                    {
-                        // this must be websocket
-                        connect = value.equalsIgnoreCase( "upgrade" );
-                    }
-                    else if ( "Sec-WebSocket-Protocol".equalsIgnoreCase( key ) )
-                    {
-                        config.setSelectedProtocol( value );
-                    }
-                    else if ( "Sec-WebSocket-Accept".equalsIgnoreCase( key ) )
-                    {
-                        secKey = value;
-                    }
-                    else if ( "Sec-WebSocket-Extensions".equalsIgnoreCase( key ))
-                    {
-                        //set available & selected protocols
-                        List<String> selectedExtensions = new ArrayList<String>();
-                        String[] extensions = value.split( "," );
-                        for ( String extension : extensions )
+                        String cleanExtension = extension.trim();
+                        if ( cleanExtension.length() > 0 )
                         {
-                            if ( extension != null )
-                            {
-                                String cleanExtension = extension.trim();
-                                if ( cleanExtension.length() > 0 )
-                                {
-                                    selectedExtensions.add( cleanExtension );
-                                }
-                            }
-                        }
-                        if (!selectedExtensions.isEmpty())
-                        {
-                            config.setSelectedExtensions( selectedExtensions );
+                            selectedExtensions.add( cleanExtension );
                         }
                     }
+                }
+                if ( !selectedExtensions.isEmpty() )
+                {
+                    config.setSelectedExtensions( selectedExtensions );
                 }
             }
 
@@ -318,6 +354,7 @@ public class WebSocketHandshake
                 // apply parsed values
                 setServerSecKey( secKey );
                 setServerConfig( config );
+                getClientConfig().setServerHeaders( Collections.unmodifiableList( config.getServerHeaders() ) );
             }
         }
     }
@@ -368,24 +405,30 @@ public class WebSocketHandshake
     {
         if ( clientHandshakeBytes == null )
         {
-            StringBuilder output = new StringBuilder();
-            output.append( "GET " + getResourcePath( getClientConfig().getUrl() ) + " HTTP/1.1\r\n" );
-            output.append( "Upgrade: WebSocket\r\n" );
-            output.append( "Connection: Upgrade\r\n" );
-            output.append( "Host: " + getClientConfig().getHost() + "\r\n" );
-            output.append( "Sec-WebSocket-Origin: " + getClientConfig().getOrigin() + "\r\n" );
-            if(getClientConfig().getAvailableProtocols() != null)
+            //build handshake info
+            String resourcePath = getResourcePath( getClientConfig().getUrl() );
+            List<HandshakeHeader> headers = getClientConfig().getClientHeaders();
+            if (headers == null)
             {
-                output.append( "Sec-WebSocket-Protocol: " + createCommaDelimitedList( getClientConfig().getAvailableProtocols() ) + "\r\n" );
+                headers = new ArrayList<HandshakeHeader>();
+                getClientConfig().setClientHeaders( headers );
             }
-            if(getClientConfig().getAvailableExtensions() != null)
+            headers.add(new HandshakeHeader( "Upgrade", "WebSocket" ));
+            headers.add(new HandshakeHeader( "Connection", "Upgrade" ));
+            headers.add(new HandshakeHeader( "Host", getClientConfig().getHost() ));
+            headers.add(new HandshakeHeader( "Sec-WebSocket-Origin", getClientConfig().getOrigin() ));
+            if ( getClientConfig().getAvailableProtocols() != null )
             {
-                output.append( "Sec-WebSocket-Extensions: " + createCommaDelimitedList( getClientConfig().getAvailableExtensions() ) + "\r\n" );
+                headers.add(new HandshakeHeader( "Sec-WebSocket-Protocol", createCommaDelimitedList( getClientConfig().getAvailableProtocols() ) ));
             }
-            output.append( "Sec-WebSocket-Key: " + getClientSecKey() + "\r\n" );
-            output.append( "Sec-WebSocket-Version: " + getClientConfig().getWebSocketVersion().getSpecVersionValue() + "\r\n" );
-            output.append( "\r\n" );
-            clientHandshakeBytes = output.toString().getBytes( Charset.forName( "US-ASCII" ) );
+            if ( getClientConfig().getAvailableExtensions() != null )
+            {
+                headers.add(new HandshakeHeader( "Sec-WebSocket-Extensions", createCommaDelimitedList( getClientConfig().getAvailableExtensions() ) ));
+            }
+            headers.add(new HandshakeHeader( "Sec-WebSocket-Key", getClientSecKey() ));
+            headers.add(new HandshakeHeader( "Sec-WebSocket-Version", getClientConfig().getWebSocketVersion().getSpecVersionValue() ));
+            String handshake = buildHandshake( headers, resourcePath );
+            clientHandshakeBytes = handshake.getBytes( Charset.forName( "US-ASCII" ) );
         }
 
         return clientHandshakeBytes;
@@ -395,15 +438,21 @@ public class WebSocketHandshake
     {
         if ( serverHandshakeBytes == null )
         {
-            StringBuilder output = new StringBuilder();
-            output.append( "GET " + getResourcePath( getServerConfig().getUrl() ) + " HTTP/1.1\r\n" );
-            output.append( "Upgrade: WebSocket\r\n" );
-            output.append( "Connection: Upgrade\r\n" );
-            output.append( "Sec-WebSocket-Protocol: " + getServerConfig().getSelectedProtocol() + "\r\n" );
-            output.append( "Sec-WebSocket-Extensions: " + getServerConfig().getSelectedExtensions() + "\r\n" );
-            output.append( "Sec-WebSocket-Accept: " + getExpectedServerSecKey() + "\r\n" );
-            output.append( "\r\n" );
-            serverHandshakeBytes = output.toString().getBytes( Charset.forName( "US-ASCII" ) );
+            //build handshake info
+            String resourcePath = getResourcePath( getClientConfig().getUrl() );
+            List<HandshakeHeader> headers = getServerConfig().getServerHeaders();
+            if (headers == null)
+            {
+                headers = new ArrayList<HandshakeHeader>();
+                getServerConfig().setServerHeaders( headers );
+            }
+            headers.add(new HandshakeHeader( "Upgrade", "WebSocket" ));
+            headers.add(new HandshakeHeader( "Connection", "Upgrade" ));
+            headers.add(new HandshakeHeader( "Sec-WebSocket-Protocol", getServerConfig().getSelectedProtocol() ));
+            headers.add(new HandshakeHeader( "Sec-WebSocket-Extensions", createCommaDelimitedList(getServerConfig().getSelectedExtensions()) ));
+            headers.add(new HandshakeHeader( "Sec-WebSocket-Accept", getExpectedServerSecKey() ));
+            String handshake = buildHandshake( headers, resourcePath );
+            serverHandshakeBytes = handshake.getBytes( Charset.forName( "US-ASCII" ) );
         }
 
         return serverHandshakeBytes;
