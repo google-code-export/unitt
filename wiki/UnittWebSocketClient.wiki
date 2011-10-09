@@ -139,8 +139,11 @@ The client API tries to follow the client specification from javascript using Ob
     if (self) 
     {
         //make sure to use the right url, it must point to your specific web socket endpoint or the handshake will fail
+        //create a connect config and set all our info here
         WebSocketConnectConfig* config = [WebSocketConnectConfig configWithURLString:@"ws://localhost:8080/testws/ws/test" origin:nil protocols:nil tlsSettings:nil headers:nil verifySecurityKey:YES extensions:nil ];
         config.closeTimeout = 15.0;
+
+        //open using the connect config, it will be populated with server info, such as selected protocol/etc
         ws = [[WebSocket webSocketWithConfig:config delegate:self] retain];
     }
     return self;
