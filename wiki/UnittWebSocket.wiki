@@ -27,7 +27,7 @@ If you already use Maven, then adding the dependency to your project is as simpl
     <dependency>
         <groupId>com.unitt.framework</groupId>
         <artifactId>websocket</artifactId>
-        <version>0.9.1.1</version>
+        <version>0.9.2</version>
         <type>jar</type>
     </dependency>
 </dependencies>
@@ -145,5 +145,5 @@ You can check out the [http://code.google.com/p/unitt/source/browse/projects/uni
 
 
 = More Info =
-  * Check out the [http://code.google.com/p/unitt/source/browse/projects/unitt-websocket/tags/0.9.1.1/src/main/java/com/unitt/framework/websocket/netty/ClientWebsocketFactory.java ClientWebsocketFactory.java], [http://code.google.com/p/unitt/source/browse/projects/unitt-websocket/tags/0.9.1.1/src/main/java/com/unitt/framework/websocket/simple/SimpleSocketFactory.java SimpleSocketFactory.java] for more information on how to use these classes.
+  * Check out the [http://code.google.com/p/unitt/source/browse/projects/unitt-websocket/tags/0.9.2/src/main/java/com/unitt/framework/websocket/netty/ClientWebsocketFactory.java ClientWebsocketFactory.java], [http://code.google.com/p/unitt/source/browse/projects/unitt-websocket/tags/0.9.2/src/main/java/com/unitt/framework/websocket/simple/SimpleSocketFactory.java SimpleSocketFactory.java] for more information on how to use these classes.
   * For more information on web sockets, see [http://en.wikipedia.org/wiki/WebSockets Wikipedia]
