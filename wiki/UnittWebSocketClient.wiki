@@ -3,7 +3,11 @@
 
 = Introduction =
 
-!UnittWebSocketClient is an API that allows you to use web sockets in your iOS Objective-C projects. It conforms to the initial & latest versions of web sockets. Simply import whichever implementation you desire, !WebSocket00.h, !WebSocket07.h, !WebSocket08.h, or !WebSocket10.h. There are many different web socket servers out there and many to do not conform to the more recent versions of the specification. Please make sure you are using the correct client version for your server version. The client API tries to follow the client specification from javascript using Objective-C constructs. Web sockets provide a low latency, bi-directional, full-duplex communication channel over TCP. The new draft version of the specification allows for text messages (must be UTF-8), as well as, binary messages. For more information, see [http://en.wikipedia.org/wiki/WebSockets Wikipedia].
+!UnittWebSocketClient is an API that allows you to use web sockets in your iOS Objective-C projects. It conforms to the initial & latest versions of web sockets. Simply import !WebSocket.h. 
+
+There are many different web socket servers out there and many to do not conform to the more recent versions of the specification. Please make sure you are using the correct client version for your server version. If you need a version prior to the hybi drafts, import WebSocket00.h. 
+
+The client API tries to follow the client specification from javascript using Objective-C constructs. Web sockets provide a low latency, bi-directional, full-duplex communication channel over TCP. The new draft version of the specification allows for text messages (must be UTF-8), as well as, binary messages. For more information, see [http://en.wikipedia.org/wiki/WebSockets Wikipedia].
 
 = Setup Your Project =
 
@@ -17,10 +21,10 @@
 <p>
 *!MyWebSocket.h*
 {{{
-#import "WebSocket07.h"
+#import "WebSocket.h"
 
 
-@interface MyWebSocket : NSObject <WebSocket07Delegate>
+@interface MyWebSocket : NSObject <WebSocketDelegate>
 {
 }
 
@@ -96,16 +100,16 @@
 <p>
 *!MyWebSocket.h*
 {{{
-#import "WebSocket07.h"
+#import "WebSocket.h"
 
 
-@interface MyWebSocket : NSObject <WebSocket07Delegate>
+@interface MyWebSocket : NSObject <WebSocketDelegate>
 {
 @private
-    WebSocket07* ws;
+    WebSocket* ws;
 }
 
-@property (nonatomic, readonly) WebSocket07* ws;
+@property (nonatomic, readonly) WebSocket* ws;
 
 - (void) startMyWebSocket;
 
@@ -135,7 +139,9 @@
     if (self) 
     {
         //make sure to use the right url, it must point to your specific web socket endpoint or the handshake will fail
-        ws = [[WebSocket07 webSocketWithURLString:@"ws://localhost:8080/testws/ws/test" delegate:self origin:nil protocols:nil tlsSettings:nil verifyHandshake:true] retain];
+        WebSocketConnectConfig* config = [WebSocketConnectConfig configWithURLString:@"ws://localhost:8080/testws/ws/test" origin:nil protocols:nil tlsSettings:nil headers:nil verifySecurityKey:YES extensions:nil ];
+        config.closeTimeout = 15.0;
+        ws = [[WebSocket webSocketWithConfig:config delegate:self] retain];
     }
     return self;
     
@@ -164,11 +170,11 @@ MyWebSocket* myWS = [[MyWebSocket alloc] init];
 
 
 = More Info =
-  * Check out the [http://code.google.com/p/unitt/source/browse/projects/iOS/UnittWebSocketClient/tags/0.9.3/UnittWebSocketClient/WebSocket00.h WebSocket00.h], [http://code.google.com/p/unitt/source/browse/projects/iOS/UnittWebSocketClient/tags/0.9.3/UnittWebSocketClient/WebSocket07.h WebSocket07.h], [http://code.google.com/p/unitt/source/browse/projects/iOS/UnittWebSocketClient/tags/0.9.3/UnittWebSocketClient/WebSocket08.h WebSocket08.h], [http://code.google.com/p/unitt/source/browse/projects/iOS/UnittWebSocketClient/tags/0.9.3/UnittWebSocketClient/WebSocket10.h WebSocket10.h] for more information on how to use these classes.
+  * Check out the [http://code.google.com/p/unitt/source/browse/projects/iOS/UnittWebSocketClient/tags/0.9.4/UnittWebSocketClient/WebSocket.h WebSocket.h] for more information on how to use these classes.
   * For more information on web sockets, see [http://en.wikipedia.org/wiki/WebSockets Wikipedia]
 
 = Sample Code =
-You can check out the [http://code.google.com/p/unitt/source/browse/projects/iOS/UnittWebSocketClient/tags/0.9.3.1/UnittWebSocketClientTests/UnittWebSocketClient07Tests.m UnittWebSocketClient07Tests] class for sample code on connecting and talking to a web socket. You can also run your own server for the test using the [http://code.google.com/p/unitt/source/browse/projects#projects%2FiOS%2Ftestws%2Ftrunk testws] project. To start the server using maven type "mvn jetty:run" at the command line.
+You can check out the [http://code.google.com/p/unitt/source/browse/projects/iOS/UnittWebSocketClient/tags/0.9.4/UnittWebSocketClientTests/UnittWebSocketClientTests.m UnittWebSocketClientTests] class for sample code on connecting and talking to a web socket. You can also run your own server for the test using the [http://code.google.com/p/unitt/source/browse/projects#projects%2FiOS%2Ftestws%2Ftrunk testws] project. To start the server using maven type "mvn jetty:run" at the command line.
 
 == !WebSocket v00 ==
-!WebSocket00.h is based on an earlier specification that was not as clear on how binary messages were handled. Therefore, this class only supports UTF8 text messages, so there is only send: and didReceiveMessage: instead of the text/binary variants. The handshake for this implementation is only partially implemented (no key1 or key2). This version is deprecated in the library and will not be updated as the specification is now 13 versions ahead of this. Contributions to the code will be reviewed and accepted, but there is no planned development due to its incompatibility with the current version of the specification.
+!WebSocket00.h is based on an earlier specification that was not as clear on how binary messages were handled. Therefore, this class only supports UTF8 text messages, so there is only send: and didReceiveMessage: instead of the text/binary variants. If you need the hixie76 keys, you can set the useKeys property to true. Otherwise, everything should just work. You can check out the [http://code.google.com/p/unitt/source/browse/projects/iOS/UnittWebSocketClient/tags/0.9.4/UnittWebSocketClientTests/UnittWebSocketClient00Tests.m UnittWebSocketClient00Tests] class for sample code for more info on using this version. This version is deprecated in the library and will not be updated as the specification is now 13 versions ahead of this. Contributions to the code will be reviewed and accepted, but there is no planned development due to its incompatibility with the current version of the specification.
