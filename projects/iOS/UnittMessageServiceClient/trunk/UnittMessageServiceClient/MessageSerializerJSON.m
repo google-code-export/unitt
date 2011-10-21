@@ -27,36 +27,62 @@
 
 
 #pragma mark - MessageSerializer
-// TODO: finish serializing the message
 - (NSData*) serializeMessage:(ServiceMessage*) aMessage
 {
     //serialize header
+    NSData* headerBytes = [self.serializer serializeToDataFromObject:aMessage.header];
     
     //serialize body
+    NSData* bodyBytes = [self.serializer serializeToDataFromArray:aMessage.contents];
     
-    //write content type & header length
+    //write data
+    NSMutableData* output = [NSMutableData data];
     
-    //write header
+    //write header length
+    unsigned char bytes[2];
+    bytes[0] = (int)((headerBytes.length >> 8) & 0XFF);
+    bytes[1] = (int)(headerBytes.length & 0XFF);
+    [output appendBytes:bytes length:2];
     
-    //write body
+    //write content type
+    bytes[0] = (int)((aMessage.header.serializerType >> 8) & 0XFF);
+    bytes[1] = (int)(aMessage.header.serializerType & 0XFF);
+    [output appendBytes:bytes length:2];
+    
+    //write data
+    [output appendData:headerBytes];
+    [output appendData:bodyBytes];
+    
+    return output;
 }
 
-// TODO: finish deserializing the message
 - (ServiceMessage*) deserializeMessage:(NSData*) aData
 {
+    ServiceMessage* result = [ServiceMessage message];
+    
     //read header length
-    
-    //read content type
-    
+    NSUInteger headerLength = 0;
+    unsigned char buffer[2];
+    [aData getBytes:&buffer length:2];
+    unsigned short len;
+    memcpy(&len, &buffer[0], sizeof(len));
+    headerLength = ntohs(len);
+        
     //read header bytes
+    NSData* headerData = [aData subdataWithRange:NSMakeRange(4, headerLength)];
     
     //read body bytes
+    NSData* bodyData = [aData subdataWithRange:NSMakeRange(4 + headerLength, aData.length - 4 - headerLength)];
     
     //deserialize header
+    MessageRoutingInfo* header = [self.serializer deserializeObjectFromData:headerData type:[MessageRoutingInfo class]];
+    result.header = header;
     
     //deserialize body
+    id body = [self.serializer deserializeObjectFromData:bodyData type:nil];
+    result.contents = body;
     
-    //construct message & return
+    return result;
 }
 
 

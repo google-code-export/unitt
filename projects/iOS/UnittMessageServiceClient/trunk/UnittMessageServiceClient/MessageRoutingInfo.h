@@ -22,6 +22,14 @@
 #import "ServiceMessage.h"
 
 
+enum 
+{
+    SerializerTypeJson = 1,
+    SerializerTypeXml = 2
+};
+typedef NSUInteger SerializerType;
+
+
 @interface MessageRoutingInfo : NSObject 
 {
     NSString* sessionId;
