@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import com.unitt.commons.foundation.lifecycle.Destructable;
 import com.unitt.commons.foundation.lifecycle.Initializable;
+import com.unitt.servicemanager.util.ByteUtil;
 import com.unitt.servicemanager.util.ValidationUtil;
 
 
@@ -160,7 +161,8 @@ public abstract class MessagingWebSocket implements Initializable, Destructable
             MessageSerializer serializer = getSerializerRegistry().getSerializer(aResponse.getHeader().getSerializerType());
             byte[] headerBytes = serializer.serializeHeader( aResponse.getHeader() );
             byte[] bodyBytes = serializer.serializeBody( aResponse.getBody() );
-            output.write( intToBytes( headerBytes.length ) );
+            output.write( ByteUtil.convertShortToBytes( new Integer(headerBytes.length).shortValue() ) );
+            output.write( ByteUtil.convertShortToBytes(aResponse.getHeader().getSerializerType()) );
             output.write( headerBytes );
             output.write( bodyBytes );
             byte[] bytesOut = output.toByteArray();
@@ -185,8 +187,8 @@ public abstract class MessagingWebSocket implements Initializable, Destructable
 
     public void onMessage( byte[] aData )
     {
-        int headerLength = bytesToShort( aData , 0);
-        short serializerType = bytesToShort( aData, 2 );
+        short headerLength = ByteUtil.convertBytesToShort( aData , 0);
+        short serializerType = ByteUtil.convertBytesToShort( aData, 2 );
         int bodyLength = aData.length - headerLength - 4;
         if ( bodyLength > 0 && headerLength > 0 && aData.length > bodyLength && aData.length > headerLength )
         {
@@ -239,45 +241,4 @@ public abstract class MessagingWebSocket implements Initializable, Destructable
     public abstract ConcurrentMap<String, SerializedMessageBody> getBodyMap();
 
     public abstract BlockingQueue<MessageRoutingInfo> getHeaderQueue();
-
-    /**
-     * Converts a 2 byte array of bytes to a short
-     * 
-     * @param b
-     *            an array of 2 bytes
-     * @return a short representing the short
-     */
-    public static final short bytesToShort( byte[] b, int aOffset )
-    {
-        short i = 0;
-        i |= b[aOffset] & 0xFF;
-        i <<= 8;
-        i |= b[aOffset + 1] & 0xFF;
-        return i;
-    }
-
-    /**
-     * Converts a 4 byte array of bytes to an int
-     * 
-     * @param b
-     *            an array of 4 bytes
-     * @return an int representing the int
-     */
-    public static final int bytesToInt( byte[] b, int aOffset )
-    {
-        int i = 0;
-        i |= b[aOffset] & 0xFF;
-        i <<= 8;
-        i |= b[aOffset + 1] & 0xFF;
-        i <<= 8;
-        i |= b[aOffset + 2] & 0xFF;
-        i <<= 8;
-        i |= b[aOffset + 3] & 0xFF;
-        return i;
-    }
-
-    public static final byte[] intToBytes( int aValue )
-    {
-        return new byte[] { (byte) ( aValue >>> 24 & 0xff ), (byte) ( aValue >> 16 & 0xff ), (byte) ( aValue >> 8 & 0xff ), (byte) ( aValue & 0xff ) };
-    }
 }
