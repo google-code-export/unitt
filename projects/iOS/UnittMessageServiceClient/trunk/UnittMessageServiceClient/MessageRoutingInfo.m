@@ -70,4 +70,15 @@ static int currentRequestId;
     return self;
 }
 
+- (void)dealloc 
+{
+    [sessionId release];
+    [requestId release];
+    [serviceName release];
+    [methodSignature release];
+    [sent release];
+    
+     [super dealloc];
+}
+
 @end

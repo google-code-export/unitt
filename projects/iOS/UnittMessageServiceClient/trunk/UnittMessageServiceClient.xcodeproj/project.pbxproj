@@ -26,6 +26,10 @@
 		BD9AE72313A41F3100D4122D /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD9AE72113A41F3100D4122D /* Security.framework */; };
 		BD9AE72613A41FCA00D4122D /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD9AE72413A41FCA00D4122D /* CFNetwork.framework */; };
 		BD9AE72713A41FCA00D4122D /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD9AE72513A41FCA00D4122D /* Security.framework */; };
+		BDA7FF8B1437C1C200473897 /* SampleServiceProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = BDA7FF891437C1C200473897 /* SampleServiceProxy.h */; };
+		BDA7FF8C1437C1C200473897 /* SampleServiceProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = BDA7FF8A1437C1C200473897 /* SampleServiceProxy.m */; };
+		BDA7FF901437C90200473897 /* ServiceProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = BDA7FF8E1437C90200473897 /* ServiceProxy.h */; };
+		BDA7FF911437C90200473897 /* ServiceProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = BDA7FF8F1437C90200473897 /* ServiceProxy.m */; };
 		BDAEA33F13A1A54E00E8EB9C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BDAEA33E13A1A54E00E8EB9C /* Foundation.framework */; };
 		BDAEA34A13A1A54E00E8EB9C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BDAEA34913A1A54E00E8EB9C /* UIKit.framework */; };
 		BDAEA34B13A1A54E00E8EB9C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BDAEA33E13A1A54E00E8EB9C /* Foundation.framework */; };
@@ -66,6 +70,10 @@
 		BD9AE72113A41F3100D4122D /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		BD9AE72413A41FCA00D4122D /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		BD9AE72513A41FCA00D4122D /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		BDA7FF891437C1C200473897 /* SampleServiceProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SampleServiceProxy.h; sourceTree = "<group>"; };
+		BDA7FF8A1437C1C200473897 /* SampleServiceProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SampleServiceProxy.m; sourceTree = "<group>"; };
+		BDA7FF8E1437C90200473897 /* ServiceProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceProxy.h; sourceTree = "<group>"; };
+		BDA7FF8F1437C90200473897 /* ServiceProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceProxy.m; sourceTree = "<group>"; };
 		BDAEA33B13A1A54E00E8EB9C /* libUnittMessageServiceClient.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libUnittMessageServiceClient.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		BDAEA33E13A1A54E00E8EB9C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		BDAEA34213A1A54E00E8EB9C /* UnittMessageServiceClient-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UnittMessageServiceClient-Prefix.pch"; sourceTree = "<group>"; };
@@ -162,6 +170,8 @@
 				BD9AE71913A4196300D4122D /* ServiceMessage.m */,
 				BD0B94B113BBB4F800A030F6 /* MessageServiceTransport.h */,
 				BD0B94B213BBB4F800A030F6 /* MessageServiceTransport.m */,
+				BDA7FF8E1437C90200473897 /* ServiceProxy.h */,
+				BDA7FF8F1437C90200473897 /* ServiceProxy.m */,
 			);
 			path = UnittMessageServiceClient;
 			sourceTree = "<group>";
@@ -177,9 +187,11 @@
 		BDAEA35113A1A54E00E8EB9C /* UnittMessageServiceClientTests */ = {
 			isa = PBXGroup;
 			children = (
+				BDAEA35213A1A54E00E8EB9C /* Supporting Files */,
 				BDAEA35813A1A54E00E8EB9C /* UnittMessageServiceClientTests.h */,
 				BDAEA35A13A1A54E00E8EB9C /* UnittMessageServiceClientTests.m */,
-				BDAEA35213A1A54E00E8EB9C /* Supporting Files */,
+				BDA7FF891437C1C200473897 /* SampleServiceProxy.h */,
+				BDA7FF8A1437C1C200473897 /* SampleServiceProxy.m */,
 			);
 			path = UnittMessageServiceClientTests;
 			sourceTree = "<group>";
@@ -216,6 +228,8 @@
 				BD9AE71A13A4196300D4122D /* ServiceMessage.h in Headers */,
 				BD0B94B313BBB4F800A030F6 /* MessageServiceTransport.h in Headers */,
 				BDC439AB141BE522002633CD /* MessageSerializerJSON.h in Headers */,
+				BDA7FF8B1437C1C200473897 /* SampleServiceProxy.h in Headers */,
+				BDA7FF901437C90200473897 /* ServiceProxy.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -319,6 +333,8 @@
 				BD9AE71B13A4196300D4122D /* ServiceMessage.m in Sources */,
 				BD0B94B413BBB4F800A030F6 /* MessageServiceTransport.m in Sources */,
 				BDC439AC141BE522002633CD /* MessageSerializerJSON.m in Sources */,
+				BDA7FF8C1437C1C200473897 /* SampleServiceProxy.m in Sources */,
+				BDA7FF911437C90200473897 /* ServiceProxy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
