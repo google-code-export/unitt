@@ -76,6 +76,7 @@ typedef NSUInteger JSSerializeOptionFlags;
 @property (retain) ObjectHandler* objectHandler;
 
 
+// TODO: use a pluggable introspector to specify class
 /**
  * Takes a JSON data stream and fills the specified object's properties with
  * its values. Only Objective-C properties of the class will be populated with the
@@ -85,6 +86,7 @@ typedef NSUInteger JSSerializeOptionFlags;
  */
 - (void) fillObjectFromData:(NSData*) aData object:(id) aObject;
 
+// TODO: use a pluggable introspector to specify class
 /**
  * Takes a JSON unicode string and fills the specified object's properties with
  * its values. Only Objective-C properties of the class will be populated with the
@@ -94,6 +96,7 @@ typedef NSUInteger JSSerializeOptionFlags;
  */
 - (void) fillObjectFromString:(NSString*) aData object:(id) aObject;
 
+// TODO: allow for nil in type - uses a pluggable introspector to determine class
 /**
  * Takes a JSON data stream and deserializes it into an object of the specified 
  * type. Only Objective-C properties of the class will be populated with the
@@ -103,6 +106,7 @@ typedef NSUInteger JSSerializeOptionFlags;
  */
 - (id) deserializeObjectFromData:(NSData*) aData type:(Class) aClass;
 
+// TODO: allow for nil in type - uses a pluggable introspector to determine class
 /**
  * Takes a JSON unicode string and deserializes it into an object of the specified 
  * type. Only Objective-C properties of the class will be populated with the
