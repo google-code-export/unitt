@@ -299,6 +299,9 @@
 /* Begin PBXProject section */
 		BD0273FE13493BCE007AF649 /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+			};
 			buildConfigurationList = BD02740113493BCE007AF649 /* Build configuration list for PBXProject "UnittUIWidgets" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
@@ -450,6 +453,7 @@
 				DSTROOT = /tmp/UnittUIWidgets.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "UnittUIWidgets/UnittUIWidgets-Prefix.pch";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -463,6 +467,7 @@
 				DSTROOT = /tmp/UnittUIWidgets.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "UnittUIWidgets/UnittUIWidgets-Prefix.pch";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -478,6 +483,7 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "UnittUIWidgetsTests/UnittUIWidgetsTests-Prefix.pch";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "UnittUIWidgetsTests/UnittUIWidgetsTests-Info.plist";
 				OTHER_LDFLAGS = (
 					"-framework",
@@ -498,6 +504,7 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "UnittUIWidgetsTests/UnittUIWidgetsTests-Prefix.pch";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "UnittUIWidgetsTests/UnittUIWidgetsTests-Info.plist";
 				OTHER_LDFLAGS = (
 					"-framework",
