@@ -34,7 +34,7 @@
 /**
  * Start color of the gradient
  */
-@property (retain) UIColor* startColor;
+@property (nonatomic, retain) UIColor* startColor;
 
 /**
  * End color of the gradient
