@@ -7,6 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		28CE37681464A31800ED26CE /* UrlManager.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = BD84ECAB1382148800CD2ED6 /* UrlManager.h */; };
+		28CE37691464A31800ED26CE /* PrefixUrlHandler.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = BDCF5314138341B1009DE400 /* PrefixUrlHandler.h */; };
+		28CE376A1464A31800ED26CE /* UrlNavigationController.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = BDCF531C13838393009DE400 /* UrlNavigationController.h */; };
+		28CE376B1464A31800ED26CE /* PersistentUrlNavigationController.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = BD3D14F01385E1710026E42F /* PersistentUrlNavigationController.h */; };
+		28CE376C1464A31800ED26CE /* HomeModel.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = BD9CCD1E136F184000A02055 /* HomeModel.h */; };
+		28CE376D1464A31800ED26CE /* IconPageView.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = BD9CCD20136F184000A02055 /* IconPageView.h */; };
+		28CE376E1464A31800ED26CE /* HomeView.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = BD9CCD22136F184000A02055 /* HomeView.h */; };
+		28CE376F1464A31800ED26CE /* HomeViewController.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = BD9CCD24136F184000A02055 /* HomeViewController.h */; };
+		28CE37701464A31800ED26CE /* IconModel.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = BD9CCD26136F184000A02055 /* IconModel.h */; };
+		28CE37711464A31800ED26CE /* GlossyButton.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = BD02743013493C05007AF649 /* GlossyButton.h */; };
+		28CE37721464A31800ED26CE /* GlossyGradientFill.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = BD02743213493C05007AF649 /* GlossyGradientFill.h */; };
+		28CE37731464A31800ED26CE /* GradientView.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = BD3DBA261354024900DD4C78 /* GradientView.h */; };
 		BD02740B13493BCF007AF649 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD02740A13493BCF007AF649 /* Foundation.framework */; };
 		BD02741713493BCF007AF649 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD02740A13493BCF007AF649 /* Foundation.framework */; };
 		BD02741913493BCF007AF649 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD02741813493BCF007AF649 /* CoreGraphics.framework */; };
@@ -55,6 +67,30 @@
 			remoteInfo = UnittUIWidgets;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		28CE37661464A2E700ED26CE /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Headers;
+			dstSubfolderSpec = 16;
+			files = (
+				28CE37681464A31800ED26CE /* UrlManager.h in CopyFiles */,
+				28CE37691464A31800ED26CE /* PrefixUrlHandler.h in CopyFiles */,
+				28CE376A1464A31800ED26CE /* UrlNavigationController.h in CopyFiles */,
+				28CE376B1464A31800ED26CE /* PersistentUrlNavigationController.h in CopyFiles */,
+				28CE376C1464A31800ED26CE /* HomeModel.h in CopyFiles */,
+				28CE376D1464A31800ED26CE /* IconPageView.h in CopyFiles */,
+				28CE376E1464A31800ED26CE /* HomeView.h in CopyFiles */,
+				28CE376F1464A31800ED26CE /* HomeViewController.h in CopyFiles */,
+				28CE37701464A31800ED26CE /* IconModel.h in CopyFiles */,
+				28CE37711464A31800ED26CE /* GlossyButton.h in CopyFiles */,
+				28CE37721464A31800ED26CE /* GlossyGradientFill.h in CopyFiles */,
+				28CE37731464A31800ED26CE /* GradientView.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		BD02740713493BCF007AF649 /* libUnittUIWidgets.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libUnittUIWidgets.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -263,6 +299,7 @@
 				BD02740313493BCF007AF649 /* Sources */,
 				BD02740413493BCF007AF649 /* Frameworks */,
 				BD02740513493BCF007AF649 /* Headers */,
+				28CE37661464A2E700ED26CE /* CopyFiles */,
 			);
 			buildRules = (
 			);
