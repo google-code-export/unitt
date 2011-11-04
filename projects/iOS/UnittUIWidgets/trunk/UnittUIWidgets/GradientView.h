@@ -24,7 +24,7 @@
 /**
  * Draws a gradient background using the colors provided.
  */
-@interface GradientView : UIView 
+@interface GradientView : UIControl 
 {
 @private 
     UIColor* startColor;
