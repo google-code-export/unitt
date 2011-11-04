@@ -39,6 +39,6 @@
 /**
  * End color of the gradient
  */
-@property (retain) UIColor* endColor;
+@property (nonatomic, retain) UIColor* endColor;
 
 @end
