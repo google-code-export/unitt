@@ -26,35 +26,23 @@
 		BD02742213493BCF007AF649 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BD02742013493BCF007AF649 /* InfoPlist.strings */; };
 		BD02742513493BCF007AF649 /* UrlManagerTests.h in Resources */ = {isa = PBXBuildFile; fileRef = BD02742413493BCF007AF649 /* UrlManagerTests.h */; };
 		BD02742713493BCF007AF649 /* UrlManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BD02742613493BCF007AF649 /* UrlManagerTests.m */; };
-		BD02743413493C05007AF649 /* GlossyButton.h in Headers */ = {isa = PBXBuildFile; fileRef = BD02743013493C05007AF649 /* GlossyButton.h */; };
 		BD02743513493C05007AF649 /* GlossyButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BD02743113493C05007AF649 /* GlossyButton.m */; };
-		BD02743713493C05007AF649 /* GlossyGradientFill.h in Headers */ = {isa = PBXBuildFile; fileRef = BD02743213493C05007AF649 /* GlossyGradientFill.h */; };
 		BD02743813493C05007AF649 /* GlossyGradientFill.m in Sources */ = {isa = PBXBuildFile; fileRef = BD02743313493C05007AF649 /* GlossyGradientFill.m */; };
 		BD02743C13493E4A007AF649 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD02743A13493E4A007AF649 /* QuartzCore.framework */; };
 		BD02743D13493E4A007AF649 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD02743B13493E4A007AF649 /* UIKit.framework */; };
-		BD3D14F21385E1710026E42F /* PersistentUrlNavigationController.h in Headers */ = {isa = PBXBuildFile; fileRef = BD3D14F01385E1710026E42F /* PersistentUrlNavigationController.h */; };
 		BD3D14F31385E1710026E42F /* PersistentUrlNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD3D14F11385E1710026E42F /* PersistentUrlNavigationController.m */; };
-		BD3DBA281354024900DD4C78 /* GradientView.h in Headers */ = {isa = PBXBuildFile; fileRef = BD3DBA261354024900DD4C78 /* GradientView.h */; };
 		BD3DBA291354024900DD4C78 /* GradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = BD3DBA271354024900DD4C78 /* GradientView.m */; };
 		BD3DBA4013540DBE00DD4C78 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD3DBA3F13540DBE00DD4C78 /* CoreGraphics.framework */; };
-		BD84ECAD1382148800CD2ED6 /* UrlManager.h in Headers */ = {isa = PBXBuildFile; fileRef = BD84ECAB1382148800CD2ED6 /* UrlManager.h */; };
 		BD84ECAE1382148800CD2ED6 /* UrlManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BD84ECAC1382148800CD2ED6 /* UrlManager.m */; };
 		BD84ECAF1382148800CD2ED6 /* UrlManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BD84ECAC1382148800CD2ED6 /* UrlManager.m */; };
-		BD9CCD28136F184000A02055 /* HomeModel.h in Headers */ = {isa = PBXBuildFile; fileRef = BD9CCD1E136F184000A02055 /* HomeModel.h */; };
 		BD9CCD29136F184000A02055 /* HomeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BD9CCD1F136F184000A02055 /* HomeModel.m */; };
-		BD9CCD2A136F184000A02055 /* IconPageView.h in Headers */ = {isa = PBXBuildFile; fileRef = BD9CCD20136F184000A02055 /* IconPageView.h */; };
 		BD9CCD2B136F184000A02055 /* IconPageView.m in Sources */ = {isa = PBXBuildFile; fileRef = BD9CCD21136F184000A02055 /* IconPageView.m */; };
-		BD9CCD2C136F184000A02055 /* HomeView.h in Headers */ = {isa = PBXBuildFile; fileRef = BD9CCD22136F184000A02055 /* HomeView.h */; };
 		BD9CCD2D136F184000A02055 /* HomeView.m in Sources */ = {isa = PBXBuildFile; fileRef = BD9CCD23136F184000A02055 /* HomeView.m */; };
-		BD9CCD2E136F184000A02055 /* HomeViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = BD9CCD24136F184000A02055 /* HomeViewController.h */; };
 		BD9CCD2F136F184000A02055 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD9CCD25136F184000A02055 /* HomeViewController.m */; };
-		BD9CCD30136F184000A02055 /* IconModel.h in Headers */ = {isa = PBXBuildFile; fileRef = BD9CCD26136F184000A02055 /* IconModel.h */; };
 		BD9CCD31136F184000A02055 /* IconModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BD9CCD27136F184000A02055 /* IconModel.m */; };
-		BDCF5316138341B1009DE400 /* PrefixUrlHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = BDCF5314138341B1009DE400 /* PrefixUrlHandler.h */; };
 		BDCF5317138341B1009DE400 /* PrefixUrlHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = BDCF5315138341B1009DE400 /* PrefixUrlHandler.m */; };
 		BDCF5318138341B1009DE400 /* PrefixUrlHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = BDCF5315138341B1009DE400 /* PrefixUrlHandler.m */; };
 		BDCF531B13837889009DE400 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BDCF531A13837889009DE400 /* UIKit.framework */; };
-		BDCF531E13838393009DE400 /* UrlNavigationController.h in Headers */ = {isa = PBXBuildFile; fileRef = BDCF531C13838393009DE400 /* UrlNavigationController.h */; };
 		BDCF531F13838393009DE400 /* UrlNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDCF531D13838393009DE400 /* UrlNavigationController.m */; };
 /* End PBXBuildFile section */
 
@@ -269,28 +257,6 @@
 		};
 /* End PBXGroup section */
 
-/* Begin PBXHeadersBuildPhase section */
-		BD02740513493BCF007AF649 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				BD02743413493C05007AF649 /* GlossyButton.h in Headers */,
-				BD02743713493C05007AF649 /* GlossyGradientFill.h in Headers */,
-				BD3DBA281354024900DD4C78 /* GradientView.h in Headers */,
-				BD9CCD28136F184000A02055 /* HomeModel.h in Headers */,
-				BD9CCD2A136F184000A02055 /* IconPageView.h in Headers */,
-				BD9CCD2C136F184000A02055 /* HomeView.h in Headers */,
-				BD9CCD2E136F184000A02055 /* HomeViewController.h in Headers */,
-				BD9CCD30136F184000A02055 /* IconModel.h in Headers */,
-				BD84ECAD1382148800CD2ED6 /* UrlManager.h in Headers */,
-				BDCF5316138341B1009DE400 /* PrefixUrlHandler.h in Headers */,
-				BDCF531E13838393009DE400 /* UrlNavigationController.h in Headers */,
-				BD3D14F21385E1710026E42F /* PersistentUrlNavigationController.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXHeadersBuildPhase section */
-
 /* Begin PBXNativeTarget section */
 		BD02740613493BCF007AF649 /* UnittUIWidgets */ = {
 			isa = PBXNativeTarget;
@@ -298,7 +264,6 @@
 			buildPhases = (
 				BD02740313493BCF007AF649 /* Sources */,
 				BD02740413493BCF007AF649 /* Frameworks */,
-				BD02740513493BCF007AF649 /* Headers */,
 				28CE37661464A2E700ED26CE /* CopyFiles */,
 			);
 			buildRules = (
