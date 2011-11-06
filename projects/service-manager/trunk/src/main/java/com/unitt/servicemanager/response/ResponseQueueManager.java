@@ -4,12 +4,11 @@ package com.unitt.servicemanager.response;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hazelcast.core.IQueue;
 import com.unitt.commons.foundation.lifecycle.Destructable;
 import com.unitt.commons.foundation.lifecycle.Initializable;
 import com.unitt.servicemanager.websocket.MessageResponse;
@@ -22,24 +21,27 @@ public abstract class ResponseQueueManager implements Initializable, Destructabl
 
     protected boolean                       isInitialized;
 
-    private ThreadPoolExecutor              executor;
+    private ResponseWriterExecutor          executor;
     private Map<String, MessagingWebSocket> sockets;
-    private String                          socketQueueName;
     private UndeliverableMessageHandler     undeliverableMessageHandler;
+    private int                             corePoolSize;
+    private int                             maxPoolSize;
+    private long                            queueKeepAliveTimeInMillis;
 
 
     // constructors
     // ---------------------------------------------------------------------------
     public ResponseQueueManager()
     {
-        this( null, null, null, null );
+        this( 0, 0, 0, null, null );
     }
 
-    public ResponseQueueManager( String aSocketQueueName, ThreadPoolExecutor aExecutor, Map<String, MessagingWebSocket> aSockets, UndeliverableMessageHandler aUndeliverableMessageHandler )
+    public ResponseQueueManager( int aCorePoolSize, int aMaxPoolSize, long aQueueKeepAliveTimeInMillis, Map<String, MessagingWebSocket> aSockets, UndeliverableMessageHandler aUndeliverableMessageHandler )
     {
-        setExecutor( aExecutor );
-        setSocketQueueName( aSocketQueueName );
-        setSockets(aSockets);
+        setCorePoolSize( aCorePoolSize );
+        setMaxPoolSize( aMaxPoolSize );
+        setQueueKeepAliveTimeInMillis( aQueueKeepAliveTimeInMillis );
+        setSockets( aSockets );
         setUndeliverableMessageHandler( aUndeliverableMessageHandler );
     }
 
@@ -50,6 +52,11 @@ public abstract class ResponseQueueManager implements Initializable, Destructabl
     {
         if ( !isInitialized() )
         {
+            if (executor == null)
+            {
+                executor = new ResponseWriterExecutor( getCorePoolSize(), getMaxPoolSize(), getQueueKeepAliveTimeInMillis(), TimeUnit.MILLISECONDS, getSocketQueue() );
+            }
+            executor.setWriter( this );
             if ( sockets == null )
             {
                 sockets = new HashMap<String, MessagingWebSocket>();
@@ -79,19 +86,6 @@ public abstract class ResponseQueueManager implements Initializable, Destructabl
         }
         try
         {
-            IQueue<?> queue = (IQueue<?>) getSocketQueue();
-            if ( queue != null )
-            {
-                queue.destroy();
-            }
-            setSocketQueueName( null );
-        }
-        catch ( Exception e )
-        {
-            logger.error( "An error occurred cleaning up the socket queue: " + this, e );
-        }
-        try
-        {
             if ( executor != null )
             {
                 executor.shutdown();
@@ -113,14 +107,48 @@ public abstract class ResponseQueueManager implements Initializable, Destructabl
 
     // getters & setters
     // ---------------------------------------------------------------------------
-    public ThreadPoolExecutor getExecutor()
+    public ResponseWriterExecutor getExecutor()
     {
         return executor;
     }
 
-    public void setExecutor( ThreadPoolExecutor aExecutor )
+    public void setExecutor( ResponseWriterExecutor aExecutor )
     {
         executor = aExecutor;
+        if ( executor != null )
+        {
+            executor.setWriter( this );
+        }
+    }
+
+    public int getCorePoolSize()
+    {
+        return corePoolSize;
+    }
+
+    public void setCorePoolSize( int aCorePoolSize )
+    {
+        corePoolSize = aCorePoolSize;
+    }
+
+    public int getMaxPoolSize()
+    {
+        return maxPoolSize;
+    }
+
+    public void setMaxPoolSize( int aMaxPoolSize )
+    {
+        maxPoolSize = aMaxPoolSize;
+    }
+
+    public long getQueueKeepAliveTimeInMillis()
+    {
+        return queueKeepAliveTimeInMillis;
+    }
+
+    public void setQueueKeepAliveTimeInMillis( long aQueueKeepAliveTimeInMillis )
+    {
+        queueKeepAliveTimeInMillis = aQueueKeepAliveTimeInMillis;
     }
 
     protected Map<String, MessagingWebSocket> getSockets()
@@ -143,16 +171,6 @@ public abstract class ResponseQueueManager implements Initializable, Destructabl
         undeliverableMessageHandler = aUndeliverableMessageHandler;
     }
 
-    public String getSocketQueueName()
-    {
-        return socketQueueName;
-    }
-
-    public void setSocketQueueName( String aSocketQueueName )
-    {
-        socketQueueName = aSocketQueueName;
-    }
-
 
     // service logic
     // ---------------------------------------------------------------------------
@@ -171,14 +189,14 @@ public abstract class ResponseQueueManager implements Initializable, Destructabl
         return getSockets().get( aSocketId );
     }
 
-    public abstract BlockingQueue<MessageResponse> getSocketQueue();
+    public abstract BlockingQueue<Runnable> getSocketQueue();
 
 
     // response writer logic
     // ---------------------------------------------------------------------------
     public boolean write( MessageResponse aResponse )
     {
-        //send the message down the websocket
+        // send the message down the websocket
         try
         {
             String socketId = aResponse.getHeader().getWebsocketId();
@@ -196,7 +214,7 @@ public abstract class ResponseQueueManager implements Initializable, Destructabl
         }
 
         // it didn't write, send to dead letter queue, if any
-        if (getUndeliverableMessageHandler() != null)
+        if ( getUndeliverableMessageHandler() != null )
         {
             getUndeliverableMessageHandler().handleUndeliverableMessage( aResponse );
         }

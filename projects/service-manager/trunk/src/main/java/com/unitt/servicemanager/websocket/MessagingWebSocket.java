@@ -13,19 +13,20 @@ import org.slf4j.LoggerFactory;
 
 import com.unitt.commons.foundation.lifecycle.Destructable;
 import com.unitt.commons.foundation.lifecycle.Initializable;
+import com.unitt.servicemanager.routing.MessageRouterJob;
 import com.unitt.servicemanager.util.ByteUtil;
 import com.unitt.servicemanager.util.ValidationUtil;
 
 
 public abstract class MessagingWebSocket implements Initializable, Destructable
 {
-    private static Logger     logger = LoggerFactory.getLogger( MessagingWebSocket.class );
+    private static Logger             logger = LoggerFactory.getLogger( MessagingWebSocket.class );
 
-    private ServerWebSocket   serverWebSocket;
-    private boolean           isInitialized;
-    private String            socketId;
+    private ServerWebSocket           serverWebSocket;
+    private boolean                   isInitialized;
+    private String                    socketId;
     private MessageSerializerRegistry serializers;
-    private long              queueTimeoutInMillis;
+    private long                      queueTimeoutInMillis;
 
 
     // constructors
@@ -58,24 +59,24 @@ public abstract class MessagingWebSocket implements Initializable, Destructable
         setSocketId( null );
         setQueueTimeoutInMillis( 0 );
     }
-    
+
     public boolean isInitialized()
     {
         return isInitialized;
     }
-    
+
     public void initialize()
-    {        
-        //init
+    {
+        // init
         if ( getSocketId() == null )
         {
             setSocketId( UUID.randomUUID().toString() );
         }
-        if (getQueueTimeoutInMillis() == 0)
+        if ( getQueueTimeoutInMillis() == 0 )
         {
             setQueueTimeoutInMillis( 30000 );
         }
-        
+
         String missing = null;
 
         // validate we have all properties
@@ -86,10 +87,6 @@ public abstract class MessagingWebSocket implements Initializable, Destructable
         if ( getServerWebSocket() == null )
         {
             missing = ValidationUtil.appendMessage( missing, "Missing server web socket. " );
-        }
-        if ( getHeaderQueue() == null )
-        {
-            missing = ValidationUtil.appendMessage( missing, "Missing header queue: " + getSocketId() + ". " );
         }
 
         // fail out with appropriate message if missing anything
@@ -158,11 +155,11 @@ public abstract class MessagingWebSocket implements Initializable, Destructable
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         try
         {
-            MessageSerializer serializer = getSerializerRegistry().getSerializer(aResponse.getHeader().getSerializerType());
+            MessageSerializer serializer = getSerializerRegistry().getSerializer( aResponse.getHeader().getSerializerType() );
             byte[] headerBytes = serializer.serializeHeader( aResponse.getHeader() );
             byte[] bodyBytes = serializer.serializeBody( aResponse.getBody() );
-            output.write( ByteUtil.convertShortToBytes( new Integer(headerBytes.length).shortValue() ) );
-            output.write( ByteUtil.convertShortToBytes(aResponse.getHeader().getSerializerType()) );
+            output.write( ByteUtil.convertShortToBytes( new Integer( headerBytes.length ).shortValue() ) );
+            output.write( ByteUtil.convertShortToBytes( aResponse.getHeader().getSerializerType() ) );
             output.write( headerBytes );
             output.write( bodyBytes );
             byte[] bytesOut = output.toByteArray();
@@ -180,14 +177,14 @@ public abstract class MessagingWebSocket implements Initializable, Destructable
             }
             catch ( IOException e )
             {
-                //do nothing
+                // do nothing
             }
         }
     }
 
     public void onMessage( byte[] aData )
     {
-        short headerLength = ByteUtil.convertBytesToShort( aData , 0);
+        short headerLength = ByteUtil.convertBytesToShort( aData, 0 );
         short serializerType = ByteUtil.convertBytesToShort( aData, 2 );
         int bodyLength = aData.length - headerLength - 4;
         if ( bodyLength > 0 && headerLength > 0 && aData.length > bodyLength && aData.length > headerLength )
@@ -199,7 +196,7 @@ public abstract class MessagingWebSocket implements Initializable, Destructable
             System.arraycopy( aData, 4 + headerLength, bodyBytes, 0, bodyLength );
 
             // create message objects
-            MessageSerializer serializer = getSerializerRegistry().getSerializer(serializerType);
+            MessageSerializer serializer = getSerializerRegistry().getSerializer( serializerType );
             MessageRoutingInfo header = serializer.deserializeHeader( headerBytes );
             header.setSerializerType( serializerType );
             SerializedMessageBody body = new SerializedMessageBody( bodyBytes );
@@ -219,7 +216,7 @@ public abstract class MessagingWebSocket implements Initializable, Destructable
     {
         try
         {
-            return getHeaderQueue().offer( aHeader, getQueueTimeoutInMillis(), TimeUnit.MILLISECONDS );
+            return getHeaderQueue().offer( new MessageRouterJob( aHeader ), getQueueTimeoutInMillis(), TimeUnit.MILLISECONDS );
         }
         catch ( Exception e )
         {
@@ -240,5 +237,5 @@ public abstract class MessagingWebSocket implements Initializable, Destructable
 
     public abstract ConcurrentMap<String, SerializedMessageBody> getBodyMap();
 
-    public abstract BlockingQueue<MessageRoutingInfo> getHeaderQueue();
+    public abstract BlockingQueue<MessageRouterJob> getHeaderQueue();
 }

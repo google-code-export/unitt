@@ -50,7 +50,7 @@ public class ServiceDelegateTest
         MessageResponse response = null;
         try
         {
-            response = serviceDelegate.getDestinationQueue( routing ).take();
+            response = serviceDelegate.getDestinationQueue( routing ).take().getResponse();
         }
         catch ( InterruptedException e )
         {

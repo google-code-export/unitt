@@ -177,7 +177,7 @@ public class ServerSocketAdapter implements WebSocket, WebSocket.OnBinaryMessage
     public void onOpen( Connection aConnection )
     {
         setConnection( aConnection );
-        setSocket( getManager().createWebSocket() );
+        setSocket( getManager().createWebSocket(this) );
         initialize();
     }
 }

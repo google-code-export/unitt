@@ -7,11 +7,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hazelcast.core.HazelcastInstance;
+import com.unitt.servicemanager.response.ResponseWriterJob;
 import com.unitt.servicemanager.service.ServiceDelegate;
 import com.unitt.servicemanager.util.ValidationUtil;
-import com.unitt.servicemanager.websocket.SerializedMessageBody;
-import com.unitt.servicemanager.websocket.MessageResponse;
 import com.unitt.servicemanager.websocket.MessageRoutingInfo;
+import com.unitt.servicemanager.websocket.SerializedMessageBody;
 
 public class HazelcastServiceDelegate extends ServiceDelegate
 {
@@ -116,7 +116,7 @@ public class HazelcastServiceDelegate extends ServiceDelegate
     }
 
     @Override
-    public BlockingQueue<MessageResponse> getDestinationQueue( MessageRoutingInfo aInfo )
+    public BlockingQueue<ResponseWriterJob> getDestinationQueue( MessageRoutingInfo aInfo )
     {
         if (aInfo != null)
         {

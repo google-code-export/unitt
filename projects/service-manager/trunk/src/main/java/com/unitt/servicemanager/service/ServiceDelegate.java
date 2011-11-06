@@ -11,19 +11,19 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.unitt.servicemanager.routing.MessageRouterExecutor;
+import com.unitt.servicemanager.response.ResponseWriterJob;
 import com.unitt.servicemanager.websocket.DeserializedMessageBody;
 import com.unitt.servicemanager.websocket.MessageResponse;
 import com.unitt.servicemanager.websocket.MessageRoutingInfo;
+import com.unitt.servicemanager.websocket.MessageRoutingInfo.MessageResultType;
 import com.unitt.servicemanager.websocket.MessageSerializer;
 import com.unitt.servicemanager.websocket.MessageSerializerRegistry;
 import com.unitt.servicemanager.websocket.SerializedMessageBody;
-import com.unitt.servicemanager.websocket.MessageRoutingInfo.MessageResultType;
 
 
 public abstract class ServiceDelegate
 {
-    private static Logger       logger        = LoggerFactory.getLogger( MessageRouterExecutor.class );
+    private static Logger       logger        = LoggerFactory.getLogger( ServiceDelegate.class );
 
     private long                queueTimeoutInMillis;
     private boolean             isInitialized = false;
@@ -158,7 +158,7 @@ public abstract class ServiceDelegate
         // push message response into appropriate response queue
         try
         {
-            getDestinationQueue( aInfo ).offer( response, getQueueTimeoutInMillis(), TimeUnit.MILLISECONDS );
+            getDestinationQueue( aInfo ).offer( new ResponseWriterJob(response), getQueueTimeoutInMillis(), TimeUnit.MILLISECONDS );
         }
         catch ( Exception e )
         {
@@ -257,5 +257,5 @@ public abstract class ServiceDelegate
 
     public abstract ConcurrentMap<String, SerializedMessageBody> getBodyMap( MessageRoutingInfo aInfo );
 
-    public abstract BlockingQueue<MessageResponse> getDestinationQueue( MessageRoutingInfo aInfo );
+    public abstract BlockingQueue<ResponseWriterJob> getDestinationQueue( MessageRoutingInfo aInfo );
 }

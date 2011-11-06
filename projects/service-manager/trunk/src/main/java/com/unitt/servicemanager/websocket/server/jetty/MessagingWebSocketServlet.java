@@ -41,12 +41,13 @@ public class MessagingWebSocketServlet extends WebSocketServlet
     {
         return new ServerSocketAdapter(aRequest, aProtocol, getFactory());
     }
+    
 
     @Override
     public void init() throws ServletException
     {
         String missing = null;
-
+        
         // validate we have all properties
         if ( getFactory() == null )
         {

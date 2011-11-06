@@ -1,38 +1,44 @@
 package com.unitt.servicemanager.hazelcast.response;
 
+
+import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.IQueue;
 import com.unitt.servicemanager.response.ResponseQueueManager;
+import com.unitt.servicemanager.response.ResponseWriterExecutor;
 import com.unitt.servicemanager.response.UndeliverableMessageHandler;
 import com.unitt.servicemanager.util.ValidationUtil;
-import com.unitt.servicemanager.websocket.MessageResponse;
 import com.unitt.servicemanager.websocket.MessagingWebSocket;
+
 
 public class HazelcastResponseQueueManager extends ResponseQueueManager
 {
-    private static Logger        logger = LoggerFactory.getLogger( HazelcastResponseQueueManager.class );
+    private static Logger     logger = LoggerFactory.getLogger( HazelcastResponseQueueManager.class );
 
-    private HazelcastInstance    hazelcastClient;
+    private HazelcastInstance hazelcastClient;
+    private String            socketQueueName;
 
     public HazelcastResponseQueueManager()
     {
-        //default
+        // default
     }
 
-    public HazelcastResponseQueueManager( String aSocketQueueName, ThreadPoolExecutor aExecutor, Map<String, MessagingWebSocket> aSockets, HazelcastInstance aHazelcastClient, UndeliverableMessageHandler aUndeliverableMessageHandler )
+    public HazelcastResponseQueueManager( int aCorePoolSize, int aMaxPoolSize, long aQueueKeepAliveTimeInMillis, Map<String, MessagingWebSocket> aSockets, UndeliverableMessageHandler aUndeliverableMessageHandler, String aSocketQueueName, HazelcastInstance aHazelcastClient )
     {
-        super( aSocketQueueName, aExecutor, aSockets, aUndeliverableMessageHandler );
+        super( aCorePoolSize, aMaxPoolSize, aQueueKeepAliveTimeInMillis, aSockets, aUndeliverableMessageHandler );
         setHazelcastClient( aHazelcastClient );
+        setSocketQueueName( aSocketQueueName );
     }
-    
-        
+
+
     // lifecycle logic
     // ---------------------------------------------------------------------------
     public void initialize()
@@ -41,34 +47,64 @@ public class HazelcastResponseQueueManager extends ResponseQueueManager
         {
             setSockets( new HashMap<String, MessagingWebSocket>() );
         }
-        
+
         String missing = null;
-        
-        //validate we have all properties
-        if (hazelcastClient == null)
+
+        // validate we have all properties
+        if ( hazelcastClient == null )
         {
-            missing = ValidationUtil.appendMessage( missing, "Missing hazelcast client. ");
+            missing = ValidationUtil.appendMessage( missing, "Missing hazelcast client. " );
         }
-        if (getSockets() == null)
+        if ( getSockets() == null )
         {
-            missing = ValidationUtil.appendMessage( missing, "Missing sockets map. ");
+            missing = ValidationUtil.appendMessage( missing, "Missing sockets map. " );
         }
-        
-        //fail out with appropriate message if missing anything
-        if (missing != null)
+        if ( socketQueueName == null )
         {
-            logger.error(missing);
+            try
+            {
+                socketQueueName = InetAddress.getLocalHost().getHostName() + "::" + System.currentTimeMillis();
+            }
+            catch ( Exception e )
+            {
+                socketQueueName = "Unknown IP Address::" + System.currentTimeMillis();
+            }
+        }
+
+        // fail out with appropriate message if missing anything
+        if ( missing != null )
+        {
+            logger.error( missing );
             throw new IllegalStateException( missing );
         }
         
+        if (getExecutor() == null)
+        {
+            setExecutor( new ResponseWriterExecutor( getCorePoolSize(), getMaxPoolSize(), getQueueKeepAliveTimeInMillis(), TimeUnit.MILLISECONDS, getSocketQueue()) );
+        }
+        getExecutor().setWriter( this );
+
         setInitialized( true );
     }
 
     public void destroy()
     {
-        //clear hazelcast
-        setHazelcastClient( null );
         super.destroy();
+        // clear hazelcast
+        try
+        {
+            IQueue<?> queue = (IQueue<?>) getSocketQueue();
+            if ( queue != null )
+            {
+                queue.destroy();
+            }
+        }
+        catch ( Exception e )
+        {
+            logger.error( "An error occurred cleaning up the socket queue: " + this, e );
+        }
+        setHazelcastClient( null );
+        setSocketQueueName( null );
     }
 
 
@@ -84,14 +120,24 @@ public class HazelcastResponseQueueManager extends ResponseQueueManager
         hazelcastClient = aClient;
     }
 
+    public String getSocketQueueName()
+    {
+        return socketQueueName;
+    }
+
+    public void setSocketQueueName( String aSocketQueueName )
+    {
+        socketQueueName = aSocketQueueName;
+    }
+
 
     // service logic
     // ---------------------------------------------------------------------------
     @Override
-    public BlockingQueue<MessageResponse> getSocketQueue()
+    public BlockingQueue<Runnable> getSocketQueue()
     {
         String queueName = getSocketQueueName();
-        if (queueName != null)
+        if ( queueName != null )
         {
             return getHazelcastClient().getQueue( queueName );
         }

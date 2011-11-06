@@ -15,9 +15,7 @@ public abstract class MessagingWebSocketManager implements Initializable, Destru
     private static Logger             logger = LoggerFactory.getLogger( MessagingWebSocketManager.class );
 
     private MessageSerializerRegistry serializerRegistry;
-    private long                      queueTimeout;
     private ResponseQueueManager      responseQueueManager;
-    private ServerWebSocket           serverSocket;
     protected boolean                 isInitialized;
 
 
@@ -25,12 +23,11 @@ public abstract class MessagingWebSocketManager implements Initializable, Destru
     // ---------------------------------------------------------------------------
     public MessagingWebSocketManager()
     {
-        this( null, 30000, null );
+        this( null, null );
     }
 
-    public MessagingWebSocketManager( MessageSerializerRegistry aSerializerRegistry, long aQueueTimeout, ResponseQueueManager aResponseQueueManager )
+    public MessagingWebSocketManager( MessageSerializerRegistry aSerializerRegistry, ResponseQueueManager aResponseQueueManager )
     {
-        setQueueTimeout( aQueueTimeout );
         setSerializerRegistry( aSerializerRegistry );
         setResponseQueueManager( aResponseQueueManager );
     }
@@ -50,10 +47,6 @@ public abstract class MessagingWebSocketManager implements Initializable, Destru
         if ( getSerializerRegistry() == null )
         {
             missing = ValidationUtil.appendMessage( missing, "Missing serializer registry. " );
-        }
-        if (getQueueTimeout() == 0)
-        {
-            setQueueTimeout( 30000 );
         }
 
         // fail out with appropriate message if missing anything
@@ -84,6 +77,7 @@ public abstract class MessagingWebSocketManager implements Initializable, Destru
             getResponseQueueManager().destroy();
         }
         setResponseQueueManager( null );
+        setSerializerRegistry( null );
         setInitialized( false );
     }
 
@@ -95,9 +89,13 @@ public abstract class MessagingWebSocketManager implements Initializable, Destru
 
     // websocket logic
     // ---------------------------------------------------------------------------
-    public MessagingWebSocket createWebSocket()
+    public MessagingWebSocket createWebSocket( ServerWebSocket aServerWebSocket )
     {
-        MessagingWebSocket webSocket = internalCreateWebSocket();
+        MessagingWebSocket webSocket = internalCreateWebSocket( aServerWebSocket );
+        if ( webSocket.getServerWebSocket() == null )
+        {
+            webSocket.setServerWebSocket( aServerWebSocket );
+        }
         webSocket.initialize();
         getResponseQueueManager().addSocket( webSocket );
         logger.info( "Opened socket: {0}.", webSocket.getSocketId() );
@@ -112,7 +110,7 @@ public abstract class MessagingWebSocketManager implements Initializable, Destru
         logger.info( "Closed socket: {0}", socketId );
     }
 
-    protected abstract MessagingWebSocket internalCreateWebSocket();
+    protected abstract MessagingWebSocket internalCreateWebSocket( ServerWebSocket aServerWebSocket );
 
 
     // getters & setters
@@ -127,16 +125,6 @@ public abstract class MessagingWebSocketManager implements Initializable, Destru
         serializerRegistry = aSerializerRegistry;
     }
 
-    public long getQueueTimeout()
-    {
-        return queueTimeout;
-    }
-
-    public void setQueueTimeout( long aQueueTimeout )
-    {
-        queueTimeout = aQueueTimeout;
-    }
-
     public ResponseQueueManager getResponseQueueManager()
     {
         return responseQueueManager;
@@ -145,15 +133,5 @@ public abstract class MessagingWebSocketManager implements Initializable, Destru
     public void setResponseQueueManager( ResponseQueueManager aResponseQueueManager )
     {
         responseQueueManager = aResponseQueueManager;
-    }
-
-    public ServerWebSocket getServerSocket()
-    {
-        return serverSocket;
-    }
-
-    public void setServerSocket( ServerWebSocket aServerSocket )
-    {
-        serverSocket = aServerSocket;
     }
 }

@@ -8,22 +8,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hazelcast.core.HazelcastInstance;
+import com.unitt.servicemanager.routing.MessageRouterJob;
 import com.unitt.servicemanager.util.ValidationUtil;
-import com.unitt.servicemanager.websocket.SerializedMessageBody;
-import com.unitt.servicemanager.websocket.MessageRoutingInfo;
 import com.unitt.servicemanager.websocket.MessageSerializerRegistry;
 import com.unitt.servicemanager.websocket.MessagingWebSocket;
+import com.unitt.servicemanager.websocket.SerializedMessageBody;
 import com.unitt.servicemanager.websocket.ServerWebSocket;
 
 
 public class HazelcastWebSocket extends MessagingWebSocket
 {
-    private static Logger                     logger = LoggerFactory.getLogger( HazelcastWebSocket.class );
+    private static Logger                   logger = LoggerFactory.getLogger( HazelcastWebSocket.class );
 
-    private HazelcastInstance                 hazelcastClient;
-    private BlockingQueue<MessageRoutingInfo> headerQueue;
+    private HazelcastInstance               hazelcastClient;
+    private BlockingQueue<MessageRouterJob> headerQueue;
+    private String                          headerQueueName;
 
-    protected boolean                         isInitialized;
+    protected boolean                       isInitialized;
 
 
     // constructors
@@ -33,15 +34,16 @@ public class HazelcastWebSocket extends MessagingWebSocket
         // default
     }
 
-    public HazelcastWebSocket( MessageSerializerRegistry aSerializers, long aQueueTimeoutInMillis, ServerWebSocket aServerWebSocket, HazelcastInstance aHazelcastClient )
+    public HazelcastWebSocket( MessageSerializerRegistry aSerializers, long aQueueTimeoutInMillis, String aHeaderQueueName, ServerWebSocket aServerWebSocket, HazelcastInstance aHazelcastClient )
     {
-        this( aSerializers, aQueueTimeoutInMillis, aServerWebSocket, aHazelcastClient, null );
+        this( aSerializers, aQueueTimeoutInMillis, aHeaderQueueName, aServerWebSocket, aHazelcastClient, null );
     }
 
-    public HazelcastWebSocket( MessageSerializerRegistry aSerializers, long aQueueTimeoutInMillis, ServerWebSocket aServerWebSocket, HazelcastInstance aHazelcastClient, String aSocketId )
+    public HazelcastWebSocket( MessageSerializerRegistry aSerializers, long aQueueTimeoutInMillis, String aHeaderQueueName, ServerWebSocket aServerWebSocket, HazelcastInstance aHazelcastClient, String aSocketId )
     {
         super( aSerializers, aQueueTimeoutInMillis, aServerWebSocket, aSocketId );
         setHazelcastClient( aHazelcastClient );
+        setHeaderQueueName( aHeaderQueueName );
     }
 
 
@@ -64,6 +66,14 @@ public class HazelcastWebSocket extends MessagingWebSocket
         {
             missing = ValidationUtil.appendMessage( missing, "Missing socket map. " );
         }
+        if ( getHeaderQueueName() == null )
+        {
+            missing = ValidationUtil.appendMessage( missing, "Missing header queue name." );
+        }
+        if ( getHeaderQueue() == null )
+        {
+            missing = ValidationUtil.appendMessage( missing, "Missing header queue: " + getHeaderQueueName() + ". " );
+        }
 
         // fail out with appropriate message if missing anything
         if ( missing != null )
@@ -82,16 +92,6 @@ public class HazelcastWebSocket extends MessagingWebSocket
 
     public void destroy()
     {
-        // destroy queue
-        try
-        {
-            getHazelcastClient().getQueue( getSocketId() ).destroy();
-        }
-        catch ( Exception e )
-        {
-            logger.error( "An error occurred while destroying the header queue for websocket: " + getSocketId(), e );
-        }
-
         // destroy map
         try
         {
@@ -104,6 +104,8 @@ public class HazelcastWebSocket extends MessagingWebSocket
 
         // clear hazelcast
         setHazelcastClient( null );
+        setHeaderQueueName( null );
+        headerQueue = null;
         isInitialized = false;
     }
 
@@ -120,6 +122,16 @@ public class HazelcastWebSocket extends MessagingWebSocket
         hazelcastClient = aClient;
     }
 
+    public String getHeaderQueueName()
+    {
+        return headerQueueName;
+    }
+
+    public void setHeaderQueueName( String aHeaderQueueName )
+    {
+        headerQueueName = aHeaderQueueName;
+    }
+
 
     // service logic
     // ---------------------------------------------------------------------------
@@ -128,11 +140,11 @@ public class HazelcastWebSocket extends MessagingWebSocket
         return getHazelcastClient().getMap( "body:" + getSocketId() );
     }
 
-    public BlockingQueue<MessageRoutingInfo> getHeaderQueue()
+    public BlockingQueue<MessageRouterJob> getHeaderQueue()
     {
         if ( headerQueue == null )
         {
-            headerQueue = getHazelcastClient().getQueue( "incoming:" + getSocketId() );
+            headerQueue = getHazelcastClient().getQueue( getHeaderQueueName() );
         }
 
         return headerQueue;

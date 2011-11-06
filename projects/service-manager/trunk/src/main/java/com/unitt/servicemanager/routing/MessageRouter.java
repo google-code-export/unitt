@@ -13,7 +13,7 @@ import com.unitt.servicemanager.websocket.MessageRoutingInfo;
 
 public abstract class MessageRouter
 {
-    private static Logger logger = LoggerFactory.getLogger( MessageRouterExecutor.class );
+    private static Logger logger = LoggerFactory.getLogger( MessageRouter.class );
 
     private long          queueTimeoutInMillis;
 
