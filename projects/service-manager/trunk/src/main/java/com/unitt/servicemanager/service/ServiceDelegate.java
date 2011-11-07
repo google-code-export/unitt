@@ -21,6 +21,7 @@ import com.unitt.servicemanager.websocket.MessageSerializerRegistry;
 import com.unitt.servicemanager.websocket.SerializedMessageBody;
 
 
+// @todo: use service delegator executor
 public abstract class ServiceDelegate
 {
     private static Logger       logger        = LoggerFactory.getLogger( ServiceDelegate.class );
