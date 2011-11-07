@@ -31,11 +31,7 @@
 
 @implementation HomeViewController
 
-@synthesize startColor, endColor, showShadow;
-@synthesize itemSize, margin, toolbarHeight;
-@synthesize useToolbar;
 @synthesize isDirty;
-@synthesize toolbarItems;
 
 
 #pragma mark Properties
@@ -142,6 +138,18 @@
     HomeView* myView = [[HomeView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame] delegate:self datasource:self];
     self.view = myView;
     [myView release];
+    
+    // defaults 
+    myView.startColor = [UIColor whiteColor];
+    myView.endColor = [UIColor blackColor];
+    myView.itemSize = CGSizeMake(92, 120);
+    myView.margin = CGSizeMake(10, 10);
+    myView.useToolbar = NO;
+    myView.toolbarHeight = 32;
+    myView.showShadow = YES;
+    myView.useToolbar = self.toolbarItems !=nil;
+
+
 }
 
 - (void) viewWillAppear: (BOOL) aAnimated
@@ -163,23 +171,12 @@
     return YES;
 }
 
-- (void) setup
-{
-    self.startColor = [UIColor whiteColor];
-    self.endColor = [UIColor blackColor];
-    self.itemSize = CGSizeMake(92, 120);
-    self.margin = CGSizeMake(10, 10);
-    self.useToolbar = NO;
-    self.toolbarHeight = 32;
-    self.showShadow = YES;
-}
 
 - (id)init 
 {
     self = [super init];
     if (self) 
     {
-        [self setup];
     }
     return self;
 }
@@ -189,8 +186,6 @@
     self = [super init];
     if (self) 
     {
-        [self setup];
-        self.useToolbar = true;
         self.toolbarItems = aItems;
     }
     return self;

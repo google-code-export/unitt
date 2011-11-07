@@ -47,15 +47,23 @@
  */
 @protocol HomeViewDelegate
 
-/**
- * Start color for the gradient view.
+/*
+ * Called when the icon view is pressed. 
  */
-@property (retain) UIColor* startColor;
+- (void) didSelectItem: (UIView*) aSender;
+
+@end
+
+
+@class IconPageView;
+
+
+@interface HomeView : GradientView <UIScrollViewDelegate>
 
 /**
- * End color for the gradient view.
+ * startColor inherited from  gradient view.
+ * endColor inherited from gradient view.
  */
-@property (retain) UIColor* endColor;
 
 /**
  * Show shadow at the top of the view.
@@ -93,34 +101,6 @@
  */
 @property (retain) NSArray* toolbarItems;
 
-/*
- * Called when the icon view is pressed. 
- */
-- (void) didSelectItem: (UIView*) aSender;
-
-@end
-
-
-@class IconPageView;
-
-
-@interface HomeView : GradientView <UIScrollViewDelegate>
-{
-@private
-    id<HomeViewDelegate> homeDelegate;
-    id<HomeViewDatasource> homeDatasource;
-    UIScrollView *scrollView;
-	UIPageControl *pageControl;
-    UIToolbar* toolbar;
-    int numberOfPages;
-    int currentPage;
-    NSMutableArray* pageViews;
-    
-    // To be used when scrolls originate from the UIPageControl
-    BOOL pageControlUsed;
-    
-	CAGradientLayer *originShadow;
-}
 
 /**
  * Delegate used to gather layout info and handle events

@@ -64,6 +64,19 @@
  */
 @property (assign) int pageNumber;
 
+/**
+ * Desired size of each item (label and icon together).
+ */
+@property (assign) CGSize itemSize;
+
+/**
+ * Minimum size of the margins. Width specifies horizontal margin.
+ * Height specifies vertical margin. These margins are the minimum
+ * size. When the view is actually laid out, the margins may be
+ * increased to fill the space.
+ */
+@property (assign) CGSize margin;
+
 
 /**
  * Returns the number of rows (width) and number of columns (height) that can be shown in

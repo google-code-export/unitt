@@ -34,6 +34,7 @@
 @synthesize buttons;
 @synthesize labels;
 @synthesize rows, columns, pageNumber;
+@synthesize itemSize, margin;
 
 CGSize actualMargin;
 
@@ -100,7 +101,7 @@ CGSize actualMargin;
 - (CGRect) makeRectForItem: (UIView*) aItem
 {
     CGPoint origin = CGPointMake(self.bounds.origin.x, self.bounds.origin.y);
-    CGSize size = CGSizeMake(self.homeDelegate.itemSize.width, self.homeDelegate.itemSize.height);
+    CGSize size = CGSizeMake(self.itemSize.width, self.itemSize.height);
     
     //determine row/column index - zero based
     int index = [self indexFor:aItem.tag];
@@ -226,15 +227,15 @@ CGSize actualMargin;
     CGRect viewFrame = self.frame;
     
     //determine max rows & columns
-    CGSize grid = [IconPageView getGridExtents:viewFrame margin:self.homeDelegate.margin itemSize:self.homeDelegate.itemSize];
+    CGSize grid = [IconPageView getGridExtents:viewFrame margin:self.margin itemSize:self.itemSize];
     
     //determine max rows & columns
     columns = grid.width;
     rows = grid.height;
     
     //determine actual margins to use
-    int actualHorizMargin = (viewFrame.size.width - (self.columns * self.homeDelegate.itemSize.width)) / (self.columns + 1);
-    int actualVertMargin = (viewFrame.size.height - (self.rows * self.homeDelegate.itemSize.height)) / (self.rows + 1);
+    int actualHorizMargin = (viewFrame.size.width - (self.columns * self.itemSize.width)) / (self.columns + 1);
+    int actualVertMargin = (viewFrame.size.height - (self.rows * self.itemSize.height)) / (self.rows + 1);
     actualMargin = CGSizeMake(actualHorizMargin, actualVertMargin);
 }
 

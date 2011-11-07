@@ -3,7 +3,7 @@
 //  UnittUIWidgets
 //
 //  Created by Josh Morris on 4/22/11.
-//  Copyright 2011 UnitT Software. All rights reserved.
+//  Copyright 2011 UnitT Software. All rights freserved.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License"); you may not
 //  use this file except in compliance with the License. You may obtain a copy of
@@ -22,7 +22,21 @@
 #import "IconModel.h"
 #import "IconPageView.h"
 
-@interface HomeView()
+@interface HomeView(){
+    id<HomeViewDelegate> homeDelegate;
+    id<HomeViewDatasource> homeDatasource;
+    UIScrollView *scrollView;
+	UIPageControl *pageControl;
+    UIToolbar* toolbar;
+    int numberOfPages;
+    int currentPage;
+    NSMutableArray* pageViews;
+    
+    // To be used when scrolls originate from the UIPageControl
+    BOOL pageControlUsed;
+    
+	CAGradientLayer *originShadow;
+}
 
 @property (nonatomic, retain) UIScrollView* scrollView;
 @property (nonatomic, retain) UIPageControl* pageControl;
@@ -39,6 +53,14 @@
 @synthesize numberOfPages;
 @synthesize pageViews;
 @synthesize toolbar, scrollView, pageControl;
+@synthesize   showShadow;
+@synthesize   itemSize;
+@synthesize   margin;
+@synthesize   toolbarHeight;
+@synthesize   useToolbar;
+@synthesize toolbarItems;
+
+
 
 int pageControlHeight = 18;
 
@@ -72,7 +94,7 @@ int pageControlHeight = 18;
 
 - (void) updatePageCount
 {
-    CGSize grid = [IconPageView getGridExtents:[self getPageViewFrame:0] margin:self.homeDelegate.margin itemSize:self.homeDelegate.itemSize];
+    CGSize grid = [IconPageView getGridExtents:[self getPageViewFrame:0] margin:self.margin itemSize:self.itemSize];
     int maxPerPage = grid.width * grid.height;
     int totalItems = [self.homeDatasource getHomeItems].count;
     if (maxPerPage > 0)
@@ -112,7 +134,7 @@ int pageControlHeight = 18;
 	[super layoutSubviews];
 	
 	//create origin shadow, if needed
-    if (self.homeDelegate && self.homeDelegate.showShadow)
+    if (self.showShadow)
     {
         if (!originShadow)
         {
@@ -208,7 +230,10 @@ int pageControlHeight = 18;
 
 - (IconPageView*) createPageView: (int) aPage frame: (CGRect) aFrame
 {
-    return [[IconPageView alloc] initWithFrame:aFrame page:aPage delegate:self.homeDelegate datasource:self.homeDatasource];
+    IconPageView *pageView =  [[IconPageView alloc] initWithFrame:aFrame page:aPage delegate:self.homeDelegate datasource:self.homeDatasource];
+    pageView.itemSize = self.itemSize;
+    pageView.margin = self.margin;
+    return pageView;
 }
 
 - (IconPageView*) createPageView: (int) aPage
@@ -314,8 +339,6 @@ int pageControlHeight = 18;
 - (void) setupView
 {
     self.opaque = YES;
-    self.startColor = self.homeDelegate.startColor;
-    self.endColor = self.homeDelegate.endColor;
 }
 
 - (void) setup: (CGRect) aFrame 
@@ -326,7 +349,7 @@ int pageControlHeight = 18;
     [self updatePageCount];
     
     //add scrollview
-    int height = aFrame.size.height - (aFrame.origin.y + pageControlHeight + (self.homeDelegate.useToolbar ? self.homeDelegate.toolbarHeight : 0));
+    int height = aFrame.size.height - (aFrame.origin.y + pageControlHeight + (self.useToolbar ? self.toolbarHeight : 0));
     self.scrollView = [self createScrollViewWithFrame: CGRectMake(aFrame.origin.x, aFrame.origin.y, aFrame.size.width, height)];
     [self.scrollView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [self addSubview: self.scrollView];
@@ -340,13 +363,13 @@ int pageControlHeight = 18;
     [self.pageControl addTarget:self action:@selector(changePage:) forControlEvents:UIControlEventValueChanged];
     
     //add toolbar if requested
-    if (self.homeDelegate.useToolbar)
+    if (self.useToolbar)
     {
-        toolbar = [self createToolbarWithFrame:CGRectMake(aFrame.origin.x, aFrame.size.height - self.homeDelegate.toolbarHeight, aFrame.size.width, self.homeDelegate.toolbarHeight)];
+        toolbar = [self createToolbarWithFrame:CGRectMake(aFrame.origin.x, aFrame.size.height - self.toolbarHeight, aFrame.size.width, self.toolbarHeight)];
         [self.toolbar setAutoresizingMask: UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin];
-        if (self.homeDelegate.toolbarItems && self.homeDelegate.toolbarItems.count > 0)
+        if (self.toolbarItems && self.toolbarItems.count > 0)
         {
-            [self.toolbar setItems:self.homeDelegate.toolbarItems animated:YES];
+            [self.toolbar setItems:self.toolbarItems animated:YES];
         }
         [self addSubview: self.toolbar];
         [self.toolbar setNeedsLayout];
