@@ -11,6 +11,7 @@ import com.unitt.servicemanager.response.ResponseWriterJob;
 import com.unitt.servicemanager.service.ServiceDelegate;
 import com.unitt.servicemanager.util.ValidationUtil;
 import com.unitt.servicemanager.websocket.MessageRoutingInfo;
+import com.unitt.servicemanager.websocket.MessageSerializerRegistry;
 import com.unitt.servicemanager.websocket.SerializedMessageBody;
 
 public class HazelcastServiceDelegate extends ServiceDelegate
@@ -18,16 +19,18 @@ public class HazelcastServiceDelegate extends ServiceDelegate
     private static Logger        logger = LoggerFactory.getLogger( HazelcastServiceDelegate.class );
 
     private HazelcastInstance    hazelcastClient;
+    private String requestQueueName;
 
     public HazelcastServiceDelegate()
     {
         //default
     }
 
-    public HazelcastServiceDelegate( Object aService, long aQueueTimeoutInMillis, HazelcastInstance aHazelcastClient )
+    public HazelcastServiceDelegate( Object aService, long aQueueTimeoutInMillis, MessageSerializerRegistry aReqistry, int aCorePoolSize, int aMaxPoolSize, long aQueueKeepAliveTimeInMillis, HazelcastInstance aHazelcastClient, String aRequestQueueName )
     {
-        super( aService, aQueueTimeoutInMillis );
+        super( aService, aQueueTimeoutInMillis, aReqistry, aCorePoolSize, aMaxPoolSize, aQueueKeepAliveTimeInMillis );
         setHazelcastClient( aHazelcastClient );
+        setRequestQueueName( aRequestQueueName );
     }
     
         
@@ -38,21 +41,9 @@ public class HazelcastServiceDelegate extends ServiceDelegate
         String missing = null;
         
         //validate we have all properties
-        if ( getSerializerRegistry() == null )
-        {
-            missing = ValidationUtil.appendMessage( missing, "Missing serializer registry. " );
-        }
-        if (getService() == null)
-        {
-            missing = ValidationUtil.appendMessage( missing, "Missing service instance. ");
-        }
         if (hazelcastClient == null)
         {
             missing = ValidationUtil.appendMessage( missing, "Missing hazelcast client. ");
-        }
-        if (getQueueTimeoutInMillis() < 1)
-        {
-            missing = ValidationUtil.appendMessage( missing, "Missing valid queue timeout: " + getQueueTimeoutInMillis() + ". ");
         }
         
         //fail out with appropriate message if missing anything
@@ -70,7 +61,7 @@ public class HazelcastServiceDelegate extends ServiceDelegate
         //clear hazelcast
         setHazelcastClient( null );
         
-        setInitialized( false );
+        super.destroy();
     }
 
 
@@ -86,6 +77,16 @@ public class HazelcastServiceDelegate extends ServiceDelegate
         hazelcastClient = aClient;
     }
 
+    public String getRequestQueueName()
+    {
+        return requestQueueName;
+    }
+
+    public void setRequestQueueName( String aRequestQueueName )
+    {
+        requestQueueName = aRequestQueueName;
+    }
+    
 
     // service logic
     // ---------------------------------------------------------------------------
@@ -139,5 +140,11 @@ public class HazelcastServiceDelegate extends ServiceDelegate
         }
         
         return null;
+    }
+
+    @Override
+    public BlockingQueue<Runnable> getRequestQueue()
+    {
+        return getHazelcastClient().getQueue( getRequestQueueName() );
     }
 }

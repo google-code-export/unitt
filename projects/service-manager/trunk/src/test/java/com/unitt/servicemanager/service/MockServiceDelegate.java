@@ -16,13 +16,15 @@ public class MockServiceDelegate extends ServiceDelegate
     public static final int                                SERVICE_ARG_COUNT = 101;
     public static final String                             SERVICE_ARG_VALUE = "TestValue";
 
+    protected BlockingQueue<Runnable>                      requestQueue;
     protected BlockingQueue<ResponseWriterJob>             destQueue;
     protected ConcurrentMap<String, SerializedMessageBody> bodyMap;
 
     public MockServiceDelegate( Object aService )
     {
-        super( aService, 10000 );
+        super( aService, 10000, null, 1, 2, 30000 );
 
+        requestQueue = new ArrayBlockingQueue<Runnable>( 10 );
         destQueue = new ArrayBlockingQueue<ResponseWriterJob>( 10 );
         bodyMap = new ConcurrentHashMap<String, SerializedMessageBody>();
     }
@@ -45,4 +47,9 @@ public class MockServiceDelegate extends ServiceDelegate
         return destQueue;
     }
 
+    @Override
+    public BlockingQueue<Runnable> getRequestQueue()
+    {
+        return requestQueue;
+    }
 }

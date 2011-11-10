@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.unitt.commons.foundation.lifecycle.Destructable;
 import com.unitt.commons.foundation.lifecycle.Initializable;
+import com.unitt.servicemanager.util.ValidationUtil;
 import com.unitt.servicemanager.websocket.MessageResponse;
 import com.unitt.servicemanager.websocket.MessagingWebSocket;
 
@@ -52,6 +53,34 @@ public abstract class ResponseQueueManager implements Initializable, Destructabl
     {
         if ( !isInitialized() )
         {
+            String missing = null;
+            
+            //validate we have all properties
+            if ( getSocketQueue() == null )
+            {
+                missing = ValidationUtil.appendMessage( missing, "Missing socket queue. " );
+            }
+            if (getCorePoolSize() < 1)
+            {
+                missing = ValidationUtil.appendMessage( missing, "Missing valid core pool size: " + getCorePoolSize() + ". ");
+            }
+            if (getQueueKeepAliveTimeInMillis() < 1)
+            {
+                missing = ValidationUtil.appendMessage( missing, "Missing valid queue keep alive: " + getQueueKeepAliveTimeInMillis() + ". ");
+            }
+            if (getMaxPoolSize() < 1)
+            {
+                missing = ValidationUtil.appendMessage( missing, "Missing valid max pool size: " + getMaxPoolSize() + ". ");
+            }
+            
+            //fail out with appropriate message if missing anything
+            if (missing != null)
+            {
+                logger.error(missing);
+                throw new IllegalStateException( missing );
+            }
+            
+            //apply values
             if (executor == null)
             {
                 executor = new ResponseWriterExecutor( getCorePoolSize(), getMaxPoolSize(), getQueueKeepAliveTimeInMillis(), TimeUnit.MILLISECONDS, getSocketQueue() );
@@ -61,6 +90,8 @@ public abstract class ResponseQueueManager implements Initializable, Destructabl
             {
                 sockets = new HashMap<String, MessagingWebSocket>();
             }
+            
+            //mark as complete
             setInitialized( true );
         }
     }
@@ -96,6 +127,10 @@ public abstract class ResponseQueueManager implements Initializable, Destructabl
         {
             logger.error( "An error occurred shutting down the executor: " + getExecutor(), e );
         }
+        setCorePoolSize( 0 );
+        setMaxPoolSize( 0 );
+        setQueueKeepAliveTimeInMillis( 0 );
+        setUndeliverableMessageHandler( null );
         setInitialized( false );
     }
 
