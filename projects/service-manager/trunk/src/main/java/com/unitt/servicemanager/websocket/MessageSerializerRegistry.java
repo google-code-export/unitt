@@ -1,11 +1,12 @@
 package com.unitt.servicemanager.websocket;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class MessageSerializerRegistry
 {
-    protected Map<Short, MessageSerializer> serializers;
+    protected Map<Short, MessageSerializer> serializers = new HashMap<Short, MessageSerializer>();
     
     
     // constructors
