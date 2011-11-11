@@ -60,7 +60,7 @@
  
 
 
-+ (id) iconModelWithKey:(NSString*) aKey controller:(UIViewController*) aController icon:(UIImage*) aIcon label:(NSString*) aLabel;
++ (id) iconModelWithKey:(NSString*) aKey controller:(UIViewController*) aController icon:(UIImage*) aIcon label:(NSString*) aLabel segue:(NSString*)asegue;
 + (id) iconModelWithKey:(NSString*) aKey url:(NSURL*) aUrl icon:(UIImage*) aIcon label:(NSString*) aLabel;
 
 @end

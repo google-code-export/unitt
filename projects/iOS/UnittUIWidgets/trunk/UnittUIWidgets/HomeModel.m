@@ -35,7 +35,7 @@
     return nil;
 }
 
-- (void) addItem: (NSString*) aKey controller: (UIViewController*) aController icon: (UIImage*) aIcon label: (NSString*) aLabelText
+- (void) addItem: (NSString*) aKey controller: (UIViewController*) aController icon: (UIImage*) aIcon label: (NSString*) aLabelText segue:(NSString*)asegue
 {
     //if params are valid, proceed
     if (aKey && aController && aIcon && aLabelText)
@@ -53,7 +53,7 @@
         }
         
         //add to models
-        [iconModels addObject:[IconModel iconModelWithKey:aKey controller:aController icon:aIcon label:aLabelText]];
+        [iconModels addObject:[IconModel iconModelWithKey:aKey controller:aController icon:aIcon label:aLabelText segue:asegue]];
     }
 }
 

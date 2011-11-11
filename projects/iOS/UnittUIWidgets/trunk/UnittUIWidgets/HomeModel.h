@@ -36,7 +36,7 @@
 /**
  * Adds an item to the model. The key must be unique.
  **/
-- (void) addItem: (NSString*) aKey controller: (UIViewController*) aController icon: (UIImage*) aIcon label: (NSString*) aLabelText;
+- (void) addItem: (NSString*) aKey controller: (UIViewController*) aController icon: (UIImage*) aIcon label: (NSString*) aLabelText segue:(NSString*)asegue;
 
 /**
  * Adds an item to the model. The key must be unique.

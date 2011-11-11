@@ -69,7 +69,7 @@
 - (void) addItem: (NSString*) aKey controller: (UIViewController*) aController icon: (UIImage*) aIcon label: (NSString*) aLabelText
 {        
     //add to model
-    [self.model addItem:aKey controller:aController icon:aIcon label:aLabelText];
+    [self.model addItem:aKey controller:aController icon:aIcon label:aLabelText segue:nil];
     [self handleModelChange];
 }
 

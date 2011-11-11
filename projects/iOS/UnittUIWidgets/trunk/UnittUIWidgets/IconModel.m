@@ -32,7 +32,7 @@
 
 
 #pragma mark Lifecycle
-+ (id) iconModelWithKey:(NSString*) aKey controller:(UIViewController*) aController icon:(UIImage*) aIcon label:(NSString*) aLabel
++ (id) iconModelWithKey:(NSString*) aKey controller:(UIViewController*) aController icon:(UIImage*) aIcon label:(NSString*) aLabel segue:(NSString*)asegue
 {
     IconModel* value = [[IconModel alloc] init];
     
@@ -40,6 +40,7 @@
     value.viewController = aController;
     value.iconImage = aIcon;
     value.labelText = aLabel;
+    value.segue = asegue;
     
     return [value autorelease];
 }
