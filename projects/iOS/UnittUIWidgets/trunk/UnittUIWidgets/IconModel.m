@@ -28,6 +28,7 @@
 @synthesize url;
 @synthesize labelText;
 @synthesize iconImage;
+@synthesize segue;
 
 
 #pragma mark Lifecycle
@@ -62,6 +63,7 @@
     [url release];
     [labelText release];
     [iconImage release];
+    [segue release];
     [super dealloc];
 }
 @end

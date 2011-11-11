@@ -53,6 +53,12 @@
  */
 @property (retain) UIImage* iconImage;
 
+/** 
+ * Name of segue (if storyboarding)
+ */
+@property (copy) NSString* segue;
+ 
+
 
 + (id) iconModelWithKey:(NSString*) aKey controller:(UIViewController*) aController icon:(UIImage*) aIcon label:(NSString*) aLabel;
 + (id) iconModelWithKey:(NSString*) aKey url:(NSURL*) aUrl icon:(UIImage*) aIcon label:(NSString*) aLabel;
