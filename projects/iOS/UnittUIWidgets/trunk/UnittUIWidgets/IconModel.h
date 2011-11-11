@@ -23,14 +23,6 @@
 
 
 @interface IconModel : NSObject 
-{
-@private 
-    UIViewController* viewController;
-    NSURL* url;
-    NSString* labelText;
-    NSString* key;
-    UIImage* iconImage;
-}
 
 /**
  * Unique key to reference this model item.
