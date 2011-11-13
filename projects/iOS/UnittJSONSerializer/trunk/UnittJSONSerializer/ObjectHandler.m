@@ -271,6 +271,7 @@
                         propertyInfo.dataType = JSDataTypeLong;
                         break;
                     case 'i' : //int
+                    case 'I' :
                         propertyInfo.dataType = JSDataTypeInt;
                         break;
                     case 'c' : //BOOL
@@ -280,6 +281,7 @@
                         isObject = true;
                         break;
                 }
+                NSLog(@"Name=%@, Datatype=%i, Char=%c", propertyInfo.name, propertyInfo.dataType, propertyAttr[1]);
                 
                 //handle custom class - if applicable
                 if (isObject)

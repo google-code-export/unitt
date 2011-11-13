@@ -50,8 +50,20 @@
 
 - (id) deserializeObjectFromData:(NSData*) aData type:(Class) aClass
 {
+    id result = nil;
+    //if not type is specified - let JSON figure it out
+    if (!aClass)
+    {
+        result = [aData objectFromJSONDataWithParseOptions:parseOptions];
+        
+        if (!result)
+        {
+            return [[[NSString alloc] initWithData:aData encoding:NSUTF8StringEncoding] autorelease];
+        }
+    }
+    
     //create object of the specified type
-    id result = [[aClass alloc] init];
+    result = [[aClass alloc] init];
     
     //fill object using deserialized JSON
     [self fillObjectFromData:aData object:result];
@@ -128,7 +140,14 @@
     //convert each item to dictionary
     for (id item in aObjects) 
     {
-        [arrayOfObjectDictionaries addObject:[self.objectHandler objectToDictionary:item]];
+        if ([item isKindOfClass:[NSString class]])
+        {
+            [arrayOfObjectDictionaries addObject:item];
+        }
+        else
+        {
+            [arrayOfObjectDictionaries addObject:[self.objectHandler objectToDictionary:item]];
+        }
     }
     
     //convert array of dictionaries to JSON data
@@ -143,7 +162,14 @@
     //convert each item to dictionary
     for (id item in aObjects) 
     {
-        [arrayOfObjectDictionaries addObject:[self.objectHandler objectToDictionary:item]];
+        if ([item isKindOfClass:[NSString class]])
+        {
+            [arrayOfObjectDictionaries addObject:item];
+        }
+        else
+        {
+            [arrayOfObjectDictionaries addObject:[self.objectHandler objectToDictionary:item]];
+        }
     }
     
     //convert array of dictionaries to JSON data

@@ -197,6 +197,12 @@
                 [aInvocation setArgument:&value atIndex:2];
                 [aInvocation invoke];
             }
+            else if (aValue == nil || [aValue isKindOfClass:[NSNull class]])
+            {                          
+                NSDate* value = nil;
+                [aInvocation setArgument:&value atIndex:2];
+                [aInvocation invoke];
+            }
             else
             {
                 NSLog(@"No custom handling logic to convert from %@ to NSDate", NSStringFromClass([aValue class]));
