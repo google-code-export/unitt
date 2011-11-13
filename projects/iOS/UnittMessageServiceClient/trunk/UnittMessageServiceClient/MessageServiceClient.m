@@ -65,6 +65,7 @@ NSString* const UnittMessageServiceException = @"MessageServiceClientException";
             MessageRoutingInfo* header = [MessageRoutingInfo routingWithService:aServiceName method:aMethodSignature];
             header.timeToLiveInMillis = self.timeToLiveInMillis;
             header.sessionId = self.sessionId;
+            header.serializerType = SerializerTypeJson;
             ServiceMessage* message = [ServiceMessage messageWithHeader:header contents:aParameters callback:aCallback];
             
             //add to pending requests (keyed by request id)
@@ -102,9 +103,13 @@ NSString* const UnittMessageServiceException = @"MessageServiceClientException";
         ServiceMessage* messageResponse = [self.serializer deserializeMessage:aMessageData];
         
         //grab callback for message
+        NSLog(@"Looking for pending request (%@) in %i requests.", messageResponse.uid, pendingRequests.count);
         ServiceMessage* messageRequest = [pendingRequests objectForKey:messageResponse.uid];
         if (messageRequest)
         {
+            //retain
+            [[messageRequest retain] autorelease];
+            
             //remove from pending
             [pendingRequests removeObjectForKey:messageResponse.uid];
             

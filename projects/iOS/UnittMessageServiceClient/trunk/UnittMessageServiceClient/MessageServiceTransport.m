@@ -24,58 +24,7 @@
 @implementation MessageServiceTransport
 
 @synthesize client;
-
-
-#pragma mark Properties
-- (NSUInteger) maxPayloadSize
-{
-    if (websocket)
-    {
-        return websocket.maxPayloadSize;
-    }
-    
-    return 0;
-}
-
-- (NSTimeInterval) timeout
-{
-    if (websocket)
-    {
-        return websocket.timeout;
-    }
-    
-    return 0;
-}
-
--(NSURL*) url
-{
-    if (websocket)
-    {
-        return websocket.url;
-    }
-    
-    return nil;
-}
-
-- (NSDictionary*) tlsSettings
-{
-    if (websocket)
-    {
-        return websocket.tlsSettings;
-    }
-    
-    return nil;
-}
-
--(BOOL) verifyHandshake
-{
-    if (websocket)
-    {
-        return websocket.verifyHandshake;
-    }
-    
-    return YES;
-}
+@synthesize config;
 
 
 #pragma mark Transport
@@ -124,6 +73,7 @@
 // TODO: figure out what to do here
 - (void) didReceiveError: (NSError*) aError
 {
+    NSLog(@"Error connecting: %@", aError.localizedDescription);
 }
 
 - (void) didReceiveTextMessage: (NSString*) aMessage
@@ -135,53 +85,43 @@
 {
     if (self.client)
     {
+        NSLog(@"Received message from service!");
         [self.client responseFromService:aMessage];
     }
 }
 
+- (void) didSendPong:(NSData*) aMessage
+{
+    //do nothing
+}
+
 
 #pragma mark Lifecycle
-+ (id) transportWithUrlString:(NSString*) aUrl
++ (id) transportWithConfig:(WebSocketConnectConfig*) aConfig
 {
-    return [[[[self class] alloc] initWithUrlString:aUrl] autorelease];
+    return [[[[self class] alloc] initWithConfig:aConfig] autorelease];
 }
 
-+ (id) transportWithUrlString:(NSString*) aUrl timeout:(NSTimeInterval) aTimeout maxPayloadSize:(NSUInteger) aMaxPayloadSize tlsSettings:(NSDictionary*) aTlsSettings verifyHandshake:(BOOL) aVerifyHandshake
-{
-    return [[[[self class] alloc] initWithUrlString:aUrl timeout:aTimeout maxPayloadSize:aMaxPayloadSize tlsSettings:aTlsSettings verifyHandshake:aVerifyHandshake] autorelease];
-}
-
-- (id) initWithUrlString:(NSString*) aUrl
+- (id) initWithConfig:(WebSocketConnectConfig*) aConfig
 {    
     self = [super init];
     if (self)
     {
-        websocket = [self createWebSocketWithUrlString:aUrl];
+        websocket = [self createWebSocketWithConfig:aConfig];
     }
     return self;
 }
 
-- (id) initWithUrlString:(NSString*) aUrl timeout:(NSTimeInterval) aTimeout maxPayloadSize:(NSUInteger) aMaxPayloadSize tlsSettings:(NSDictionary*) aTlsSettings verifyHandshake:(BOOL) aVerifyHandshake
+- (WebSocket*) createWebSocketWithConfig:(WebSocketConnectConfig*) aConfig
 {
-    self = [super init];
-    if (self)
-    {
-        websocket = [self createWebSocketWithUrlString:aUrl timeout:aTimeout maxPayloadSize:aMaxPayloadSize tlsSettings:aTlsSettings verifyHandshake:aVerifyHandshake];
-    }
-    return self;
+    return [[WebSocket webSocketWithConfig:aConfig delegate:self] retain];
 }
 
-- (WebSocket07*) createWebSocketWithUrlString:(NSString*) aUrl
+- (void) dealloc 
 {
-    return [self createWebSocketWithUrlString:aUrl timeout:30 maxPayloadSize:32*1024 tlsSettings:nil verifyHandshake:YES];
-}
-            
-- (WebSocket07*) createWebSocketWithUrlString:(NSString *)aUrl timeout:(NSTimeInterval) aTimeout maxPayloadSize:(NSUInteger) aMaxPayloadSize tlsSettings:(NSDictionary*) aTlsSettings verifyHandshake:(BOOL) aVerifyHandshake
-{
-    WebSocket07* result = [WebSocket07 webSocketWithURLString:aUrl delegate:self origin:nil protocols:[NSArray arrayWithObject:@"unitt-message-service"] tlsSettings:aTlsSettings verifyHandshake:aVerifyHandshake];
-    result.maxPayloadSize = aMaxPayloadSize;
-    result.timeout = aTimeout;
-    return [result retain];
+    [config release];
+    [websocket release];
+    [super dealloc];
 }
 
 @end

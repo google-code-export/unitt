@@ -39,7 +39,7 @@ typedef NSUInteger SerializerType;
     NSUInteger timeToLiveInMillis;
     NSDate* sent;
     NSUInteger serializerType;
-    MessageResultType resultType;
+    NSUInteger resultType;
 }
 
 @property (copy) NSString* sessionId;
@@ -50,7 +50,7 @@ typedef NSUInteger SerializerType;
 @property (copy) NSDate* sent;
 @property (readonly) NSString* uid;
 @property (assign) NSUInteger serializerType;
-@property (assign) MessageResultType resultType;
+@property (assign) NSUInteger resultType;
 
 + (NSString*) nextRequestId;
 
