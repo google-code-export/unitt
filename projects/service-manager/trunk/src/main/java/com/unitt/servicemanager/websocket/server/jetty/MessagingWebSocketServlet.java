@@ -39,6 +39,7 @@ public class MessagingWebSocketServlet extends WebSocketServlet
     @Override
     public WebSocket doWebSocketConnect( HttpServletRequest aRequest, String aProtocol )
     {
+        logger.debug( "Connecting web socket." );
         return new ServerSocketAdapter(aRequest, aProtocol, getFactory());
     }
     
@@ -66,5 +67,7 @@ public class MessagingWebSocketServlet extends WebSocketServlet
         {
             getFactory().initialize();
         }
+        
+        super.init();
     }
 }

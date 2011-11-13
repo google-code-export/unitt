@@ -11,7 +11,6 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.unitt.servicemanager.response.ResponseWriterJob;
 import com.unitt.servicemanager.util.ValidationUtil;
 import com.unitt.servicemanager.websocket.DeserializedMessageBody;
 import com.unitt.servicemanager.websocket.MessageResponse;
@@ -20,35 +19,33 @@ import com.unitt.servicemanager.websocket.MessageRoutingInfo.MessageResultType;
 import com.unitt.servicemanager.websocket.MessageSerializer;
 import com.unitt.servicemanager.websocket.MessageSerializerRegistry;
 import com.unitt.servicemanager.websocket.SerializedMessageBody;
+import com.unitt.servicemanager.worker.DelegateMaster;
+import com.unitt.servicemanager.worker.Processor;
 
 
-public abstract class ServiceDelegate
+public abstract class ServiceDelegate implements Processor<MessageRoutingInfo>
 {
-    private static Logger             logger        = LoggerFactory.getLogger( ServiceDelegate.class );
+    private static Logger                                       logger        = LoggerFactory.getLogger( ServiceDelegate.class );
 
-    private long                      queueTimeoutInMillis;
-    private boolean                   isInitialized = false;
-    private Map<String, Method>       cachedMethods;
-    private Object                    service;
-    private MessageSerializerRegistry serializers;
-    private int                       corePoolSize;
-    private int                       maxPoolSize;
-    private long                      queueKeepAliveTimeInMillis;
-    private ServiceDelegateExecutor   executor;
+    private long                                                queueTimeoutInMillis;
+    private boolean                                             isInitialized = false;
+    private Map<String, Method>                                 cachedMethods;
+    private Object                                              service;
+    private MessageSerializerRegistry                           serializers;
+    private int                                                 numberOfWorkers;
+    private DelegateMaster<MessageRoutingInfo, ServiceDelegate> workers;
 
 
     // constructors
     // ---------------------------------------------------------------------------
     public ServiceDelegate()
     {
-        this( null, 0, null, 0, 0, 0 );
+        this( null, 0, null, 0 );
     }
 
-    public ServiceDelegate( Object aService, long aQueueTimeoutInMillis, MessageSerializerRegistry aReqistry, int aCorePoolSize, int aMaxPoolSize, long aQueueKeepAliveTimeInMillis )
+    public ServiceDelegate( Object aService, long aQueueTimeoutInMillis, MessageSerializerRegistry aReqistry, int aNumberOfThreads )
     {
-        setCorePoolSize( aCorePoolSize );
-        setMaxPoolSize( aMaxPoolSize );
-        setQueueKeepAliveTimeInMillis( aQueueKeepAliveTimeInMillis );
+        setNumberOfWorkers( aNumberOfThreads );
         setService( aService );
         setQueueTimeoutInMillis( aQueueTimeoutInMillis );
         setSerializerRegistry( aReqistry );
@@ -81,17 +78,9 @@ public abstract class ServiceDelegate
             {
                 missing = ValidationUtil.appendMessage( missing, "Missing valid queue timeout: " + getQueueTimeoutInMillis() + ". " );
             }
-            if ( getCorePoolSize() < 1 )
+            if ( getNumberOfWorkers() < 1 )
             {
-                missing = ValidationUtil.appendMessage( missing, "Missing valid core pool size: " + getCorePoolSize() + ". " );
-            }
-            if ( getQueueKeepAliveTimeInMillis() < 1 )
-            {
-                missing = ValidationUtil.appendMessage( missing, "Missing valid queue keep alive: " + getQueueKeepAliveTimeInMillis() + ". " );
-            }
-            if ( getMaxPoolSize() < 1 )
-            {
-                missing = ValidationUtil.appendMessage( missing, "Missing valid max pool size: " + getMaxPoolSize() + ". " );
+                missing = ValidationUtil.appendMessage( missing, "Missing number of Threads: " + getNumberOfWorkers() + ". " );
             }
             if ( getSerializerRegistry() == null )
             {
@@ -107,11 +96,11 @@ public abstract class ServiceDelegate
 
             // apply values
             setCachedMethods( new HashMap<String, Method>() );
-            if ( executor == null )
+            if ( workers == null )
             {
-                executor = new ServiceDelegateExecutor( getCorePoolSize(), getMaxPoolSize(), getQueueKeepAliveTimeInMillis(), TimeUnit.MILLISECONDS, getRequestQueue() );
+                workers = new DelegateMaster<MessageRoutingInfo, ServiceDelegate>( getClass().getSimpleName(), getRequestQueue(), this, getQueueTimeoutInMillis(), getNumberOfWorkers() );
             }
-            executor.setServiceDelegate( this );
+            workers.startup();
 
             setInitialized( true );
         }
@@ -119,21 +108,19 @@ public abstract class ServiceDelegate
 
     public void destroy()
     {
-        setCorePoolSize( 0 );
-        setMaxPoolSize( 0 );
-        setQueueKeepAliveTimeInMillis( 0 );
+        setNumberOfWorkers( 0 );
         setQueueTimeoutInMillis( 0 );
         try
         {
-            if ( executor != null )
+            if ( workers != null )
             {
-                executor.shutdown();
+                workers.shutdown();
             }
-            setExecutor( null );
+            workers = null;
         }
         catch ( Exception e )
         {
-            logger.error( "An error occurred shutting down the executor: " + getExecutor(), e );
+            logger.error( "An error occurred shutting down the workers.", e );
         }
         setSerializers( null );
         setService( null );
@@ -178,24 +165,14 @@ public abstract class ServiceDelegate
         serializers = aSerializers;
     }
 
-    public int getCorePoolSize()
+    public int getNumberOfWorkers()
     {
-        return corePoolSize;
+        return numberOfWorkers;
     }
 
-    public void setCorePoolSize( int aCorePoolSize )
+    public void setNumberOfWorkers( int aNumberOfThreads )
     {
-        corePoolSize = aCorePoolSize;
-    }
-
-    public int getMaxPoolSize()
-    {
-        return maxPoolSize;
-    }
-
-    public void setMaxPoolSize( int aMaxPoolSize )
-    {
-        maxPoolSize = aMaxPoolSize;
+        numberOfWorkers = aNumberOfThreads;
     }
 
     public MessageSerializerRegistry getSerializers()
@@ -206,26 +183,6 @@ public abstract class ServiceDelegate
     public void setSerializers( MessageSerializerRegistry aSerializers )
     {
         serializers = aSerializers;
-    }
-
-    public ServiceDelegateExecutor getExecutor()
-    {
-        return executor;
-    }
-
-    public void setExecutor( ServiceDelegateExecutor aExecutor )
-    {
-        executor = aExecutor;
-    }
-
-    public long getQueueKeepAliveTimeInMillis()
-    {
-        return queueKeepAliveTimeInMillis;
-    }
-
-    public void setQueueKeepAliveTimeInMillis( long aQueueKeepAliveTimeInMillis )
-    {
-        queueKeepAliveTimeInMillis = aQueueKeepAliveTimeInMillis;
     }
 
     protected Map<String, Method> getCachedMethods()
@@ -241,7 +198,7 @@ public abstract class ServiceDelegate
 
     // service method execution logic
     // ---------------------------------------------------------------------------
-    public void executeServiceMethod( MessageRoutingInfo aInfo )
+    public void process( MessageRoutingInfo aInfo )
     {
         MessageResponse response = new MessageResponse();
         response.setHeader( aInfo );
@@ -283,7 +240,7 @@ public abstract class ServiceDelegate
         // push message response into appropriate response queue
         try
         {
-            getDestinationQueue( aInfo ).offer( new ResponseWriterJob( response ), getQueueTimeoutInMillis(), TimeUnit.MILLISECONDS );
+            getDestinationQueue( aInfo ).offer( response, getQueueTimeoutInMillis(), TimeUnit.MILLISECONDS );
         }
         catch ( Exception e )
         {
@@ -307,6 +264,7 @@ public abstract class ServiceDelegate
         SerializedMessageBody body = getBodyMap( aInfo ).remove( aInfo.getUid() );
         MessageSerializer serializer = getSerializerRegistry().getSerializer( aInfo.getSerializerType() );
         DeserializedMessageBody args = serializer.deserializeBody( aInfo, body.getContents() );
+        System.out.println("Args: " + args.getServiceMethodArguments());
         if ( args != null && args.getServiceMethodArguments() != null )
         {
             return (Object[]) args.getServiceMethodArguments().toArray( new Object[args.getServiceMethodArguments().size()] );
@@ -382,7 +340,7 @@ public abstract class ServiceDelegate
 
     public abstract ConcurrentMap<String, SerializedMessageBody> getBodyMap( MessageRoutingInfo aInfo );
 
-    public abstract BlockingQueue<ResponseWriterJob> getDestinationQueue( MessageRoutingInfo aInfo );
+    public abstract BlockingQueue<MessageResponse> getDestinationQueue( MessageRoutingInfo aInfo );
 
-    public abstract BlockingQueue<Runnable> getRequestQueue();
+    public abstract BlockingQueue<MessageRoutingInfo> getRequestQueue();
 }

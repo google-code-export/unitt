@@ -7,21 +7,20 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.unitt.servicemanager.service.ServiceDelegateJob;
 import com.unitt.servicemanager.util.ValidationUtil;
 import com.unitt.servicemanager.websocket.MessageRoutingInfo;
+import com.unitt.servicemanager.worker.DelegateMaster;
+import com.unitt.servicemanager.worker.Processor;
 
 
-public abstract class MessageRouter
+public abstract class MessageRouter implements Processor<MessageRoutingInfo>
 {
-    private static Logger         logger        = LoggerFactory.getLogger( MessageRouter.class );
+    private static Logger                                     logger        = LoggerFactory.getLogger( MessageRouter.class );
 
-    private boolean               isInitialized = false;
-    private long                  queueTimeoutInMillis;
-    private int                   corePoolSize;
-    private int                   maxPoolSize;
-    private long                  queueKeepAliveTimeInMillis;
-    private MessageRouterExecutor executor;
+    private boolean                                           isInitialized = false;
+    private long                                              queueTimeoutInMillis;
+    private int                                               numberOfWorkers;
+    private DelegateMaster<MessageRoutingInfo, MessageRouter> workers;
 
 
     // constructors
@@ -30,11 +29,9 @@ public abstract class MessageRouter
     {
     }
 
-    public MessageRouter( long aQueueTimeoutInMillis, int aCorePoolSize, int aMaxPoolSize, long aQueueKeepAliveTimeInMillis )
+    public MessageRouter( long aQueueTimeoutInMillis, int aNumberOfThreads )
     {
-        setCorePoolSize( aCorePoolSize );
-        setMaxPoolSize( aMaxPoolSize );
-        setQueueKeepAliveTimeInMillis( aQueueKeepAliveTimeInMillis );
+        setNumberOfWorkers( aNumberOfThreads );
         setQueueTimeoutInMillis( aQueueTimeoutInMillis );
     }
 
@@ -61,17 +58,9 @@ public abstract class MessageRouter
             {
                 missing = ValidationUtil.appendMessage( missing, "Missing valid queue timeout: " + getQueueTimeoutInMillis() + ". " );
             }
-            if ( getCorePoolSize() < 1 )
+            if ( getNumberOfWorkers() < 1 )
             {
-                missing = ValidationUtil.appendMessage( missing, "Missing valid core pool size: " + getCorePoolSize() + ". " );
-            }
-            if ( getQueueKeepAliveTimeInMillis() < 1 )
-            {
-                missing = ValidationUtil.appendMessage( missing, "Missing valid queue keep alive: " + getQueueKeepAliveTimeInMillis() + ". " );
-            }
-            if ( getMaxPoolSize() < 1 )
-            {
-                missing = ValidationUtil.appendMessage( missing, "Missing valid max pool size: " + getMaxPoolSize() + ". " );
+                missing = ValidationUtil.appendMessage( missing, "Missing number of Threads: " + getNumberOfWorkers() + ". " );
             }
 
             // fail out with appropriate message if missing anything
@@ -82,11 +71,11 @@ public abstract class MessageRouter
             }
 
             // apply values
-            if ( executor == null )
+            if ( workers == null )
             {
-                executor = new MessageRouterExecutor( getCorePoolSize(), getMaxPoolSize(), getQueueKeepAliveTimeInMillis(), TimeUnit.MILLISECONDS, getRoutingQueue() );
+                workers = new DelegateMaster<MessageRoutingInfo, MessageRouter>( getClass().getSimpleName(), getRoutingQueue(), this, getQueueTimeoutInMillis(), getNumberOfWorkers() );
             }
-            executor.setRouter( this );
+            workers.startup();
 
             setInitialized( true );
         }
@@ -94,21 +83,19 @@ public abstract class MessageRouter
 
     public void destroy()
     {
-        setCorePoolSize( 0 );
-        setMaxPoolSize( 0 );
-        setQueueKeepAliveTimeInMillis( 0 );
+        setNumberOfWorkers( 0 );
         setQueueTimeoutInMillis( 0 );
         try
         {
-            if ( executor != null )
+            if ( workers != null )
             {
-                executor.shutdown();
+                workers.shutdown();
             }
-            setExecutor( null );
+            workers = null;
         }
         catch ( Exception e )
         {
-            logger.error( "An error occurred shutting down the executor: " + getExecutor(), e );
+            logger.error( "An error occurred shutting down the workers.", e );
         }
         setInitialized( false );
     }
@@ -131,63 +118,42 @@ public abstract class MessageRouter
         queueTimeoutInMillis = aQueueTimeoutInMillis;
     }
 
-    public MessageRouterExecutor getExecutor()
+    public DelegateMaster<MessageRoutingInfo, MessageRouter> getWorkers()
     {
-        return executor;
+        return workers;
     }
 
-    public void setExecutor( MessageRouterExecutor aExecutor )
+    public void setWorkers( DelegateMaster<MessageRoutingInfo, MessageRouter> aWorkers )
     {
-        executor = aExecutor;
+        workers = aWorkers;
     }
 
-    public int getCorePoolSize()
+    public int getNumberOfWorkers()
     {
-        return corePoolSize;
+        return numberOfWorkers;
     }
 
-    public void setCorePoolSize( int aCorePoolSize )
+    public void setNumberOfWorkers( int aNumberOfThreads )
     {
-        corePoolSize = aCorePoolSize;
-    }
-
-    public int getMaxPoolSize()
-    {
-        return maxPoolSize;
-    }
-
-    public void setMaxPoolSize( int aMaxPoolSize )
-    {
-        maxPoolSize = aMaxPoolSize;
-    }
-
-    public long getQueueKeepAliveTimeInMillis()
-    {
-        return queueKeepAliveTimeInMillis;
-    }
-
-    public void setQueueKeepAliveTimeInMillis( long aQueueKeepAliveTimeInMillis )
-    {
-        queueKeepAliveTimeInMillis = aQueueKeepAliveTimeInMillis;
+        numberOfWorkers = aNumberOfThreads;
     }
 
 
     // routing logic
     // ---------------------------------------------------------------------------
-    public boolean route( MessageRoutingInfo aInfo )
+    public void process( MessageRoutingInfo aInfo )
     {
         try
         {
-            return getServiceQueue( aInfo ).offer( new ServiceDelegateJob( aInfo ), getQueueTimeoutInMillis(), TimeUnit.MILLISECONDS );
+            getServiceQueue( aInfo ).offer( aInfo, getQueueTimeoutInMillis(), TimeUnit.MILLISECONDS );
         }
         catch ( Exception e )
         {
             logger.error( "[" + this + "] - Could not route message: " + aInfo, e );
-            return false;
         }
     }
 
-    public abstract BlockingQueue<ServiceDelegateJob> getServiceQueue( MessageRoutingInfo aInfo );
+    public abstract BlockingQueue<MessageRoutingInfo> getServiceQueue( MessageRoutingInfo aInfo );
 
-    public abstract BlockingQueue<Runnable> getRoutingQueue();
+    public abstract BlockingQueue<MessageRoutingInfo> getRoutingQueue();
 }

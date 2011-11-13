@@ -18,7 +18,7 @@ public class HazelcastWebSocketFactory extends MessagingWebSocketManager
     private static Logger     logger = LoggerFactory.getLogger( HazelcastWebSocketFactory.class );
 
     private HazelcastInstance hazelcastClient;
-    private long              queueTimeout;
+    private long              queueTimeoutInMillis;
     private String            headerQueueName;
 
 
@@ -32,7 +32,7 @@ public class HazelcastWebSocketFactory extends MessagingWebSocketManager
     public HazelcastWebSocketFactory( MessageSerializerRegistry aSerializers, long aQueueTimeout, String aHeaderQueueName, HazelcastInstance aHazelcastClient, ResponseQueueManager aResponseQueueManager )
     {
         super( aSerializers, aResponseQueueManager );
-        setQueueTimeout( aQueueTimeout );
+        setQueueTimeoutInMillis( aQueueTimeout );
         setHazelcastClient( aHazelcastClient );
         setHeaderQueueName( aHeaderQueueName );
     }
@@ -58,9 +58,9 @@ public class HazelcastWebSocketFactory extends MessagingWebSocketManager
         {
             missing = ValidationUtil.appendMessage( missing, "Missing serializer registry. " );
         }
-        if ( getQueueTimeout() == 0 )
+        if ( getQueueTimeoutInMillis() == 0 )
         {
-            setQueueTimeout( 30000 );
+            setQueueTimeoutInMillis( 30000 );
         }
         if ( getHeaderQueueName() == null )
         {
@@ -88,7 +88,7 @@ public class HazelcastWebSocketFactory extends MessagingWebSocketManager
     {
         setHazelcastClient( null );
         setHeaderQueueName( null );
-        setQueueTimeout( 0 );
+        setQueueTimeoutInMillis( 0 );
         super.destroy();
     }
 
@@ -98,7 +98,8 @@ public class HazelcastWebSocketFactory extends MessagingWebSocketManager
     @Override
     public MessagingWebSocket internalCreateWebSocket( ServerWebSocket aServerWebSocket )
     {
-        return new HazelcastWebSocket( getSerializerRegistry(), getQueueTimeout(), getHeaderQueueName(), aServerWebSocket, getHazelcastClient() );
+        logger.debug( "Creating web socket." );
+        return new HazelcastWebSocket( getResponseQueueManager().getServerId(), getSerializerRegistry(), getQueueTimeoutInMillis(), getHeaderQueueName(), aServerWebSocket, getHazelcastClient() );
     }
 
 
@@ -114,14 +115,14 @@ public class HazelcastWebSocketFactory extends MessagingWebSocketManager
         hazelcastClient = aClient;
     }
 
-    public long getQueueTimeout()
+    public long getQueueTimeoutInMillis()
     {
-        return queueTimeout;
+        return queueTimeoutInMillis;
     }
 
-    public void setQueueTimeout( long aQueueTimeout )
+    public void setQueueTimeoutInMillis( long aQueueTimeout )
     {
-        queueTimeout = aQueueTimeout;
+        queueTimeoutInMillis = aQueueTimeout;
     }
 
     public String getHeaderQueueName()

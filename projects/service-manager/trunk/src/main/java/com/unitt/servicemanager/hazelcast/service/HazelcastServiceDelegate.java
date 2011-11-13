@@ -1,5 +1,6 @@
 package com.unitt.servicemanager.hazelcast.service;
 
+
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentMap;
 
@@ -7,60 +8,61 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hazelcast.core.HazelcastInstance;
-import com.unitt.servicemanager.response.ResponseWriterJob;
 import com.unitt.servicemanager.service.ServiceDelegate;
 import com.unitt.servicemanager.util.ValidationUtil;
+import com.unitt.servicemanager.websocket.MessageResponse;
 import com.unitt.servicemanager.websocket.MessageRoutingInfo;
 import com.unitt.servicemanager.websocket.MessageSerializerRegistry;
 import com.unitt.servicemanager.websocket.SerializedMessageBody;
 
+
 public class HazelcastServiceDelegate extends ServiceDelegate
 {
-    private static Logger        logger = LoggerFactory.getLogger( HazelcastServiceDelegate.class );
+    private static Logger     logger = LoggerFactory.getLogger( HazelcastServiceDelegate.class );
 
-    private HazelcastInstance    hazelcastClient;
-    private String requestQueueName;
+    private HazelcastInstance hazelcastClient;
+    private String            requestQueueName;
 
     public HazelcastServiceDelegate()
     {
-        //default
+        // default
     }
 
-    public HazelcastServiceDelegate( Object aService, long aQueueTimeoutInMillis, MessageSerializerRegistry aReqistry, int aCorePoolSize, int aMaxPoolSize, long aQueueKeepAliveTimeInMillis, HazelcastInstance aHazelcastClient, String aRequestQueueName )
+    public HazelcastServiceDelegate( Object aService, long aQueueTimeoutInMillis, MessageSerializerRegistry aReqistry, int aNumberOfWorkers, HazelcastInstance aHazelcastClient, String aRequestQueueName )
     {
-        super( aService, aQueueTimeoutInMillis, aReqistry, aCorePoolSize, aMaxPoolSize, aQueueKeepAliveTimeInMillis );
+        super( aService, aQueueTimeoutInMillis, aReqistry, aNumberOfWorkers );
         setHazelcastClient( aHazelcastClient );
         setRequestQueueName( aRequestQueueName );
     }
-    
-        
+
+
     // lifecycle logic
     // ---------------------------------------------------------------------------
     public void initialize()
     {
         String missing = null;
-        
-        //validate we have all properties
-        if (hazelcastClient == null)
+
+        // validate we have all properties
+        if ( hazelcastClient == null )
         {
-            missing = ValidationUtil.appendMessage( missing, "Missing hazelcast client. ");
+            missing = ValidationUtil.appendMessage( missing, "Missing hazelcast client. " );
         }
-        
-        //fail out with appropriate message if missing anything
-        if (missing != null)
+
+        // fail out with appropriate message if missing anything
+        if ( missing != null )
         {
-            logger.error(missing);
+            logger.error( missing );
             throw new IllegalStateException( missing );
         }
-        
+
         super.initialize();
     }
 
     public void destroy()
     {
-        //clear hazelcast
+        // clear hazelcast
         setHazelcastClient( null );
-        
+
         super.destroy();
     }
 
@@ -86,17 +88,17 @@ public class HazelcastServiceDelegate extends ServiceDelegate
     {
         requestQueueName = aRequestQueueName;
     }
-    
+
 
     // service logic
     // ---------------------------------------------------------------------------
     @Override
     public ConcurrentMap<String, SerializedMessageBody> getBodyMap( MessageRoutingInfo aInfo )
     {
-        if (aInfo != null)
+        if ( aInfo != null )
         {
-            String mapName = aInfo.getServiceName();
-            if (mapName != null)
+            String mapName = getBodyMapName( aInfo );
+            if ( mapName != null )
             {
                 return getHazelcastClient().getMap( mapName );
             }
@@ -108,21 +110,22 @@ public class HazelcastServiceDelegate extends ServiceDelegate
 
     protected String getBodyMapName( MessageRoutingInfo aInfo )
     {
-        if (aInfo != null)
+        if ( aInfo != null )
         {
-            return "body:" + aInfo.getServerId();
+            System.out.println("Fetching body map in delegate: " + "body:" + aInfo.getWebSocketId());
+            return "body:" + aInfo.getWebSocketId();
         }
-        
+
         return null;
     }
 
     @Override
-    public BlockingQueue<ResponseWriterJob> getDestinationQueue( MessageRoutingInfo aInfo )
+    public BlockingQueue<MessageResponse> getDestinationQueue( MessageRoutingInfo aInfo )
     {
-        if (aInfo != null)
+        if ( aInfo != null )
         {
-            String queueName = aInfo.getServiceName();
-            if (queueName != null)
+            String queueName = getDestinationQueueName( aInfo );
+            if ( queueName != null )
             {
                 return getHazelcastClient().getQueue( queueName );
             }
@@ -134,16 +137,16 @@ public class HazelcastServiceDelegate extends ServiceDelegate
 
     protected String getDestinationQueueName( MessageRoutingInfo aInfo )
     {
-        if (aInfo != null)
+        if ( aInfo != null )
         {
             return "outgoing:" + aInfo.getServerId();
         }
-        
+
         return null;
     }
 
     @Override
-    public BlockingQueue<Runnable> getRequestQueue()
+    public BlockingQueue<MessageRoutingInfo> getRequestQueue()
     {
         return getHazelcastClient().getQueue( getRequestQueueName() );
     }

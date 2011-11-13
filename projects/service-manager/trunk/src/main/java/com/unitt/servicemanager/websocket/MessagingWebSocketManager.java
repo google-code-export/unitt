@@ -96,6 +96,10 @@ public abstract class MessagingWebSocketManager implements Initializable, Destru
         {
             webSocket.setServerWebSocket( aServerWebSocket );
         }
+        if (webSocket.getServerId() == null)
+        {
+            webSocket.setServerId( getResponseQueueManager().getServerId() );
+        }
         webSocket.initialize();
         getResponseQueueManager().addSocket( webSocket );
         logger.info( "Opened socket: {0}.", webSocket.getSocketId() );

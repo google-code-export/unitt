@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 
 import com.unitt.commons.foundation.lifecycle.Destructable;
 import com.unitt.commons.foundation.lifecycle.Initializable;
-import com.unitt.servicemanager.routing.MessageRouterJob;
 import com.unitt.servicemanager.util.ByteUtil;
 import com.unitt.servicemanager.util.ValidationUtil;
 
@@ -25,6 +24,7 @@ public abstract class MessagingWebSocket implements Initializable, Destructable
     private ServerWebSocket           serverWebSocket;
     private boolean                   isInitialized;
     private String                    socketId;
+    private String serverId;
     private MessageSerializerRegistry serializers;
     private long                      queueTimeoutInMillis;
 
@@ -33,16 +33,17 @@ public abstract class MessagingWebSocket implements Initializable, Destructable
     // ---------------------------------------------------------------------------
     public MessagingWebSocket()
     {
-        this( null, 30000, null );
+        this( null, null, 30000, null );
     }
 
-    public MessagingWebSocket( MessageSerializerRegistry aSerializers, long aQueueTimeoutInMillis, ServerWebSocket aServerWebSocket )
+    public MessagingWebSocket( String aServerId, MessageSerializerRegistry aSerializers, long aQueueTimeoutInMillis, ServerWebSocket aServerWebSocket )
     {
-        this( aSerializers, aQueueTimeoutInMillis, aServerWebSocket, null );
+        this( aServerId, aSerializers, aQueueTimeoutInMillis, aServerWebSocket, null );
     }
 
-    public MessagingWebSocket( MessageSerializerRegistry aSerializers, long aQueueTimeoutInMillis, ServerWebSocket aServerWebSocket, String aSocketId )
+    public MessagingWebSocket( String aServerId, MessageSerializerRegistry aSerializers, long aQueueTimeoutInMillis, ServerWebSocket aServerWebSocket, String aSocketId )
     {
+        setServerId(aServerId);
         setSerializerRegistry( aSerializers );
         setQueueTimeoutInMillis( aQueueTimeoutInMillis );
         setServerWebSocket( aServerWebSocket );
@@ -54,6 +55,7 @@ public abstract class MessagingWebSocket implements Initializable, Destructable
     // ---------------------------------------------------------------------------
     public void destroy()
     {
+        setServerId(null);
         setSerializerRegistry( null );
         setServerWebSocket( null );
         setSocketId( null );
@@ -88,6 +90,10 @@ public abstract class MessagingWebSocket implements Initializable, Destructable
         {
             missing = ValidationUtil.appendMessage( missing, "Missing server web socket. " );
         }
+        if ( getServerId() == null )
+        {
+            missing = ValidationUtil.appendMessage( missing, "Missing server id. " );
+        }
 
         // fail out with appropriate message if missing anything
         if ( missing != null )
@@ -115,6 +121,26 @@ public abstract class MessagingWebSocket implements Initializable, Destructable
     public void setSocketId( String aSocketId )
     {
         socketId = aSocketId;
+    }
+
+    public String getServerId()
+    {
+        return serverId;
+    }
+
+    public void setServerId( String aServerId )
+    {
+        serverId = aServerId;
+    }
+
+    public MessageSerializerRegistry getSerializers()
+    {
+        return serializers;
+    }
+
+    public void setSerializers( MessageSerializerRegistry aSerializers )
+    {
+        serializers = aSerializers;
     }
 
     public MessageSerializerRegistry getSerializerRegistry()
@@ -158,6 +184,7 @@ public abstract class MessagingWebSocket implements Initializable, Destructable
             MessageSerializer serializer = getSerializerRegistry().getSerializer( aResponse.getHeader().getSerializerType() );
             byte[] headerBytes = serializer.serializeHeader( aResponse.getHeader() );
             byte[] bodyBytes = serializer.serializeBody( aResponse.getBody() );
+            System.out.println("Sending serialized body: " + new String(bodyBytes));
             output.write( ByteUtil.convertShortToBytes( new Integer( headerBytes.length ).shortValue() ) );
             output.write( ByteUtil.convertShortToBytes( aResponse.getHeader().getSerializerType() ) );
             output.write( headerBytes );
@@ -197,8 +224,14 @@ public abstract class MessagingWebSocket implements Initializable, Destructable
 
             // create message objects
             MessageSerializer serializer = getSerializerRegistry().getSerializer( serializerType );
+            if (serializer == null)
+            {
+                logger.debug("Could not find serializer: " + serializerType);
+            }
             MessageRoutingInfo header = serializer.deserializeHeader( headerBytes );
             header.setSerializerType( serializerType );
+            header.setWebSocketId( getSocketId() );
+            header.setServerId( getServerId() );
             SerializedMessageBody body = new SerializedMessageBody( bodyBytes );
 
             // put body bytes in map
@@ -216,7 +249,8 @@ public abstract class MessagingWebSocket implements Initializable, Destructable
     {
         try
         {
-            return getHeaderQueue().offer( new MessageRouterJob( aHeader ), getQueueTimeoutInMillis(), TimeUnit.MILLISECONDS );
+            logger.debug( "Pushing header: " + aHeader );
+            return getHeaderQueue().offer( aHeader, getQueueTimeoutInMillis(), TimeUnit.MILLISECONDS );
         }
         catch ( Exception e )
         {
@@ -227,6 +261,7 @@ public abstract class MessagingWebSocket implements Initializable, Destructable
 
     public void pushBody( String aUid, SerializedMessageBody aBody )
     {
+        logger.info( "Pushing body to map for key: " + aUid );
         getBodyMap().put( aUid, aBody );
     }
 
@@ -237,5 +272,5 @@ public abstract class MessagingWebSocket implements Initializable, Destructable
 
     public abstract ConcurrentMap<String, SerializedMessageBody> getBodyMap();
 
-    public abstract BlockingQueue<MessageRouterJob> getHeaderQueue();
+    public abstract BlockingQueue<MessageRoutingInfo> getHeaderQueue();
 }

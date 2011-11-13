@@ -1,11 +1,9 @@
 package com.unitt.servicemanager.hazelcast.response;
 
 
-import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,9 +11,9 @@ import org.slf4j.LoggerFactory;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IQueue;
 import com.unitt.servicemanager.response.ResponseQueueManager;
-import com.unitt.servicemanager.response.ResponseWriterExecutor;
 import com.unitt.servicemanager.response.UndeliverableMessageHandler;
 import com.unitt.servicemanager.util.ValidationUtil;
+import com.unitt.servicemanager.websocket.MessageResponse;
 import com.unitt.servicemanager.websocket.MessagingWebSocket;
 
 
@@ -24,18 +22,16 @@ public class HazelcastResponseQueueManager extends ResponseQueueManager
     private static Logger     logger = LoggerFactory.getLogger( HazelcastResponseQueueManager.class );
 
     private HazelcastInstance hazelcastClient;
-    private String            socketQueueName;
 
     public HazelcastResponseQueueManager()
     {
         // default
     }
 
-    public HazelcastResponseQueueManager( int aCorePoolSize, int aMaxPoolSize, long aQueueKeepAliveTimeInMillis, Map<String, MessagingWebSocket> aSockets, UndeliverableMessageHandler aUndeliverableMessageHandler, String aSocketQueueName, HazelcastInstance aHazelcastClient )
+    public HazelcastResponseQueueManager( long aQueueTimeoutInMillis, int aNumberOfWorkers, Map<String, MessagingWebSocket> aSockets, UndeliverableMessageHandler aUndeliverableMessageHandler, String aServerId, HazelcastInstance aHazelcastClient )
     {
-        super( aCorePoolSize, aMaxPoolSize, aQueueKeepAliveTimeInMillis, aSockets, aUndeliverableMessageHandler );
+        super( aServerId, aQueueTimeoutInMillis, aNumberOfWorkers, aSockets, aUndeliverableMessageHandler );
         setHazelcastClient( aHazelcastClient );
-        setSocketQueueName( aSocketQueueName );
     }
 
 
@@ -59,17 +55,6 @@ public class HazelcastResponseQueueManager extends ResponseQueueManager
         {
             missing = ValidationUtil.appendMessage( missing, "Missing sockets map. " );
         }
-        if ( socketQueueName == null )
-        {
-            try
-            {
-                socketQueueName = InetAddress.getLocalHost().getHostName() + "::" + System.currentTimeMillis();
-            }
-            catch ( Exception e )
-            {
-                socketQueueName = "Unknown IP Address::" + System.currentTimeMillis();
-            }
-        }
 
         // fail out with appropriate message if missing anything
         if ( missing != null )
@@ -78,18 +63,13 @@ public class HazelcastResponseQueueManager extends ResponseQueueManager
             throw new IllegalStateException( missing );
         }
         
-        if (getExecutor() == null)
-        {
-            setExecutor( new ResponseWriterExecutor( getCorePoolSize(), getMaxPoolSize(), getQueueKeepAliveTimeInMillis(), TimeUnit.MILLISECONDS, getSocketQueue()) );
-        }
-        getExecutor().setWriter( this );
-
-        setInitialized( true );
+        super.initialize();
     }
 
     public void destroy()
     {
         super.destroy();
+        
         // clear hazelcast
         try
         {
@@ -104,7 +84,6 @@ public class HazelcastResponseQueueManager extends ResponseQueueManager
             logger.error( "An error occurred cleaning up the socket queue: " + this, e );
         }
         setHazelcastClient( null );
-        setSocketQueueName( null );
     }
 
 
@@ -120,24 +99,14 @@ public class HazelcastResponseQueueManager extends ResponseQueueManager
         hazelcastClient = aClient;
     }
 
-    public String getSocketQueueName()
-    {
-        return socketQueueName;
-    }
-
-    public void setSocketQueueName( String aSocketQueueName )
-    {
-        socketQueueName = aSocketQueueName;
-    }
-
 
     // service logic
     // ---------------------------------------------------------------------------
     @Override
-    public BlockingQueue<Runnable> getSocketQueue()
+    public BlockingQueue<MessageResponse> getSocketQueue()
     {
-        String queueName = getSocketQueueName();
-        if ( queueName != null )
+        String queueName = "outgoing:" + getServerId();
+        if ( getServerId() != null )
         {
             return getHazelcastClient().getQueue( queueName );
         }

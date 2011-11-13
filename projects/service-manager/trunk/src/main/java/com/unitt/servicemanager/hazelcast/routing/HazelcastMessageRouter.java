@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 
 import com.hazelcast.core.HazelcastInstance;
 import com.unitt.servicemanager.routing.MessageRouter;
-import com.unitt.servicemanager.service.ServiceDelegateJob;
 import com.unitt.servicemanager.util.ValidationUtil;
 import com.unitt.servicemanager.websocket.MessageRoutingInfo;
 
@@ -26,9 +25,9 @@ public class HazelcastMessageRouter extends MessageRouter
         // default
     }
 
-    public HazelcastMessageRouter( long aQueueTimeoutInMillis, int aCorePoolSize, int aMaxPoolSize, long aQueueKeepAliveTimeInMillis, String aRequestQueueName, HazelcastInstance aHazelcastClient )
+    public HazelcastMessageRouter( long aQueueTimeoutInMillis, int aNumberOfWorkers, String aRequestQueueName, HazelcastInstance aHazelcastClient )
     {
-        super( aQueueTimeoutInMillis, aCorePoolSize, aMaxPoolSize, aQueueKeepAliveTimeInMillis );
+        super( aQueueTimeoutInMillis, aNumberOfWorkers );
         setHazelcastClient( aHazelcastClient );
         setRequestQueueName( aRequestQueueName );
     }
@@ -106,7 +105,7 @@ public class HazelcastMessageRouter extends MessageRouter
     // service logic
     // ---------------------------------------------------------------------------
     @Override
-    public BlockingQueue<ServiceDelegateJob> getServiceQueue( MessageRoutingInfo aInfo )
+    public BlockingQueue<MessageRoutingInfo> getServiceQueue( MessageRoutingInfo aInfo )
     {
         if ( aInfo != null )
         {
@@ -132,7 +131,7 @@ public class HazelcastMessageRouter extends MessageRouter
     }
 
     @Override
-    public BlockingQueue<Runnable> getRoutingQueue()
+    public BlockingQueue<MessageRoutingInfo> getRoutingQueue()
     {
         return getHazelcastClient().getQueue( getRequestQueueName() );
     }

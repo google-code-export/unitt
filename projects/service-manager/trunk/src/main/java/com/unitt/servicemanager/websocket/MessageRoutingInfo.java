@@ -19,10 +19,10 @@ public class MessageRoutingInfo implements Serializable
     private String requestId;
     private String serviceName;
     private String methodSignature;
-    private int    timeToLiveInMills;
+    private int    timeToLiveInMillis;
     private Date   sent;
     private String uid;
-    private String websocketId;
+    private String webSocketId;
     private String serverId;
     private Short serializerType;
     private MessageResultType resultType;
@@ -72,14 +72,14 @@ public class MessageRoutingInfo implements Serializable
         methodSignature = aMethodSignature;
     }
 
-    public int getTimeToLiveInMills()
+    public int getTimeToLiveInMillis()
     {
-        return timeToLiveInMills;
+        return timeToLiveInMillis;
     }
 
-    public void setTimeToLiveInMills( int aTimeToLiveInMills )
+    public void setTimeToLiveInMillis( int aTimeToLiveInMillis )
     {
-        timeToLiveInMills = aTimeToLiveInMills;
+        timeToLiveInMillis = aTimeToLiveInMillis;
     }
 
     public Date getSent()
@@ -92,19 +92,24 @@ public class MessageRoutingInfo implements Serializable
         sent = aSent;
     }
 
-    public String getWebsocketId()
+    public String getWebSocketId()
     {
-        return websocketId;
+        return webSocketId;
     }
 
-    public void setWebsocketId( String aWebsocketId )
+    public void setWebSocketId( String aWebsocketId )
     {
-        websocketId = aWebsocketId;
+        webSocketId = aWebsocketId;
     }
 
     public String getUid()
     {
         return uid;
+    }
+
+    public void setUid( String aUid )
+    {
+        uid = aUid;
     }
 
     public String getServerId()
@@ -143,6 +148,6 @@ public class MessageRoutingInfo implements Serializable
     @Override
     public String toString()
     {
-        return "MessageRoutingInfo [serverId= " + serverId + ", websocketId=" + websocketId + ", sessionId=" + sessionId + ", requestId=" + requestId + ", uid=" + uid + ", serviceName=" + serviceName + ", methodSignature=" + methodSignature + ", serializerType=" + serializerType + ", sent=" + sent + ", timeToLiveInMills=" + timeToLiveInMills + ", resultType=" + resultType + "]";
+        return "MessageRoutingInfo [serverId= " + serverId + ", websocketId=" + webSocketId + ", sessionId=" + sessionId + ", requestId=" + requestId + ", uid=" + uid + ", serviceName=" + serviceName + ", methodSignature=" + methodSignature + ", serializerType=" + serializerType + ", sent=" + sent + ", timeToLiveInMills=" + timeToLiveInMillis + ", resultType=" + resultType + "]";
     }
 }

@@ -36,6 +36,7 @@ public class ServerSocketAdapter implements WebSocket, WebSocket.OnBinaryMessage
 
     public ServerSocketAdapter( HttpServletRequest aRequest, String aProtocol, MessagingWebSocketManager aFactory )
     {
+        manager = aFactory;
         aRequest.getRequestURI();
     }
 
@@ -156,10 +157,12 @@ public class ServerSocketAdapter implements WebSocket, WebSocket.OnBinaryMessage
     // ---------------------------------------------------------------------------
     public void onMessage( byte[] aData, int aOffset, int aLength )
     {
+        logger.debug("On Message of Length: " + aLength);
         if ( aData.length != aLength && aOffset != 0 )
         {
             byte[] data = new byte[aLength];
             System.arraycopy( aData, aOffset, data, 0, aLength );
+            getSocket().onMessage( data );
         }
         else
         {
@@ -176,6 +179,7 @@ public class ServerSocketAdapter implements WebSocket, WebSocket.OnBinaryMessage
 
     public void onOpen( Connection aConnection )
     {
+        logger.debug("On Open");
         setConnection( aConnection );
         setSocket( getManager().createWebSocket(this) );
         initialize();

@@ -1,6 +1,8 @@
 package com.unitt.servicemanager.serializer;
 
 
+import java.util.Arrays;
+
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +46,11 @@ public class JacksonJsonSerializer implements MessageSerializer
     {
         try
         {
-            return mapper.readValue( aBody, DeserializedMessageBody.class );
+            System.out.println("Deserializing: " + new String(aBody));
+            Object[] args = mapper.readValue( aBody, Object[].class );
+            DeserializedMessageBody body = new DeserializedMessageBody();
+            body.setServiceMethodArguments( Arrays.asList( args ) );
+            return body;
         }
         catch ( Exception e )
         {
@@ -62,7 +68,7 @@ public class JacksonJsonSerializer implements MessageSerializer
         }
         catch ( Exception e )
         {
-            logger.error( "Could not deserialize header.", e );
+            logger.error( "Could not deserialize header: " + new String(aHeader), e );
         }
         
         return null;

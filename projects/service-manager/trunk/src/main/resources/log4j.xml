@@ -31,7 +31,7 @@
         </layout>
     </appender>
     <root>
-        <priority value="info" />
+        <priority value="debug" />
         <appender-ref ref="STDOUT" />
         <appender-ref ref="STDERR" />
         <!-- uncomment to save to file

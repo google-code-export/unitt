@@ -7,6 +7,7 @@ import java.util.List;
 
 import junit.framework.Assert;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,6 +24,8 @@ public class ServiceDelegateTest
     @Before
     public void setUp() throws Exception
     {
+        String[] strings = new String[]{"Test", "NoTest"};
+        System.out.println("Serialized Array=" + new ObjectMapper().writeValueAsString( strings ));
         service = new MockService();
         serviceDelegate = new MockServiceDelegate( service );
         serviceDelegate.initialize();
@@ -46,11 +49,11 @@ public class ServiceDelegateTest
         routing.setServiceName( "myServiceName" );
         
         //execute service
-        serviceDelegate.executeServiceMethod( routing );
+        serviceDelegate.process( routing );
         MessageResponse response = null;
         try
         {
-            response = serviceDelegate.getDestinationQueue( routing ).take().getResponse();
+            response = serviceDelegate.getDestinationQueue( routing ).take();
         }
         catch ( InterruptedException e )
         {

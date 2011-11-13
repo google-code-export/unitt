@@ -1,10 +1,10 @@
 package com.unitt.servicemanager.response;
 
 
+import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,34 +14,35 @@ import com.unitt.commons.foundation.lifecycle.Initializable;
 import com.unitt.servicemanager.util.ValidationUtil;
 import com.unitt.servicemanager.websocket.MessageResponse;
 import com.unitt.servicemanager.websocket.MessagingWebSocket;
+import com.unitt.servicemanager.worker.DelegateMaster;
+import com.unitt.servicemanager.worker.Processor;
 
 
-public abstract class ResponseQueueManager implements Initializable, Destructable, ResponseWriter
+public abstract class ResponseQueueManager implements Initializable, Destructable, Processor<MessageResponse>
 {
-    private static Logger                   logger = LoggerFactory.getLogger( ResponseQueueManager.class );
+    private static Logger                                         logger = LoggerFactory.getLogger( ResponseQueueManager.class );
 
-    protected boolean                       isInitialized;
-
-    private ResponseWriterExecutor          executor;
-    private Map<String, MessagingWebSocket> sockets;
-    private UndeliverableMessageHandler     undeliverableMessageHandler;
-    private int                             corePoolSize;
-    private int                             maxPoolSize;
-    private long                            queueKeepAliveTimeInMillis;
+    protected boolean                                             isInitialized;
+    private long                                                  queueTimeoutInMillis;
+    private Map<String, MessagingWebSocket>                       sockets;
+    private UndeliverableMessageHandler                           undeliverableMessageHandler;
+    private int                                                   numberOfWorkers;
+    private String                                                serverId;
+    private DelegateMaster<MessageResponse, ResponseQueueManager> workers;
 
 
     // constructors
     // ---------------------------------------------------------------------------
     public ResponseQueueManager()
     {
-        this( 0, 0, 0, null, null );
+        this( null, 0, 0, null, null );
     }
 
-    public ResponseQueueManager( int aCorePoolSize, int aMaxPoolSize, long aQueueKeepAliveTimeInMillis, Map<String, MessagingWebSocket> aSockets, UndeliverableMessageHandler aUndeliverableMessageHandler )
+    public ResponseQueueManager( String aServerId, long aQueueTimeoutInMillis, int aNumberOfWorkers, Map<String, MessagingWebSocket> aSockets, UndeliverableMessageHandler aUndeliverableMessageHandler )
     {
-        setCorePoolSize( aCorePoolSize );
-        setMaxPoolSize( aMaxPoolSize );
-        setQueueKeepAliveTimeInMillis( aQueueKeepAliveTimeInMillis );
+        setServerId( aServerId );
+        setQueueTimeoutInMillis( aQueueTimeoutInMillis );
+        setNumberOfWorkers( aNumberOfWorkers );
         setSockets( aSockets );
         setUndeliverableMessageHandler( aUndeliverableMessageHandler );
     }
@@ -54,44 +55,51 @@ public abstract class ResponseQueueManager implements Initializable, Destructabl
         if ( !isInitialized() )
         {
             String missing = null;
-            
-            //validate we have all properties
+
+            // validate we have all properties
+            if ( getQueueTimeoutInMillis() < 1 )
+            {
+                missing = ValidationUtil.appendMessage( missing, "Missing valid queue timeout: " + getQueueTimeoutInMillis() + ". " );
+            }
+            if ( getNumberOfWorkers() < 1 )
+            {
+                missing = ValidationUtil.appendMessage( missing, "Missing number of Threads: " + getNumberOfWorkers() + ". " );
+            }
+            if ( getServerId() == null )
+            {
+                try
+                {
+                    serverId = InetAddress.getLocalHost().getHostName() + "::" + System.currentTimeMillis();
+                }
+                catch ( Exception e )
+                {
+                    serverId = "Unknown IP Address::" + System.currentTimeMillis();
+                }
+            }
             if ( getSocketQueue() == null )
             {
                 missing = ValidationUtil.appendMessage( missing, "Missing socket queue. " );
             }
-            if (getCorePoolSize() < 1)
+
+            // fail out with appropriate message if missing anything
+            if ( missing != null )
             {
-                missing = ValidationUtil.appendMessage( missing, "Missing valid core pool size: " + getCorePoolSize() + ". ");
-            }
-            if (getQueueKeepAliveTimeInMillis() < 1)
-            {
-                missing = ValidationUtil.appendMessage( missing, "Missing valid queue keep alive: " + getQueueKeepAliveTimeInMillis() + ". ");
-            }
-            if (getMaxPoolSize() < 1)
-            {
-                missing = ValidationUtil.appendMessage( missing, "Missing valid max pool size: " + getMaxPoolSize() + ". ");
-            }
-            
-            //fail out with appropriate message if missing anything
-            if (missing != null)
-            {
-                logger.error(missing);
+                logger.error( missing );
                 throw new IllegalStateException( missing );
             }
-            
-            //apply values
-            if (executor == null)
+
+            // apply values
+            if ( workers == null )
             {
-                executor = new ResponseWriterExecutor( getCorePoolSize(), getMaxPoolSize(), getQueueKeepAliveTimeInMillis(), TimeUnit.MILLISECONDS, getSocketQueue() );
+                workers = new DelegateMaster<MessageResponse, ResponseQueueManager>( getClass().getSimpleName(), getSocketQueue(), this, getQueueTimeoutInMillis(), getNumberOfWorkers() );
             }
-            executor.setWriter( this );
+            workers.startup();
             if ( sockets == null )
             {
                 sockets = new HashMap<String, MessagingWebSocket>();
             }
-            
-            //mark as complete
+
+            // mark as complete
             setInitialized( true );
         }
     }
@@ -115,21 +123,20 @@ public abstract class ResponseQueueManager implements Initializable, Destructabl
         {
             logger.error( "An error occurred clearing the socket map: " + this, e );
         }
+        setNumberOfWorkers( 0 );
+        setQueueTimeoutInMillis( 0 );
         try
         {
-            if ( executor != null )
+            if ( workers != null )
             {
-                executor.shutdown();
+                workers.shutdown();
             }
-            setExecutor( null );
+            workers = null;
         }
         catch ( Exception e )
         {
-            logger.error( "An error occurred shutting down the executor: " + getExecutor(), e );
+            logger.error( "An error occurred shutting down the workers.", e );
         }
-        setCorePoolSize( 0 );
-        setMaxPoolSize( 0 );
-        setQueueKeepAliveTimeInMillis( 0 );
         setUndeliverableMessageHandler( null );
         setInitialized( false );
     }
@@ -142,48 +149,34 @@ public abstract class ResponseQueueManager implements Initializable, Destructabl
 
     // getters & setters
     // ---------------------------------------------------------------------------
-    public ResponseWriterExecutor getExecutor()
+    public long getQueueTimeoutInMillis()
     {
-        return executor;
+        return queueTimeoutInMillis;
     }
 
-    public void setExecutor( ResponseWriterExecutor aExecutor )
+    public void setQueueTimeoutInMillis( long aQueueTimeoutInMillis )
     {
-        executor = aExecutor;
-        if ( executor != null )
-        {
-            executor.setWriter( this );
-        }
+        queueTimeoutInMillis = aQueueTimeoutInMillis;
     }
 
-    public int getCorePoolSize()
+    public DelegateMaster<MessageResponse, ResponseQueueManager> getWorkers()
     {
-        return corePoolSize;
+        return workers;
     }
 
-    public void setCorePoolSize( int aCorePoolSize )
+    public void setWorkers( DelegateMaster<MessageResponse, ResponseQueueManager> aWorkers )
     {
-        corePoolSize = aCorePoolSize;
+        workers = aWorkers;
     }
 
-    public int getMaxPoolSize()
+    public int getNumberOfWorkers()
     {
-        return maxPoolSize;
+        return numberOfWorkers;
     }
 
-    public void setMaxPoolSize( int aMaxPoolSize )
+    public void setNumberOfWorkers( int aNumberOfThreads )
     {
-        maxPoolSize = aMaxPoolSize;
-    }
-
-    public long getQueueKeepAliveTimeInMillis()
-    {
-        return queueKeepAliveTimeInMillis;
-    }
-
-    public void setQueueKeepAliveTimeInMillis( long aQueueKeepAliveTimeInMillis )
-    {
-        queueKeepAliveTimeInMillis = aQueueKeepAliveTimeInMillis;
+        numberOfWorkers = aNumberOfThreads;
     }
 
     protected Map<String, MessagingWebSocket> getSockets()
@@ -194,6 +187,16 @@ public abstract class ResponseQueueManager implements Initializable, Destructabl
     protected void setSockets( Map<String, MessagingWebSocket> aSockets )
     {
         sockets = aSockets;
+    }
+
+    public String getServerId()
+    {
+        return serverId;
+    }
+
+    public void setServerId( String aServerId )
+    {
+        serverId = aServerId;
     }
 
     public UndeliverableMessageHandler getUndeliverableMessageHandler()
@@ -224,28 +227,27 @@ public abstract class ResponseQueueManager implements Initializable, Destructabl
         return getSockets().get( aSocketId );
     }
 
-    public abstract BlockingQueue<Runnable> getSocketQueue();
+    public abstract BlockingQueue<MessageResponse> getSocketQueue();
 
 
     // response writer logic
     // ---------------------------------------------------------------------------
-    public boolean write( MessageResponse aResponse )
+    public void process( MessageResponse aResponse )
     {
         // send the message down the websocket
         try
         {
-            String socketId = aResponse.getHeader().getWebsocketId();
+            String socketId = aResponse.getHeader().getWebSocketId();
             MessagingWebSocket socket = getSocket( socketId );
             if ( socket != null )
             {
+                System.out.println("Sending: " + aResponse.getBody());
                 socket.send( aResponse );
-                return true;
             }
         }
         catch ( Exception e )
         {
             logger.error( "[" + this + "] - Could not write message: " + aResponse, e );
-            return false;
         }
 
         // it didn't write, send to dead letter queue, if any
@@ -253,7 +255,5 @@ public abstract class ResponseQueueManager implements Initializable, Destructabl
         {
             getUndeliverableMessageHandler().handleUndeliverableMessage( aResponse );
         }
-
-        return false;
     }
 }
