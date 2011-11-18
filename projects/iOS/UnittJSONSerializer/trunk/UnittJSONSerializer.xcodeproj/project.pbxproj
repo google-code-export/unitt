@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		282791551476E8F100BC1CC7 /* JSONKit.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = BD665740138F941C00E6094C /* JSONKit.h */; };
+		282791561476E8F100BC1CC7 /* JSONSerializer.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = BD665733138F901800E6094C /* JSONSerializer.h */; };
+		282791571476E8F100BC1CC7 /* JSONPropertyInfo.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = BDB8F0751391FDBD00316BF7 /* JSONPropertyInfo.h */; };
+		282791581476E8F100BC1CC7 /* FieldHandler.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = BDB27261141B323A00C1C0E8 /* FieldHandler.h */; };
+		282791591476E8F100BC1CC7 /* ObjectHandler.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = BDB27266141B35C100C1C0E8 /* ObjectHandler.h */; };
 		BD05B2AB139190B500372B4E /* TestTransportObject.m in Sources */ = {isa = PBXBuildFile; fileRef = BD05B2AA139190B500372B4E /* TestTransportObject.m */; };
 		BD05B2BB1391B17500372B4E /* TestSuperTransportObject.m in Sources */ = {isa = PBXBuildFile; fileRef = BD05B2BA1391B17500372B4E /* TestSuperTransportObject.m */; };
 		BD56B14914152B1500E00068 /* JSONPropertyInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = BDB8F0761391FDBD00316BF7 /* JSONPropertyInfo.m */; };
@@ -42,6 +47,23 @@
 			remoteInfo = UnittJSONSerializer;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		282791461476E8AB00BC1CC7 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Headers;
+			dstSubfolderSpec = 16;
+			files = (
+				282791551476E8F100BC1CC7 /* JSONKit.h in CopyFiles */,
+				282791561476E8F100BC1CC7 /* JSONSerializer.h in CopyFiles */,
+				282791571476E8F100BC1CC7 /* JSONPropertyInfo.h in CopyFiles */,
+				282791581476E8F100BC1CC7 /* FieldHandler.h in CopyFiles */,
+				282791591476E8F100BC1CC7 /* ObjectHandler.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		BD05B2A9139190B500372B4E /* TestTransportObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestTransportObject.h; sourceTree = "<group>"; };
@@ -201,6 +223,7 @@
 				BD665706138F8EDA00E6094C /* Sources */,
 				BD665707138F8EDA00E6094C /* Frameworks */,
 				BD665708138F8EDA00E6094C /* Headers */,
+				282791461476E8AB00BC1CC7 /* CopyFiles */,
 			);
 			buildRules = (
 			);
