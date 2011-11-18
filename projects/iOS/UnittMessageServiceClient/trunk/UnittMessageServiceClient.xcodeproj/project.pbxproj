@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2827910E1476E7F500BC1CC7 /* MessageSerializerJSON.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = BDC439A9141BE522002633CD /* MessageSerializerJSON.h */; };
+		2827910F1476E7F500BC1CC7 /* MessageServiceClient.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = BD9AE6FF13A3DDD500D4122D /* MessageServiceClient.h */; };
+		282791101476E7F500BC1CC7 /* MessageRoutingInfo.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = BD9AE70413A3E29800D4122D /* MessageRoutingInfo.h */; };
+		282791111476E7F500BC1CC7 /* ServiceCallback.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = BD9AE70E13A4163E00D4122D /* ServiceCallback.h */; };
+		282791121476E7F500BC1CC7 /* ServiceMessage.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = BD9AE71813A4196300D4122D /* ServiceMessage.h */; };
+		282791131476E7F500BC1CC7 /* MessageServiceTransport.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = BD0B94B113BBB4F800A030F6 /* MessageServiceTransport.h */; };
+		282791141476E7F500BC1CC7 /* ServiceProxy.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = BDA7FF8E1437C90200473897 /* ServiceProxy.h */; };
 		BD0B94B313BBB4F800A030F6 /* MessageServiceTransport.h in Headers */ = {isa = PBXBuildFile; fileRef = BD0B94B113BBB4F800A030F6 /* MessageServiceTransport.h */; };
 		BD0B94B413BBB4F800A030F6 /* MessageServiceTransport.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0B94B213BBB4F800A030F6 /* MessageServiceTransport.m */; };
 		BD0B94B513BBB4F800A030F6 /* MessageServiceTransport.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0B94B213BBB4F800A030F6 /* MessageServiceTransport.m */; };
@@ -46,6 +53,48 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		282791291476E87B00BC1CC7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 282791211476E87B00BC1CC7 /* UnittJSONSerializer.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BD66570A138F8EDA00E6094C;
+			remoteInfo = UnittJSONSerializer;
+		};
+		2827912B1476E87B00BC1CC7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 282791211476E87B00BC1CC7 /* UnittJSONSerializer.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BD665717138F8EDA00E6094C;
+			remoteInfo = UnittJSONSerializerTests;
+		};
+		282791421476E89900BC1CC7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2827913A1476E89900BC1CC7 /* UnittWebSocketClient.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BD0C3248136FA7CB008B53D7;
+			remoteInfo = UnittWebSocketClient;
+		};
+		282791441476E89900BC1CC7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2827913A1476E89900BC1CC7 /* UnittWebSocketClient.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BD0C3255136FA7CB008B53D7;
+			remoteInfo = UnittWebSocketClientTests;
+		};
+		2827915A1476E8FF00BC1CC7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 282791211476E87B00BC1CC7 /* UnittJSONSerializer.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = BD665709138F8EDA00E6094C;
+			remoteInfo = UnittJSONSerializer;
+		};
+		2827915C1476E90300BC1CC7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2827913A1476E89900BC1CC7 /* UnittWebSocketClient.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = BD0C3247136FA7CB008B53D7;
+			remoteInfo = UnittWebSocketClient;
+		};
 		BDAEA34E13A1A54E00E8EB9C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BDAEA33213A1A54E00E8EB9C /* Project object */;
@@ -55,7 +104,28 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		2827910C1476E7DB00BC1CC7 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Headers;
+			dstSubfolderSpec = 16;
+			files = (
+				2827910E1476E7F500BC1CC7 /* MessageSerializerJSON.h in CopyFiles */,
+				2827910F1476E7F500BC1CC7 /* MessageServiceClient.h in CopyFiles */,
+				282791101476E7F500BC1CC7 /* MessageRoutingInfo.h in CopyFiles */,
+				282791111476E7F500BC1CC7 /* ServiceCallback.h in CopyFiles */,
+				282791121476E7F500BC1CC7 /* ServiceMessage.h in CopyFiles */,
+				282791131476E7F500BC1CC7 /* MessageServiceTransport.h in CopyFiles */,
+				282791141476E7F500BC1CC7 /* ServiceProxy.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		282791211476E87B00BC1CC7 /* UnittJSONSerializer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = UnittJSONSerializer.xcodeproj; path = ../../UnittJSONSerializer/trunk/UnittJSONSerializer.xcodeproj; sourceTree = "<group>"; };
+		2827913A1476E89900BC1CC7 /* UnittWebSocketClient.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = UnittWebSocketClient.xcodeproj; path = ../../UnittWebSocketClient/trunk/UnittWebSocketClient.xcodeproj; sourceTree = "<group>"; };
 		BD0B94B113BBB4F800A030F6 /* MessageServiceTransport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageServiceTransport.h; sourceTree = "<group>"; };
 		BD0B94B213BBB4F800A030F6 /* MessageServiceTransport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageServiceTransport.m; sourceTree = "<group>"; };
 		BD9AE6FF13A3DDD500D4122D /* MessageServiceClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageServiceClient.h; sourceTree = "<group>"; };
@@ -121,9 +191,29 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		282791221476E87B00BC1CC7 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2827912A1476E87B00BC1CC7 /* libUnittJSONSerializer.a */,
+				2827912C1476E87B00BC1CC7 /* UnittJSONSerializerTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2827913B1476E89900BC1CC7 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				282791431476E89900BC1CC7 /* libUnittWebSocketClient.a */,
+				282791451476E89900BC1CC7 /* UnittWebSocketClientTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		BDAEA33013A1A54E00E8EB9C = {
 			isa = PBXGroup;
 			children = (
+				2827913A1476E89900BC1CC7 /* UnittWebSocketClient.xcodeproj */,
+				282791211476E87B00BC1CC7 /* UnittJSONSerializer.xcodeproj */,
 				BDAEA34013A1A54E00E8EB9C /* UnittMessageServiceClient */,
 				BDAEA35113A1A54E00E8EB9C /* UnittMessageServiceClientTests */,
 				BDAEA33D13A1A54E00E8EB9C /* Frameworks */,
@@ -243,10 +333,13 @@
 				BDAEA33713A1A54E00E8EB9C /* Sources */,
 				BDAEA33813A1A54E00E8EB9C /* Frameworks */,
 				BDAEA33913A1A54E00E8EB9C /* Headers */,
+				2827910C1476E7DB00BC1CC7 /* CopyFiles */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				2827915D1476E90300BC1CC7 /* PBXTargetDependency */,
+				2827915B1476E8FF00BC1CC7 /* PBXTargetDependency */,
 			);
 			name = UnittMessageServiceClient;
 			productName = UnittMessageServiceClient;
@@ -287,6 +380,16 @@
 			mainGroup = BDAEA33013A1A54E00E8EB9C;
 			productRefGroup = BDAEA33C13A1A54E00E8EB9C /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 282791221476E87B00BC1CC7 /* Products */;
+					ProjectRef = 282791211476E87B00BC1CC7 /* UnittJSONSerializer.xcodeproj */;
+				},
+				{
+					ProductGroup = 2827913B1476E89900BC1CC7 /* Products */;
+					ProjectRef = 2827913A1476E89900BC1CC7 /* UnittWebSocketClient.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				BDAEA33A13A1A54E00E8EB9C /* UnittMessageServiceClient */,
@@ -294,6 +397,37 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		2827912A1476E87B00BC1CC7 /* libUnittJSONSerializer.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libUnittJSONSerializer.a;
+			remoteRef = 282791291476E87B00BC1CC7 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		2827912C1476E87B00BC1CC7 /* UnittJSONSerializerTests.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = UnittJSONSerializerTests.octest;
+			remoteRef = 2827912B1476E87B00BC1CC7 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		282791431476E89900BC1CC7 /* libUnittWebSocketClient.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libUnittWebSocketClient.a;
+			remoteRef = 282791421476E89900BC1CC7 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		282791451476E89900BC1CC7 /* UnittWebSocketClientTests.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = UnittWebSocketClientTests.octest;
+			remoteRef = 282791441476E89900BC1CC7 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		BDAEA34513A1A54E00E8EB9C /* Resources */ = {
@@ -354,6 +488,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		2827915B1476E8FF00BC1CC7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = UnittJSONSerializer;
+			targetProxy = 2827915A1476E8FF00BC1CC7 /* PBXContainerItemProxy */;
+		};
+		2827915D1476E90300BC1CC7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = UnittWebSocketClient;
+			targetProxy = 2827915C1476E90300BC1CC7 /* PBXContainerItemProxy */;
+		};
 		BDAEA34F13A1A54E00E8EB9C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = BDAEA33A13A1A54E00E8EB9C /* UnittMessageServiceClient */;
@@ -431,6 +575,7 @@
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "${inherited}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/**";
 			};
 			name = Debug;
 		};
@@ -445,6 +590,7 @@
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "${inherited}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/**";
 			};
 			name = Release;
 		};
