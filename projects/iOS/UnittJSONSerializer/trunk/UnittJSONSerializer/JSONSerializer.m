@@ -30,6 +30,28 @@
 
 
 #pragma mark Deserialize
+- (id) deserializeStringFromData:(NSData*) aData {
+    return [[[NSString alloc] initWithData:aData encoding:NSUTF8StringEncoding] autorelease];
+}
+
+- (id) deserializeDateFromData:(NSData*) aData {
+    return [self deserializeDateFromString:[[[NSString alloc] initWithData:aData encoding:NSUTF8StringEncoding] autorelease]];
+}
+
+- (id) deserializeNumberFromData:(NSData*) aData {
+    return [self deserializeNumberFromString:[[[NSString alloc] initWithData:aData encoding:NSUTF8StringEncoding] autorelease]];
+}
+
+- (id) deserializeDateFromString:(NSString*) aString {
+    double almostValue = [aString doubleValue];
+    return [NSDate dateWithTimeIntervalSince1970:almostValue];
+}
+
+- (id) deserializeNumberFromString:(NSString*) aString {
+    long long almostValue = [aString longLongValue];
+    return [NSNumber numberWithLongLong:almostValue];
+}
+
 - (void) fillObjectFromData:(NSData*) aData object:(id) aObject {
     //create dictionary from data
     NSDictionary* data = [aData objectFromJSONDataWithParseOptions:parseOptions];
@@ -48,6 +70,7 @@
 
 - (id) deserializeObjectFromData:(NSData*) aData type:(Class) aClass {
     id result;
+    
     //if not type is specified - let JSON figure it out
     if (!aClass) {
         result = [aData objectFromJSONDataWithParseOptions:parseOptions];
@@ -55,6 +78,20 @@
         if (!result) {
             return [[[NSString alloc] initWithData:aData encoding:NSUTF8StringEncoding] autorelease];
         }
+    }
+
+    //if primitive, handle as such
+    if ([aClass isEqual:[NSDate class]])
+    {
+        return [self deserializeDateFromData:aData];
+    }
+    else if ([aClass isEqual:[NSNumber class]])
+    {
+        return [self deserializeNumberFromData:aData];
+    }
+    else if ([aClass isEqual:[NSString class]])
+    {
+        return [self deserializeStringFromData:aData];
     }
 
     //create object of the specified type
@@ -67,8 +104,29 @@
 }
 
 - (id) deserializeObjectFromString:(NSString*) aData type:(Class) aClass {
+    id result;
+
+    //if not type is specified - let JSON figure it out
+    if (!aClass) {
+        result = [aData objectFromJSONStringWithParseOptions:parseOptions];
+
+        if (!result) {
+            return aData;
+        }
+    }
+
+    //if primitive, handle as such
+    if ([aClass isEqual:[NSDate class]])
+    {
+        return [self deserializeDateFromString:aData];
+    }
+    else if ([aClass isEqual:[NSNumber class]])
+    {
+        return [self deserializeNumberFromString:aData];
+    }
+
     //create object of the specified type
-    id result = [[[aClass alloc] init] autorelease];
+    result = [[[aClass alloc] init] autorelease];
 
     //fill object using deserialized JSON
     [self fillObjectFromString:aData object:result];
