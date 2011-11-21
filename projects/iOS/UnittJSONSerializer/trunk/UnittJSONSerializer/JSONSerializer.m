@@ -30,101 +30,112 @@
 
 
 #pragma mark Deserialize
-- (void) fillObjectFromData:(NSData*) aData object:(id) aObject
-{
+- (void) fillObjectFromData:(NSData*) aData object:(id) aObject {
     //create dictionary from data
     NSDictionary* data = [aData objectFromJSONDataWithParseOptions:parseOptions];
-    
+
     //fill object using dictionary
     [self.objectHandler fillObjectFromDictionary:data object:aObject];
 }
 
-- (void) fillObjectFromString:(NSString*) aData object:(id) aObject
-{
+- (void) fillObjectFromString:(NSString*) aData object:(id) aObject {
     //create dictionary from string
     NSDictionary* data = [aData objectFromJSONStringWithParseOptions:parseOptions];
-    
+
     //fill object using dictionary
     [self.objectHandler fillObjectFromDictionary:data object:aObject];
 }
 
-- (id) deserializeObjectFromData:(NSData*) aData type:(Class) aClass
-{
-    id result = nil;
+- (id) deserializeObjectFromData:(NSData*) aData type:(Class) aClass {
+    id result;
     //if not type is specified - let JSON figure it out
-    if (!aClass)
-    {
+    if (!aClass) {
         result = [aData objectFromJSONDataWithParseOptions:parseOptions];
-        
-        if (!result)
-        {
+
+        if (!result) {
             return [[[NSString alloc] initWithData:aData encoding:NSUTF8StringEncoding] autorelease];
         }
     }
-    
+
     //create object of the specified type
-    result = [[aClass alloc] init];
-    
+    result = [[[aClass alloc] init] autorelease];
+
     //fill object using deserialized JSON
     [self fillObjectFromData:aData object:result];
-    
+
     return result;
 }
 
-- (id) deserializeObjectFromString:(NSString*) aData type:(Class) aClass
-{
+- (id) deserializeObjectFromString:(NSString*) aData type:(Class) aClass {
     //create object of the specified type
-    id result = [[aClass alloc] init];
-    
+    id result = [[[aClass alloc] init] autorelease];
+
     //fill object using deserialized JSON
     [self fillObjectFromString:aData object:result];
-    
+
     return result;
 }
 
-- (NSArray*) deserializeArrayFromType:(NSArray*) aClasses dataArray:(NSArray*) aData
-{
+- (NSArray*) deserializeArrayFromType:(Class) aClass dataArray:(NSArray*) aData {
     //init
     NSMutableArray* results = [NSMutableArray array];
-    
+
+    //loop through array
+    int length = aData.count;
+    for (int i = 0; i < length; i++) {
+        id result = [aData objectAtIndex:i];
+        [results addObject:[self deserializeObjectFromData:result type:aClass]];
+    }
+
+    return results;
+}
+
+- (NSArray*) deserializeArrayFromTypes:(NSArray*) aClasses dataArray:(NSArray*) aData {
+    //init
+    NSMutableArray* results = [NSMutableArray array];
+
     //loop through array
     int length = aClasses.count;
-    if (aData && aData.count < length)
-    {
+    if (aData && aData.count < length) {
         length = aData.count;
     }
-    for (int i = 0; i < length; i++) 
-    {
+    for (int i = 0; i < length; i++) {
         id result = [aData objectAtIndex:i];
         Class type = [aClasses objectAtIndex:i];
         [results addObject:[self deserializeObjectFromData:result type:type]];
     }
-    
+
     return results;
 }
 
-- (NSArray*) deserializeArrayFromType:(NSArray*) aClasses data:(NSData*) aData
-{
+- (NSArray*) deserializeArrayFromType:(Class) aClass data:(NSData*) aData {
     //create array from data
-    return [self deserializeArrayFromType:aClasses dataArray:[aData objectFromJSONDataWithParseOptions:parseOptions]];
+    return [self deserializeArrayFromType:aClass dataArray:[aData objectFromJSONDataWithParseOptions:parseOptions]];
 }
 
-- (NSArray*) deserializeArrayFromType:(NSArray*) aClasses string:(NSString*) aData
-{
+- (NSArray*) deserializeArrayFromTypes:(NSArray*) aClasses data:(NSData*) aData {
+    //create array from data
+    return [self deserializeArrayFromTypes:aClasses dataArray:[aData objectFromJSONDataWithParseOptions:parseOptions]];
+}
+
+- (NSArray*) deserializeArrayFromType:(Class) aClass string:(NSString*) aData {
     //create array from string
-    return [self deserializeArrayFromType:aClasses dataArray:[aData objectFromJSONStringWithParseOptions:parseOptions]];
+    return [self deserializeArrayFromType:aClass dataArray:[aData objectFromJSONStringWithParseOptions:parseOptions]];
+}
+
+- (NSArray*) deserializeArrayFromTypes:(NSArray*) aClasses string:(NSString*) aData {
+    //create array from string
+    return [self deserializeArrayFromTypes:aClasses dataArray:[aData objectFromJSONStringWithParseOptions:parseOptions]];
 }
 
 
 #pragma mark Serialize
-- (NSData*) serializeToDataFromObject:(id) aObject
-{
+- (NSData*) serializeToDataFromObject:(id) aObject {
     //convert the object to JSON data
     return [[self.objectHandler objectToDictionary:aObject] JSONDataWithOptions:serializeOptions error:nil];
 }
 
-- (NSString*) serializeToStringFromObject:(id) aObject
-{
+- (NSString*) serializeToStringFromObject:(id) aObject {
     //convert the object to a JSON string
     NSError* error;
     NSString* value = [[self.objectHandler objectToDictionary:aObject] JSONStringWithOptions:serializeOptions error:&error];
@@ -132,67 +143,55 @@
     return value;
 }
 
-- (NSData*) serializeToDataFromArray:(NSArray*) aObjects
-{
+- (NSData*) serializeToDataFromArray:(NSArray*) aObjects {
     //init
     NSMutableArray* arrayOfObjectDictionaries = [NSMutableArray array];
-    
+
     //convert each item to dictionary
-    for (id item in aObjects) 
-    {
-        if ([item isKindOfClass:[NSString class]])
-        {
+    for (id item in aObjects) {
+        if ([item isKindOfClass:[NSString class]]) {
             [arrayOfObjectDictionaries addObject:item];
         }
-        else
-        {
+        else {
             [arrayOfObjectDictionaries addObject:[self.objectHandler objectToDictionary:item]];
         }
     }
-    
+
     //convert array of dictionaries to JSON data
     return [arrayOfObjectDictionaries JSONDataWithOptions:serializeOptions error:nil];
 }
 
-- (NSString*) serializeToStringFromArray:(NSArray*) aObjects
-{
+- (NSString*) serializeToStringFromArray:(NSArray*) aObjects {
     //init
     NSMutableArray* arrayOfObjectDictionaries = [NSMutableArray array];
-    
+
     //convert each item to dictionary
-    for (id item in aObjects) 
-    {
-        if ([item isKindOfClass:[NSString class]])
-        {
+    for (id item in aObjects) {
+        if ([item isKindOfClass:[NSString class]]) {
             [arrayOfObjectDictionaries addObject:item];
         }
-        else
-        {
+        else {
             [arrayOfObjectDictionaries addObject:[self.objectHandler objectToDictionary:item]];
         }
     }
-    
+
     //convert array of dictionaries to JSON data
     return [arrayOfObjectDictionaries JSONStringWithOptions:serializeOptions error:nil];
 }
 
 
 #pragma mark Lifecycle
-+ (id) serializerWithParseOptions: (JSParseOptionFlags) aParseOptions serializeOptions: (JSSerializeOptionFlags) aSerializeOptions
-{
++ (id) serializerWithParseOptions:(JSParseOptionFlags) aParseOptions serializeOptions:(JSSerializeOptionFlags) aSerializeOptions {
     return [[[JSONSerializer alloc] initWithParseOptions:aParseOptions serializeOptions:aSerializeOptions] autorelease];
 }
 
-+ (id) serializerWithParseOptions: (JSParseOptionFlags) aParseOptions serializeOptions: (JSSerializeOptionFlags) aSerializeOptions objectHandler:(ObjectHandler*) aObjectHandler
-{
++ (id) serializerWithParseOptions:(JSParseOptionFlags) aParseOptions serializeOptions:(JSSerializeOptionFlags) aSerializeOptions objectHandler:(ObjectHandler*) aObjectHandler {
     return [[[JSONSerializer alloc] initWithParseOptions:aParseOptions serializeOptions:aSerializeOptions objectHandler:aObjectHandler] autorelease];
 }
 
-- (id) initWithParseOptions:(JSParseOptionFlags) aParseOptions serializeOptions:(JSSerializeOptionFlags) aSerializeOptions objectHandler:(ObjectHandler*) aObjectHandler
-{
+- (id) initWithParseOptions:(JSParseOptionFlags) aParseOptions serializeOptions:(JSSerializeOptionFlags) aSerializeOptions objectHandler:(ObjectHandler*) aObjectHandler {
     self = [super init];
-    if (self) 
-    {
+    if (self) {
         parseOptions = aParseOptions;
         serializeOptions = aSerializeOptions;
         objectHandler = [aObjectHandler retain];
@@ -200,11 +199,9 @@
     return self;
 }
 
-- (id) initWithParseOptions: (JSParseOptionFlags) aParseOptions serializeOptions: (JSSerializeOptionFlags) aSerializeOptions
-{
+- (id) initWithParseOptions:(JSParseOptionFlags) aParseOptions serializeOptions:(JSSerializeOptionFlags) aSerializeOptions {
     self = [super init];
-    if (self) 
-    {
+    if (self) {
         parseOptions = aParseOptions;
         serializeOptions = aSerializeOptions;
         objectHandler = [[ObjectHandler alloc] init];
@@ -212,11 +209,9 @@
     return self;
 }
 
-- (id) init
-{
+- (id) init {
     self = [super init];
-    if (self) 
-    {
+    if (self) {
         parseOptions = JSParseOptionsStrict;
         serializeOptions = JSSerializeOptionNone;
         objectHandler = [[ObjectHandler alloc] init];
@@ -224,10 +219,9 @@
     return self;
 }
 
-- (void) dealloc 
-{
+- (void) dealloc {
     [objectHandler release];
-    
+
     [super dealloc];
 }
 

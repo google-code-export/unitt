@@ -31,15 +31,18 @@
 @synthesize customClass;
 
 #pragma mark Lifecycle
-- (id) init
-{
+- (id) init {
     self = [super init];
-    if (self)
-    {
+    if (self) {
         self.isComplex = false;
         self.dataType = JSDataTypeNSString;
     }
     return self;
+}
+
+- (void) dealloc {
+    [name release];
+    [super dealloc];
 }
 
 @end

@@ -27,8 +27,7 @@
 #import "JSONPropertyInfo.h"
 
 
-@interface ObjectHandler : NSObject
-{
+@interface ObjectHandler : NSObject {
 @private
     NSMutableDictionary* classDefs;
     FieldHandler* fieldHandler;
@@ -38,17 +37,26 @@
 @property (retain) FieldHandler* fieldHandler;
 
 - (JSONPropertyInfo*) getPropertyInfoForObject:(id) aObject name:(NSString*) aName;
+
 - (void) fillPropertiesForClass:(Class) aClass;
+
 - (void) fillObjectFromDictionary:(NSDictionary*) aData object:(id) aObject;
+
 - (id) performSelectorSafelyForObject:(id) aObject selector:(SEL) aSelector argument:(id) argument type:(JSDataType) aType;
+
 - (NSDictionary*) objectToDictionary:(id) aObject;
+
 - (NSArray*) toArrayFromArray:(NSArray*) aArray;
+
 - (NSDictionary*) toDictionaryFromDictionary:(NSDictionary*) aDictionary;
 
 
 + (id) objectHandlerWithFieldHandler:(FieldHandler*) aFieldHandler;
+
 + (id) objectHandler;
+
 - (id) initWithWithFieldHandler:(FieldHandler*) aFieldHandler;
+
 - (id) init;
 
 @end
