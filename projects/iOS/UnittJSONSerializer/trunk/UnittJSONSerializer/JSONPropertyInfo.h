@@ -21,8 +21,7 @@
 #import <Foundation/Foundation.h>
 
 
-enum 
-{
+enum {
     JSDataTypeNSString = 0,
     JSDataTypeNSDate = 1,
     JSDataTypeNSNumber = 2,
@@ -37,8 +36,7 @@ enum
 typedef NSUInteger JSDataType;
 
 
-@interface JSONPropertyInfo : NSObject 
-{
+@interface JSONPropertyInfo : NSObject {
 @private
     NSString* name;
     SEL setter;

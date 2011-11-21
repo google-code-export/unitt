@@ -26,30 +26,28 @@
 #import "ObjectHandler.h"
 #import "FieldHandler.h"
 
-enum 
-{
+enum {
     JSParseOptionsStrict = 0, //default
     JSParseOptionComments = (1 << 0), //allow comments (//, /*...*/)
     JSParseOptionUnicodeNewlines = (1 << 1), //allow unicode recommended newlines,
-                                             //(?:\r\n|[\n\v\f\r\x85\p{Zl}\p{Zp}])
+    //(?:\r\n|[\n\v\f\r\x85\p{Zl}\p{Zp}])
     JSParseOptionLooseUnicode = (1 << 2), //allows JSON with malformed Unicode to be
-                                          //parsed without reporting an error. Any 
-                                          //malformed Unicode is replaced with \uFFFD, 
-                                          //or "REPLACEMENT CHARACTER"
+    //parsed without reporting an error. Any
+    //malformed Unicode is replaced with \uFFFD,
+    //or "REPLACEMENT CHARACTER"
     JSParseOptionPermitTextAfterValidJSON = (1 << 3) //don't throw an error if there 
-                                                     //is text after the JSON
+    //is text after the JSON
 };
 typedef NSUInteger JSParseOptionFlags;
 
-enum 
-{
+enum {
     JSSerializeOptionNone = 0, //default
     JSSerializeOptionPretty = (1 << 0), //more useful for debugging
-    JSSerializeOptionEscapeUnicode  = (1 << 1) //encode Unicode code points that can
-                                               //be encoded as a single UTF16 code unit
-                                               //as \uXXXX, and will encode Unicode code
-                                               //points that require UTF16 surrogate 
-                                               //pairs as \uhigh\ulow
+    JSSerializeOptionEscapeUnicode = (1 << 1) //encode Unicode code points that can
+    //be encoded as a single UTF16 code unit
+    //as \uXXXX, and will encode Unicode code
+    //points that require UTF16 surrogate
+    //pairs as \uhigh\ulow
 };
 typedef NSUInteger JSSerializeOptionFlags;
 
@@ -61,8 +59,7 @@ typedef NSUInteger JSSerializeOptionFlags;
  * JSONSerializer uses JSONKit to convert to/from JSON. For more information, 
  * see https://github.com/johnezang/JSONKit
  */
-@interface JSONSerializer : NSObject 
-{
+@interface JSONSerializer : NSObject {
 @private
     JKParseOptionFlags parseOptions;
     JKSerializeOptionFlags serializeOptions;
@@ -119,7 +116,16 @@ typedef NSUInteger JSSerializeOptionFlags;
  * in the JSON data. This is a deep deserialization process that does not handle
  * circular references.
  */
-- (NSArray*) deserializeArrayFromType:(NSArray*) aClass data:(NSData*) aData;
+- (NSArray*) deserializeArrayFromTypes:(NSArray*) aClass data:(NSData*) aData;
+
+/**
+ * Takes a JSON data stream and deserializes it into an array of objects of the
+ * specified type. Only Objective-C properties of the class will be populated with
+ * the appropriate data whose property names are the unicode equivalent of the keys
+ * in the JSON data. This is a deep deserialization process that does not handle
+ * circular references.
+ */
+- (NSArray*) deserializeArrayFromType:(Class) aClass data:(NSData*) aData;
 
 /**
  * Takes a JSON unicode string and deserializes it into an array of objects of the 
@@ -128,7 +134,16 @@ typedef NSUInteger JSSerializeOptionFlags;
  * in the JSON data. This is a deep deserialization process that does not handle
  * circular references.
  */
-- (NSArray*) deserializeArrayFromType:(NSArray*) aClass string:(NSString*) aData;
+- (NSArray*) deserializeArrayFromTypes:(NSArray*) aClass string:(NSString*) aData;
+
+/**
+ * Takes a JSON unicode string and deserializes it into an array of objects of the
+ * specified type. Only Objective-C properties of the class will be populated with
+ * the appropriate data whose property names are the unicode equivalent of the keys
+ * in the JSON data. This is a deep deserialization process that does not handle
+ * circular references.
+ */
+- (NSArray*) deserializeArrayFromType:(Class) aClass string:(NSString*) aData;
 
 /**
  * Serializes the specified object into a JSON data stream.
@@ -152,8 +167,11 @@ typedef NSUInteger JSSerializeOptionFlags;
 
 
 + (id) serializerWithParseOptions:(JSParseOptionFlags) aParseOptions serializeOptions:(JSSerializeOptionFlags) aSerializeOptions;
+
 + (id) serializerWithParseOptions:(JSParseOptionFlags) aParseOptions serializeOptions:(JSSerializeOptionFlags) aSerializeOptions objectHandler:(ObjectHandler*) aObjectHandler;
+
 - (id) initWithParseOptions:(JSParseOptionFlags) aParseOptions serializeOptions:(JSSerializeOptionFlags) aSerializeOptions;
+
 - (id) initWithParseOptions:(JSParseOptionFlags) aParseOptions serializeOptions:(JSSerializeOptionFlags) aSerializeOptions objectHandler:(ObjectHandler*) aObjectHandler;
 
 @end

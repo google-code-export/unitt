@@ -22,17 +22,14 @@
 
 @implementation FieldHandler
 
-- (id) getFieldValueForInvocation:(NSInvocation*) aInvocation datatype:(JSDataType) aDataType
-{    
-    switch (aDataType) 
-    {
+- (id) getFieldValueForInvocation:(NSInvocation*) aInvocation datatype:(JSDataType) aDataType {
+    switch (aDataType) {
         case JSDataTypeInt:
         {
             int value;
             [aInvocation invoke];
             [aInvocation getReturnValue:&value];
             return [NSNumber numberWithInt:value];
-            break;
         }
         case JSDataTypeLong:
         {
@@ -40,7 +37,6 @@
             [aInvocation invoke];
             [aInvocation getReturnValue:&value];
             return [NSNumber numberWithLongLong:value];
-            break;
         }
         case JSDataTypeDouble:
         {
@@ -48,7 +44,6 @@
             [aInvocation invoke];
             [aInvocation getReturnValue:&value];
             return [NSNumber numberWithDouble:value];
-            break;
         }
         case JSDataTypeBoolean:
         {
@@ -56,30 +51,23 @@
             [aInvocation invoke];
             [aInvocation getReturnValue:&value];
             return value ? @"true" : @"false";
-            break;
         }
         case JSDataTypeNSNumber:
         {
-            NSNumber* value = [[NSNumber alloc] init];
+            NSNumber* value = [[[NSNumber alloc] init] autorelease];
             [aInvocation invoke];
             [aInvocation getReturnValue:&value];
             return value;
-            break;
         }
         case JSDataTypeNSDate:
         {
-            NSDate* value = [[NSDate alloc] init];
+            NSDate* value = [[[NSDate alloc] init] autorelease];
             [aInvocation invoke];
             [aInvocation getReturnValue:&value];
-            if (value)
-            {
-                return [NSNumber numberWithLongLong:(long long)[value timeIntervalSince1970]];
+            if (value) {
+                return [NSNumber numberWithLongLong:(long long) [value timeIntervalSince1970]];
             }
-            else
-            {
-                return nil;
-            }
-            break;
+            return nil;
         }
         default:
         {
@@ -87,124 +75,127 @@
             [aInvocation invoke];
             [aInvocation getReturnValue:&value];
             return value;
-            break;
         }
     }
-    return nil;
 }
 
-- (void) setFieldValueForInvocation:(NSInvocation*) aInvocation datatype:(JSDataType) aDataType value:(id) aValue
-{
-    switch (aDataType) 
-    {
+- (void) setFieldValueForInvocation:(NSInvocation*) aInvocation datatype:(JSDataType) aDataType value:(id) aValue {
+    switch (aDataType) {
         case JSDataTypeInt:
-            if ([aValue isKindOfClass:[NSString class]])
-            {
+            if ([aValue isKindOfClass:[NSString class]]) {
                 int value = [((NSString*) aValue) intValue];
                 [aInvocation setArgument:&value atIndex:2];
                 [aInvocation invoke];
             }
-            else if ([aValue isKindOfClass:[NSNumber class]])
-            {
+            else if ([aValue isKindOfClass:[NSNumber class]]) {
                 int value = [((NSNumber*) aValue) intValue];
                 [aInvocation setArgument:&value atIndex:2];
                 [aInvocation invoke];
             }
-            else
-            {
+            else if (aValue == nil || [aValue isKindOfClass:[NSNull class]]) {
+                int value = 0;
+                [aInvocation setArgument:&value atIndex:2];
+                [aInvocation invoke];
+            }
+            else {
                 NSLog(@"No custom handling logic to convert from %@ to int", NSStringFromClass([aValue class]));
             }
             break;
         case JSDataTypeLong:
-            if ([aValue isKindOfClass:[NSString class]])
-            {
+            if ([aValue isKindOfClass:[NSString class]]) {
                 long long value = [((NSString*) aValue) longLongValue];
                 [aInvocation setArgument:&value atIndex:2];
                 [aInvocation invoke];
             }
-            else if ([aValue isKindOfClass:[NSNumber class]])
-            {
+            else if ([aValue isKindOfClass:[NSNumber class]]) {
                 long long value = [((NSNumber*) aValue) longLongValue];
                 [aInvocation setArgument:&value atIndex:2];
                 [aInvocation invoke];
             }
-            else
-            {
+            else if (aValue == nil || [aValue isKindOfClass:[NSNull class]]) {
+                long long value = 0;
+                [aInvocation setArgument:&value atIndex:2];
+                [aInvocation invoke];
+            }
+            else {
                 NSLog(@"No custom handling logic to convert from %@ to long", NSStringFromClass([aValue class]));
             }
             break;
         case JSDataTypeDouble:
-            if ([aValue isKindOfClass:[NSString class]])
-            {
+            if ([aValue isKindOfClass:[NSString class]]) {
                 double value = [((NSString*) aValue) doubleValue];
                 NSLog(@"parsed double value as: %f", value);
                 [aInvocation setArgument:&value atIndex:2];
                 [aInvocation invoke];
             }
-            else if ([aValue isKindOfClass:[NSNumber class]])
-            {
+            else if ([aValue isKindOfClass:[NSNumber class]]) {
                 double value = [((NSNumber*) aValue) doubleValue];
                 [aInvocation setArgument:&value atIndex:2];
                 [aInvocation invoke];
             }
-            else
-            {
+            else if (aValue == nil || [aValue isKindOfClass:[NSNull class]]) {
+                double value = 0;
+                [aInvocation setArgument:&value atIndex:2];
+                [aInvocation invoke];
+            }
+            else {
                 NSLog(@"No custom handling logic to convert from %@ to double", NSStringFromClass([aValue class]));
             }
             break;
         case JSDataTypeBoolean:
-            if ([aValue isKindOfClass:[NSString class]])
-            {
+            if ([aValue isKindOfClass:[NSString class]]) {
                 BOOL value = [((NSString*) aValue) boolValue];
                 [aInvocation setArgument:&value atIndex:2];
                 [aInvocation invoke];
             }
-            else
-            {
+            else if (aValue == nil || [aValue isKindOfClass:[NSNull class]]) {
+                BOOL value = NO;
+                [aInvocation setArgument:&value atIndex:2];
+                [aInvocation invoke];
+            }
+            else {
                 NSLog(@"No custom handling logic to convert from %@ to boolean", NSStringFromClass([aValue class]));
             }
             break;
         case JSDataTypeNSNumber:
-            if ([aValue isKindOfClass:[NSString class]])
-            {
+            if ([aValue isKindOfClass:[NSString class]]) {
                 long long almostValue = [((NSString*) aValue) longLongValue];
                 NSNumber* value = [NSNumber numberWithLongLong:almostValue];
                 [aInvocation setArgument:&value atIndex:2];
                 [aInvocation invoke];
             }
-            else if ([aValue isKindOfClass:[NSNumber class]])
-            {
+            else if ([aValue isKindOfClass:[NSNumber class]]) {
                 [aInvocation setArgument:&aValue atIndex:2];
                 [aInvocation invoke];
             }
-            else
-            {
-                NSLog(@"No custom handling logic to convert from %@ to NSNumber", NSStringFromClass([aValue class]));
-            }
-            break;
-        case JSDataTypeNSDate:
-            if ([aValue isKindOfClass:[NSString class]])
-            {
-                double almostValue = [((NSString*) aValue) doubleValue];                            
-                NSDate* value = [NSDate dateWithTimeIntervalSince1970:almostValue];
-                [aInvocation setArgument:&value atIndex:2];
-                [aInvocation invoke];
-            }
-            else if ([aValue isKindOfClass:[NSNumber class]])
-            {
-                NSNumber* almostValue = (NSNumber*) aValue;                            
-                NSDate* value = [NSDate dateWithTimeIntervalSince1970:[almostValue doubleValue]];
-                [aInvocation setArgument:&value atIndex:2];
-                [aInvocation invoke];
-            }
-            else if (aValue == nil || [aValue isKindOfClass:[NSNull class]])
-            {                          
+            else if (aValue == nil || [aValue isKindOfClass:[NSNull class]]) {
                 NSDate* value = nil;
                 [aInvocation setArgument:&value atIndex:2];
                 [aInvocation invoke];
             }
-            else
-            {
+            else {
+                NSLog(@"No custom handling logic to convert from %@ to NSNumber", NSStringFromClass([aValue class]));
+            }
+            break;
+        case JSDataTypeNSDate:
+            if ([aValue isKindOfClass:[NSString class]]) {
+                double almostValue = [((NSString*) aValue) doubleValue];
+                NSDate* value = [NSDate dateWithTimeIntervalSince1970:almostValue];
+                [aInvocation setArgument:&value atIndex:2];
+                [aInvocation invoke];
+            }
+            else if ([aValue isKindOfClass:[NSNumber class]]) {
+                NSNumber* almostValue = (NSNumber*) aValue;
+                NSDate* value = [NSDate dateWithTimeIntervalSince1970:[almostValue doubleValue]];
+                [aInvocation setArgument:&value atIndex:2];
+                [aInvocation invoke];
+            }
+            else if (aValue == nil || [aValue isKindOfClass:[NSNull class]]) {
+                NSDate* value = nil;
+                [aInvocation setArgument:&value atIndex:2];
+                [aInvocation invoke];
+            }
+            else {
                 NSLog(@"No custom handling logic to convert from %@ to NSDate", NSStringFromClass([aValue class]));
             }
             break;

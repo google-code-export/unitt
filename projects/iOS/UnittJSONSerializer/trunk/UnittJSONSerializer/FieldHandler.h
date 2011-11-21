@@ -24,12 +24,12 @@
 #import "JSONPropertyInfo.h"
 
 
-@interface FieldHandler : NSObject
-{
-    
+@interface FieldHandler : NSObject {
+
 }
 
 - (id) getFieldValueForInvocation:(NSInvocation*) aInvocation datatype:(JSDataType) aDataType;
+
 - (void) setFieldValueForInvocation:(NSInvocation*) aInvocation datatype:(JSDataType) aDataType value:(id) aValue;
 
 @end
