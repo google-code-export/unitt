@@ -33,36 +33,29 @@ static int currentRequestId;
 @synthesize timeToLiveInMillis;
 @synthesize sent;
 @synthesize serializerType;
-@synthesize resultType;
 
 
-- (NSString*) uid
-{
+- (NSString*) uid {
     return [NSString stringWithFormat:@"%@::%@", self.sessionId, self.requestId];
 }
 
 
-+ (NSString*) nextRequestId
-{
++ (NSString*) nextRequestId {
     return [NSString stringWithFormat:@"%i", currentRequestId++];
 }
 
 
-+ (id) routing
-{
++ (id) routing {
     return [[[[self class] alloc] init] autorelease];
 }
 
-+ (id) routingWithService:(NSString*) aServiceName method:(NSString*) aMethodSignature
-{
++ (id) routingWithService:(NSString*) aServiceName method:(NSString*) aMethodSignature {
     return [[[[self class] alloc] initWithService:aServiceName method:aMethodSignature] autorelease];
 }
 
-- (id) initWithService:(NSString*) aServiceName method:(NSString*) aMethodSignature
-{
+- (id) initWithService:(NSString*) aServiceName method:(NSString*) aMethodSignature {
     self = [super init];
-    if (self)
-    {
+    if (self) {
         self.serviceName = aServiceName;
         self.methodSignature = aMethodSignature;
         self.requestId = [[self class] nextRequestId];
@@ -70,15 +63,14 @@ static int currentRequestId;
     return self;
 }
 
-- (void)dealloc 
-{
+- (void) dealloc {
     [sessionId release];
     [requestId release];
     [serviceName release];
     [methodSignature release];
     [sent release];
-    
-     [super dealloc];
+
+    [super dealloc];
 }
 
 @end

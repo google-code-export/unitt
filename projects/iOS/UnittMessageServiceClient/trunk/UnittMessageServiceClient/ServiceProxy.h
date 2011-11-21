@@ -22,8 +22,7 @@
 #import "MessageServiceClient.h"
 #import "ServiceCallback.h"
 
-@interface ServiceProxy : NSObject
-{
+@interface ServiceProxy : NSObject {
 @private
     MessageServiceClient* client;
     NSString* serviceName;
@@ -33,7 +32,9 @@
 @property (copy) NSString* serviceName;
 
 + (id) proxy;
+
 + (id) proxyWithClient:(MessageServiceClient*) aClient;
+
 - (id) initWithClient:(MessageServiceClient*) aClient;
 
 @end

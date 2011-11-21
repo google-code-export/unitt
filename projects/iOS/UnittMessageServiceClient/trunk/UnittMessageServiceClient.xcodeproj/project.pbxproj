@@ -50,6 +50,10 @@
 		BDC439AD141BE522002633CD /* MessageSerializerJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = BDC439AA141BE522002633CD /* MessageSerializerJSON.m */; };
 		BDC439AF141BE640002633CD /* libUnittJSONSerializer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BDC439AE141BE640002633CD /* libUnittJSONSerializer.a */; };
 		BDC439B0141BE640002633CD /* libUnittJSONSerializer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BDC439AE141BE640002633CD /* libUnittJSONSerializer.a */; };
+		BDC439B0141BE640002633CF /* PendingRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = BDC439B0141BE640002633CE /* PendingRequest.h */; };
+		BDC439B0141BE640002633D1 /* PendingRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = BDC439B0141BE640002633D0 /* PendingRequest.m */; };
+		BDC439B0141BE640002633D3 /* ReferenceType.h in Headers */ = {isa = PBXBuildFile; fileRef = BDC439B0141BE640002633D2 /* ReferenceType.h */; };
+		BDC439B0141BE640002633D5 /* ReferenceType.m in Sources */ = {isa = PBXBuildFile; fileRef = BDC439B0141BE640002633D4 /* ReferenceType.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -158,6 +162,10 @@
 		BDC439A9141BE522002633CD /* MessageSerializerJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageSerializerJSON.h; sourceTree = "<group>"; };
 		BDC439AA141BE522002633CD /* MessageSerializerJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageSerializerJSON.m; sourceTree = "<group>"; };
 		BDC439AE141BE640002633CD /* libUnittJSONSerializer.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libUnittJSONSerializer.a; path = "../../../Library/Developer/UnitTSoftware/UnittJSONSerializer/bin/Debug-iphonesimulator/libUnittJSONSerializer.a"; sourceTree = "<group>"; };
+		BDC439B0141BE640002633CE /* PendingRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PendingRequest.h; sourceTree = "<group>"; };
+		BDC439B0141BE640002633D0 /* PendingRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PendingRequest.m; sourceTree = "<group>"; };
+		BDC439B0141BE640002633D2 /* ReferenceType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReferenceType.h; sourceTree = "<group>"; };
+		BDC439B0141BE640002633D4 /* ReferenceType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReferenceType.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -249,6 +257,10 @@
 		BDAEA34013A1A54E00E8EB9C /* UnittMessageServiceClient */ = {
 			isa = PBXGroup;
 			children = (
+				BDC439B0141BE640002633D4 /* ReferenceType.m */,
+				BDC439B0141BE640002633D2 /* ReferenceType.h */,
+				BDC439B0141BE640002633D0 /* PendingRequest.m */,
+				BDC439B0141BE640002633CE /* PendingRequest.h */,
 				BDAEA34113A1A54E00E8EB9C /* Supporting Files */,
 				BDC439A7141BE4F1002633CD /* Serializers */,
 				BD9AE6FF13A3DDD500D4122D /* MessageServiceClient.h */,
@@ -320,6 +332,8 @@
 				BDC439AB141BE522002633CD /* MessageSerializerJSON.h in Headers */,
 				BDA7FF8B1437C1C200473897 /* SampleServiceProxy.h in Headers */,
 				BDA7FF901437C90200473897 /* ServiceProxy.h in Headers */,
+				BDC439B0141BE640002633CF /* PendingRequest.h in Headers */,
+				BDC439B0141BE640002633D3 /* ReferenceType.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -469,6 +483,8 @@
 				BDC439AC141BE522002633CD /* MessageSerializerJSON.m in Sources */,
 				BDA7FF8C1437C1C200473897 /* SampleServiceProxy.m in Sources */,
 				BDA7FF911437C90200473897 /* ServiceProxy.m in Sources */,
+				BDC439B0141BE640002633D1 /* PendingRequest.m in Sources */,
+				BDC439B0141BE640002633D5 /* ReferenceType.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
