@@ -31,7 +31,7 @@
 
 @property (nonatomic, retain) ReferenceType* returnType;
 @property (nonatomic, retain) ServiceMessage* message;
-@property (retain) id <ServiceCallback> callback;
+@property (nonatomic, retain) id <ServiceCallback> callback;
 @property (readonly) NSString* uid;
 
 + (id) requestWithReturnType:(ReferenceType*) aReturnType message:(ServiceMessage*) aMessage callback:(id) aCallback;

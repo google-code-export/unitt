@@ -61,9 +61,10 @@ NSString* const UnittMessageServiceException = @"MessageServiceClientException";
             header.sessionId = self.sessionId;
             header.serializerType = SerializerTypeJson;
             ServiceMessage* message = [ServiceMessage messageWithHeader:header contents:aParameters];
+            PendingRequest* request = [PendingRequest requestWithReturnType:aReturnType message:message callback:aCallback];
 
             //add to pending requests (keyed by request id)
-            [pendingRequests setObject:[PendingRequest requestWithReturnType:aReturnType message:message callback:aCallback] forKey:header.uid];
+            [pendingRequests setObject:request forKey:header.uid];
 
             //send message
             if (self.isOpen) {
@@ -97,7 +98,8 @@ NSString* const UnittMessageServiceException = @"MessageServiceClientException";
             //deserialize back into message
             ServiceMessage* messageResponse = [self.serializer deserializeMessage:aMessageData routing:header returnType:request.returnType];
 
-            //remove from pending
+            //retain/autorelease & remove from pending
+            [[request retain] autorelease];
             [pendingRequests removeObjectForKey:header.uid];
 
             //call appropriate method on the callback
@@ -105,6 +107,9 @@ NSString* const UnittMessageServiceException = @"MessageServiceClientException";
             if (callback) {
                 [self handleCallback:callback result:messageResponse.contents];
             }
+        }
+        else {
+            NSLog(@"Did not find pending request.");
         }
     }
 }
