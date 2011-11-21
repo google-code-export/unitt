@@ -22,41 +22,38 @@
 #import "MessageRoutingInfo.h"
 #import "ServiceMessage.h"
 #import "ServiceCallback.h"
+#import "ReferenceType.h"
 
 @class ServiceMessage;
 @class MessageRoutingInfo;
-
-enum 
-{
-    MessageResultTypeError = 0, //result is an error condition.
-    MessageResultTypeCompleteSuccess = 1 //result is a complete object, do not wait for more data.
-};
-typedef NSUInteger MessageResultType;
 
 
 @protocol MessageSerializer <NSObject>
 
 - (NSData*) serializeMessage:(ServiceMessage*) aMessage;
-- (ServiceMessage*) deserializeMessage:(NSData*) aData;
+
+- (ServiceMessage*) deserializeMessage:(NSData*) aData returnType:(ReferenceType*) aReturnType;
+
+- (ServiceMessage*) deserializeMessage:(NSData*) aData routing:(MessageRoutingInfo*) aRoutingInfo returnType:(ReferenceType*) aReturnType;
+
+- (MessageRoutingInfo*) deserializeMessageHeader:(NSData*) aData;
 
 @end
 
 
-@interface ServiceMessage : NSObject 
-{
+@interface ServiceMessage : NSObject {
 @private
     MessageRoutingInfo* header;
     id contents;
-    id<ServiceCallback> callback;
 }
 
 @property (retain) MessageRoutingInfo* header;
 @property (retain) id contents;
-@property (retain) id<ServiceCallback> callback;
-@property (readonly) NSString* uid;
 
 + (id) message;
-+ (id) messageWithHeader:(MessageRoutingInfo*) aHeader contents:(id) aContents callback:(id) aCallback;
-- (id) initWithHeader:(MessageRoutingInfo*) aHeader contents:(id) aContents callback:(id) aCallback;
+
++ (id) messageWithHeader:(MessageRoutingInfo*) aHeader contents:(id) aContents;
+
+- (id) initWithHeader:(MessageRoutingInfo*) aHeader contents:(id) aContents;
 
 @end

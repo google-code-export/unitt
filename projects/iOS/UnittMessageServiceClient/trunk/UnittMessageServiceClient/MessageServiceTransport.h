@@ -25,8 +25,7 @@
 @class MessageServiceClient;
 
 
-@interface MessageServiceTransport : NSObject <WebSocketDelegate>
-{
+@interface MessageServiceTransport : NSObject <WebSocketDelegate> {
 @private
     WebSocket* websocket;
     WebSocketConnectConfig* config;
@@ -36,7 +35,7 @@
 /**
  * Client that manages and handles all requests and response callbacks.
  */
-@property(retain) MessageServiceClient* client;
+@property (retain) MessageServiceClient* client;
 
 /**
  * Connect configuration information for the web socket
@@ -45,6 +44,7 @@
 
 
 - (void) open;
+
 - (void) close;
 
 
@@ -52,6 +52,7 @@
 
 
 + (id) transportWithConfig:(WebSocketConnectConfig*) aConfig;
+
 - (id) initWithConfig:(WebSocketConnectConfig*) aConfig;
 
 /**

@@ -25,25 +25,27 @@
 @synthesize client;
 @synthesize serviceName;
 
-+ (id) proxy
-{
++ (id) proxy {
     return [[[[self class] alloc] init] autorelease];
 }
 
-+ (id) proxyWithClient:(MessageServiceClient*) aClient
-{
-    
++ (id) proxyWithClient:(MessageServiceClient*) aClient {
+
     return [[[[self class] alloc] initWithClient:aClient] autorelease];
 }
 
-- (id) initWithClient:(MessageServiceClient*) aClient
-{
+- (id) initWithClient:(MessageServiceClient*) aClient {
     self = [super init];
-    if (self) 
-    {
+    if (self) {
         self.client = aClient;
     }
     return self;
+}
+
+- (void) dealloc {
+    [client release];
+    [serviceName release];
+    [super dealloc];
 }
 
 @end

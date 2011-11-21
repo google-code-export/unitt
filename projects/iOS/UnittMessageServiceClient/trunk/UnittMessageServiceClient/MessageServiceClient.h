@@ -27,31 +27,34 @@
 
 @class MessageServiceTransport;
 
-@interface MessageServiceClient : NSObject
-{
+@interface MessageServiceClient : NSObject {
     int requestCounter;
     NSString* sessionId;
     NSUInteger timeToLiveInMillis;
     MutableQueue* queuedRequests;
     NSMutableDictionary* pendingRequests;
     MessageServiceTransport* transport;
-    id<MessageSerializer> serializer;
+    id <MessageSerializer> serializer;
     BOOL isOpen;
 }
 
-@property (nonatomic,copy) NSString* sessionId;
+@property (nonatomic, copy) NSString* sessionId;
 @property (assign) NSUInteger timeToLiveInMillis;
 @property (retain) MessageServiceTransport* transport;
 @property (readonly) BOOL hasPendingRequests;
-@property (retain) id<MessageSerializer> serializer;
-@property (nonatomic,readonly) BOOL isOpen;
+@property (retain) id <MessageSerializer> serializer;
+@property (nonatomic, readonly) BOOL isOpen;
 
-- (void) requestForService:(NSString*) aServiceName methodSignature:(NSString*) aMethodSignature parameters:(NSArray*) aParameters callback:(id<ServiceCallback>) aCallback;
+- (void) requestForService:(NSString*) aServiceName methodSignature:(NSString*) aMethodSignature parameters:(NSArray*) aParameters returnType:(ReferenceType*) aReturnType callback:(id <ServiceCallback>) aCallback;
+
 - (void) responseFromService:(NSData*) aMessageData;
-- (void) transportDidClose: (NSError*) aError;
-- (void) transportDidOpen;
-- (void) handleCallback:(id<ServiceCallback>) aCallback result:(id) aResult;
 
-extern NSString *const UnittMessageServiceException;
+- (void) transportDidClose:(NSError*) aError;
+
+- (void) transportDidOpen;
+
+- (void) handleCallback:(id <ServiceCallback>) aCallback result:(id) aResult;
+
+extern NSString* const UnittMessageServiceException;
 
 @end

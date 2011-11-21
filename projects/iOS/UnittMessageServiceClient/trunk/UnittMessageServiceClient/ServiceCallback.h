@@ -24,10 +24,12 @@
 @protocol ServiceCallback <NSObject>
 
 - (void) onError:(NSError*) aError;
+
 - (void) onComplete:(id) aResult;
 
 @optional
 - (void) onPartialResult:(id) aResult;
+
 - (void) onPartialResults:(NSArray*) aResults;
 
 @end

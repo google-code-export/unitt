@@ -28,99 +28,80 @@
 
 
 #pragma mark Transport
-- (void) send:(NSData *)aData
-{
-    if (websocket)
-    {
+- (void) send:(NSData*) aData {
+    if (websocket) {
         [websocket sendBinary:aData];
     }
 }
 
-- (void) open
-{
-    if (websocket)
-    {
+- (void) open {
+    if (websocket) {
         [websocket open];
     }
 }
 
-- (void) close
-{
-    if (websocket)
-    {
+- (void) close {
+    if (websocket) {
         [websocket close];
-    }    
+    }
 }
 
 
 #pragma mark WebSocket Delegate
-- (void) didOpen
-{
-    if (self.client)
-    {
+- (void) didOpen {
+    if (self.client) {
         [self.client transportDidOpen];
     }
 }
 
-- (void) didClose:(NSUInteger) aStatusCode message:(NSString*) aMessage error:(NSError*) aError
-{
-    if (self.client)
-    {
+- (void) didClose:(NSUInteger) aStatusCode message:(NSString*) aMessage error:(NSError*) aError {
+    if (self.client) {
         [self.client transportDidClose:aError];
     }
 }
 
 // TODO: figure out what to do here
-- (void) didReceiveError: (NSError*) aError
-{
+- (void) didReceiveError:(NSError*) aError {
     NSLog(@"Error connecting: %@", aError.localizedDescription);
 }
 
-- (void) didReceiveTextMessage: (NSString*) aMessage
-{
+- (void) didReceiveTextMessage:(NSString*) aMessage {
     //do nothing, we only use binary messages
 }
 
-- (void) didReceiveBinaryMessage: (NSData*) aMessage
-{
-    if (self.client)
-    {
+- (void) didReceiveBinaryMessage:(NSData*) aMessage {
+    if (self.client) {
         NSLog(@"Received message from service!");
         [self.client responseFromService:aMessage];
     }
 }
 
-- (void) didSendPong:(NSData*) aMessage
-{
+- (void) didSendPong:(NSData*) aMessage {
     //do nothing
 }
 
 
 #pragma mark Lifecycle
-+ (id) transportWithConfig:(WebSocketConnectConfig*) aConfig
-{
++ (id) transportWithConfig:(WebSocketConnectConfig*) aConfig {
     return [[[[self class] alloc] initWithConfig:aConfig] autorelease];
 }
 
-- (id) initWithConfig:(WebSocketConnectConfig*) aConfig
-{    
+- (id) initWithConfig:(WebSocketConnectConfig*) aConfig {
     self = [super init];
-    if (self)
-    {
+    if (self) {
         websocket = [self createWebSocketWithConfig:aConfig];
     }
     return self;
 }
 
-- (WebSocket*) createWebSocketWithConfig:(WebSocketConnectConfig*) aConfig
-{
+- (WebSocket*) createWebSocketWithConfig:(WebSocketConnectConfig*) aConfig {
     return [[WebSocket webSocketWithConfig:aConfig delegate:self] retain];
 }
 
-- (void) dealloc 
-{
+- (void) dealloc {
     [config release];
     [websocket release];
+    [client release];
     [super dealloc];
 }
 

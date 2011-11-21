@@ -25,40 +25,29 @@
 
 @synthesize header;
 @synthesize contents;
-@synthesize callback;
 
 
-- (NSString*) uid
-{
-    if (self.header)
-    {
-        return self.header.uid;
-    }
-    
-    return nil;
-}
-
-
-+ (id) message
-{
++ (id) message {
     return [[[[self class] alloc] init] autorelease];
 }
 
-+ (id) messageWithHeader:(MessageRoutingInfo*) aHeader contents:(id) aContents callback:(id) aCallback
-{
-    return [[[[self class] alloc] initWithHeader:aHeader contents:aContents callback:aCallback] autorelease];
++ (id) messageWithHeader:(MessageRoutingInfo*) aHeader contents:(id) aContents {
+    return [[[[self class] alloc] initWithHeader:aHeader contents:aContents] autorelease];
 }
 
-- (id) initWithHeader:(MessageRoutingInfo*) aHeader contents:(id) aContents callback:(id) aCallback
-{
+- (id) initWithHeader:(MessageRoutingInfo*) aHeader contents:(id) aContents {
     self = [super init];
-    if (self)
-    {
+    if (self) {
         self.header = aHeader;
         self.contents = aContents;
-        self.callback = aCallback;
     }
     return self;
+}
+
+- (void) dealloc {
+    [header release];
+    [contents release];
+    [super dealloc];
 }
 
 @end

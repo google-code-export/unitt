@@ -22,24 +22,21 @@
 #import "ServiceMessage.h"
 
 
-enum 
-{
+enum {
     SerializerTypeJson = 1,
     SerializerTypeXml = 2
 };
 typedef NSUInteger SerializerType;
 
 
-@interface MessageRoutingInfo : NSObject 
-{
+@interface MessageRoutingInfo : NSObject {
     NSString* sessionId;
     NSString* requestId;
     NSString* serviceName;
     NSString* methodSignature;
     NSUInteger timeToLiveInMillis;
     NSDate* sent;
-    NSUInteger serializerType;
-    NSUInteger resultType;
+    SerializerType serializerType;
 }
 
 @property (copy) NSString* sessionId;
@@ -49,13 +46,14 @@ typedef NSUInteger SerializerType;
 @property (assign) NSUInteger timeToLiveInMillis;
 @property (copy) NSDate* sent;
 @property (readonly) NSString* uid;
-@property (assign) NSUInteger serializerType;
-@property (assign) NSUInteger resultType;
+@property (assign) SerializerType serializerType;
 
 + (NSString*) nextRequestId;
 
 + (id) routing;
+
 + (id) routingWithService:(NSString*) aServiceName method:(NSString*) aMethodSignature;
+
 - (id) initWithService:(NSString*) aServiceName method:(NSString*) aMethodSignature;
 
 @end
