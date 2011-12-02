@@ -25,7 +25,11 @@ public class WebSocketUtilTest
     {
         short valueIn = 1000;
         byte[] bytes = WebSocketUtil.convertShortToBytes( valueIn );
-        short valueOut = WebSocketUtil.convertBytesToShort( bytes, 0 );
+        int valueOut = WebSocketUtil.convertBytesToShort( bytes, 0 );
         Assert.assertEquals( "Did not convert correctly.", valueIn, valueOut );
+        int largeValueIn = 48000;
+        bytes = WebSocketUtil.convertShortToBytes( largeValueIn );
+        valueOut = WebSocketUtil.convertBytesToShort( bytes, 0 );
+        Assert.assertEquals( "Did not convert long value correctly.", largeValueIn, valueOut );
     }
 }
