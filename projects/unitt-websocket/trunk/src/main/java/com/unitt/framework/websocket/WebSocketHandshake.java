@@ -4,6 +4,7 @@ package com.unitt.framework.websocket;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -375,6 +376,10 @@ public class WebSocketHandshake
         // determine server sec key
         temp = getClientSecKey() + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
         byte[] bytes = DigestUtils.sha( temp );
+        if (bytes.length > 16)
+        {
+            bytes = Arrays.copyOf(bytes, 16);
+        }
         setExpectedServerSecKey( new String( Base64.encodeBase64( bytes ), charset ) );
     }
 
