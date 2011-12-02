@@ -717,6 +717,18 @@ public abstract class WebSocketConnection implements WebSocket, NetworkSocketObs
                 sendErrorToObserver( e );
             }
         }
+        else if ( aFragment.getOpCode() == MessageOpCode.CLOSE )
+        {
+            try
+            {
+                getNetwork().write( aFragment.getFragment() );
+            }
+            catch ( IOException e )
+            {
+                sendErrorToObserver( e );
+            }
+            closeSocket();
+        }
     }
 
 
