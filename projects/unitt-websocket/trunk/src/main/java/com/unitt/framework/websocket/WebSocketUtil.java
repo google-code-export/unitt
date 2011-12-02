@@ -61,9 +61,9 @@ public class WebSocketUtil
         return convertBytes( aBytes, aStart, 4 ).intValue();
     }
 
-    public static short convertBytesToShort( byte[] aBytes, int aStart )
+    public static int convertBytesToShort( byte[] aBytes, int aStart )
     {
-        return convertBytes( aBytes, aStart, 2 ).shortValue();
+        return convertBytes( aBytes, aStart, 2 ).intValue();
     }
 
     protected static Long convertBytes( byte[] aBytes, int aStart, int aLength )
@@ -99,7 +99,7 @@ public class WebSocketUtil
         return convertToBytes( aValue, 4 );
     }
 
-    public static byte[] convertShortToBytes( short aValue )
+    public static byte[] convertShortToBytes( int aValue )
     {
         return  convertToBytes( aValue, 2 );
     }

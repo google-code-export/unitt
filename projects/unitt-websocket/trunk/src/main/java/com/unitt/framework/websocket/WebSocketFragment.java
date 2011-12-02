@@ -283,7 +283,7 @@ public class WebSocketFragment
                         return;
                     }
 
-                    dataLength = new Short( WebSocketUtil.convertBytesToShort( buffer, index ) ).longValue();
+                    dataLength = new Integer( WebSocketUtil.convertBytesToShort( buffer, index ) ).longValue();
                     index += 2;
                 }
                 else if ( dataLength == 127 )
