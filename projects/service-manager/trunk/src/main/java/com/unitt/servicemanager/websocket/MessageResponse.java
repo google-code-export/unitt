@@ -10,6 +10,7 @@ public class MessageResponse implements Serializable
 
     private MessageRoutingInfo header;
     private Object             body;
+    private byte[] bodyBytes;
 
 
     // constructors
@@ -42,6 +43,13 @@ public class MessageResponse implements Serializable
         body = aBody;
     }
 
+    public byte[] getBodyBytes() {
+        return bodyBytes;
+    }
+
+    public void setBodyBytes(byte[] aBodyBytes) {
+        bodyBytes = aBodyBytes;
+    }
 
     // Object overrides
     // ------------------------------------------------

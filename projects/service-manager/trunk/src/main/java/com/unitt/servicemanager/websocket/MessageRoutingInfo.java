@@ -10,7 +10,8 @@ public class MessageRoutingInfo implements Serializable
     public enum MessageResultType
     {
         Error,
-        CompleteSuccess;
+        CompleteSuccess,
+        PartialSuccess;
     }
     
     private static final long serialVersionUID = 3745930724237990205L;
