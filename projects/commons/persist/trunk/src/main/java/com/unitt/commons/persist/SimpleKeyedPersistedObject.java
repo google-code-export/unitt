@@ -1,7 +1,9 @@
 package com.unitt.commons.persist;
 
-public interface SimpleKeyedPersistedObject extends PersistedObject
+import java.io.Serializable;
+
+public interface SimpleKeyedPersistedObject<T extends Serializable> extends PersistedObject
 {
-    public Long getId();
-    public void setId( Long aId );
+    public T getId();
+    public void setId( T aId );
 }
