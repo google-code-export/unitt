@@ -183,7 +183,11 @@ public abstract class MessagingWebSocket implements Initializable, Destructable
         {
             MessageSerializer serializer = getSerializerRegistry().getSerializer( aResponse.getHeader().getSerializerType() );
             byte[] headerBytes = serializer.serializeHeader( aResponse.getHeader() );
-            byte[] bodyBytes = serializer.serializeBody( aResponse.getBody() );
+            byte[] bodyBytes = aResponse.getBodyBytes();
+            if (bodyBytes == null && aResponse.getBody() != null)
+            {
+                bodyBytes = serializer.serializeBody( aResponse.getBody() );
+            }
             System.out.println("Sending serialized body: " + new String(bodyBytes));
             output.write( ByteUtil.convertShortToBytes( new Integer( headerBytes.length ).shortValue() ) );
             output.write( ByteUtil.convertShortToBytes( aResponse.getHeader().getSerializerType() ) );

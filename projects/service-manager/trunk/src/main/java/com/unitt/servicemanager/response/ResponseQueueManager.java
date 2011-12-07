@@ -241,7 +241,6 @@ public abstract class ResponseQueueManager implements Initializable, Destructabl
             MessagingWebSocket socket = getSocket( socketId );
             if ( socket != null )
             {
-                System.out.println("Sending: " + aResponse.getBody());
                 socket.send( aResponse );
             }
         }

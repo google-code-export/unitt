@@ -3,6 +3,7 @@ package com.unitt.servicemanager.service;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentMap;
@@ -224,10 +225,18 @@ public abstract class ServiceDelegate implements Processor<MessageRoutingInfo>
             }
 
             // execute method & apply result
-            Object[] args = getArguments( aInfo );
-            Object result = method.invoke( getService(), args );
-            response.getHeader().setResultType( MessageResultType.CompleteSuccess );
-            response.setBody( result );
+            Object[] args = getArguments( aInfo, method );
+            if (methodPushesResults(method))
+            {
+                method.invoke( getService(), args );
+                response.getHeader().setResultType( MessageResultType.PartialSuccess );
+            }
+            else
+            {
+                Object result = method.invoke( getService(), args );
+                response.getHeader().setResultType( MessageResultType.CompleteSuccess );
+                response.setBody( result );
+            }
         }
         catch ( Exception e )
         {
@@ -240,12 +249,39 @@ public abstract class ServiceDelegate implements Processor<MessageRoutingInfo>
         // push message response into appropriate response queue
         try
         {
+            //@todo: remove need for body attribute
+            MessageSerializer serializer = getSerializerRegistry().getSerializer( response.getHeader().getSerializerType() );
+            if (response.getBody() != null)
+            {
+                response.setBodyBytes(serializer.serializeBody( response.getBody() ));
+                response.setBody(null);
+            }
             getDestinationQueue( aInfo ).offer( response, getQueueTimeoutInMillis(), TimeUnit.MILLISECONDS );
         }
         catch ( Exception e )
         {
             logger.error( "[" + this + "] - Could not route message response: " + aInfo, e );
         }
+    }
+
+    protected int getIndexOfPartialResults(Method aMethod)
+    {
+        Class<?>[] params = aMethod.getParameterTypes();
+        //search for a PushesResults parameter
+        for (int i = 0; i < params.length; i++)
+        {
+            if (params[i].isAssignableFrom(PushesResults.class))
+            {
+                return i;
+            }
+        } 
+        
+        return -1;
+    }
+    
+    protected boolean methodPushesResults(Method aMethod)
+    {
+        return getIndexOfPartialResults(aMethod) >= 0;
     }
 
     public Method getCachedMethod( String aMethodSignature )
@@ -257,9 +293,10 @@ public abstract class ServiceDelegate implements Processor<MessageRoutingInfo>
     {
         getCachedMethods().put( aMethodSignature, aMethod );
     }
-
-    public Object[] getArguments( MessageRoutingInfo aInfo )
+    
+    public Object[] getArguments( MessageRoutingInfo aInfo, Method aMethod )
     {
+        //@todo: create callback & push into parameters
         // grab arguments & deserialize
         SerializedMessageBody body = getBodyMap( aInfo ).remove( aInfo.getUid() );
         MessageSerializer serializer = getSerializerRegistry().getSerializer( aInfo.getSerializerType() );
@@ -267,7 +304,25 @@ public abstract class ServiceDelegate implements Processor<MessageRoutingInfo>
         System.out.println("Args: " + args.getServiceMethodArguments());
         if ( args != null && args.getServiceMethodArguments() != null )
         {
-            return (Object[]) args.getServiceMethodArguments().toArray( new Object[args.getServiceMethodArguments().size()] );
+            int partialResultsIndex = getIndexOfPartialResults(aMethod);
+            Object[] results = new Object[aMethod.getParameterTypes().length];
+            List<Object> argValues = args.getServiceMethodArguments();
+            for (int i = 0; i < results.length; i++)
+            {
+               if (i == partialResultsIndex)
+               {
+                   results[i] = new PushesResultsImpl();
+               }
+               else if (partialResultsIndex >= 0 && i > partialResultsIndex)
+               {
+                   results[i] = argValues.get(i + 1);
+               }
+               else
+               {
+                   results[i] = argValues.get(i);
+               }
+            }
+            return results;
         }
         return new Object[] {};
     }
