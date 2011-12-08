@@ -29,6 +29,15 @@ enum {
 typedef NSUInteger SerializerType;
 
 
+enum
+{
+    MessageResultTypeError = 0, //result is an error condition.
+    MessageResultTypeCompleteSuccess = 1, //result is a complete object, do not wait for more data.
+    MessageResultTypePartialSuccess = 2 //result is only part of the complete results, keep waiting for more data.
+};
+typedef NSUInteger MessageResultType;
+
+
 @interface MessageRoutingInfo : NSObject {
     NSString* sessionId;
     NSString* requestId;
@@ -37,6 +46,7 @@ typedef NSUInteger SerializerType;
     NSUInteger timeToLiveInMillis;
     NSDate* sent;
     SerializerType serializerType;
+    MessageResultType resultType;
 }
 
 @property (copy) NSString* sessionId;
@@ -47,6 +57,7 @@ typedef NSUInteger SerializerType;
 @property (copy) NSDate* sent;
 @property (readonly) NSString* uid;
 @property (assign) SerializerType serializerType;
+@property (assign) MessageResultType resultType;
 
 + (NSString*) nextRequestId;
 

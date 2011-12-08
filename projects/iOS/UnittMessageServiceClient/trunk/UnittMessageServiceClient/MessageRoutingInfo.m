@@ -33,6 +33,7 @@ static int currentRequestId;
 @synthesize timeToLiveInMillis;
 @synthesize sent;
 @synthesize serializerType;
+@synthesize resultType;
 
 
 - (NSString*) uid {

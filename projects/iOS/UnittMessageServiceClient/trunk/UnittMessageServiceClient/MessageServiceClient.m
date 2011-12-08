@@ -98,14 +98,18 @@ NSString* const UnittMessageServiceException = @"MessageServiceClientException";
             //deserialize back into message
             ServiceMessage* messageResponse = [self.serializer deserializeMessage:aMessageData routing:header returnType:request.returnType];
 
-            //retain/autorelease & remove from pending
-            [[request retain] autorelease];
-            [pendingRequests removeObjectForKey:header.uid];
+            //leave on queue if it is not complete
+            if (messageResponse.header.resultType == MessageResultTypeCompleteSuccess || messageResponse.header.resultType == MessageResultTypeError)
+            {
+                //retain/autorelease & remove from pending
+                [[request retain] autorelease];
+                [pendingRequests removeObjectForKey:header.uid];
+            }
 
             //call appropriate method on the callback
             id <ServiceCallback> callback = request.callback;
             if (callback) {
-                [self handleCallback:callback result:messageResponse.contents];
+                [self handleCallback:callback result:messageResponse];
             }
         }
         else {
@@ -135,12 +139,16 @@ NSString* const UnittMessageServiceException = @"MessageServiceClientException";
     isOpen = YES;
 }
 
-- (void) handleCallback:(id <ServiceCallback>) aCallback result:(id) aResult {
-    if ([aResult isKindOfClass:[NSError class]]) {
-        [aCallback onError:(NSError*) aResult];
-    }
-    else {
-        [aCallback onComplete:aResult];
+- (void) handleCallback:(id<ServiceCallback>) aCallback result:(ServiceMessage*) aResult
+{
+    switch (aResult.header.resultType) {
+        case MessageResultTypeError:
+            [aCallback onError:(NSError*) aResult.contents];
+        case MessageResultTypeCompleteSuccess:
+            [aCallback onComplete:aResult.contents];
+        case MessageResultTypePartialSuccess:
+            [aCallback onPartial:aResult.contents];
+            break;
     }
 }
 

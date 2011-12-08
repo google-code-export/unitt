@@ -28,8 +28,5 @@
 - (void) onComplete:(id) aResult;
 
 @optional
-- (void) onPartialResult:(id) aResult;
-
-- (void) onPartialResults:(NSArray*) aResults;
-
+- (void) onPartial:(id) aResult;
 @end
