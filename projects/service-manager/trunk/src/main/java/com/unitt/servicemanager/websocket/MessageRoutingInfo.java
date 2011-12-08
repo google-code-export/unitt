@@ -11,7 +11,7 @@ public class MessageRoutingInfo implements Serializable
     {
         Error,
         CompleteSuccess,
-        PartialSuccess;
+        PartialSuccess
     }
     
     private static final long serialVersionUID = 3745930724237990205L;
@@ -27,6 +27,29 @@ public class MessageRoutingInfo implements Serializable
     private String serverId;
     private Short serializerType;
     private MessageResultType resultType;
+
+
+    // constructors
+    // ---------------------------------------------------------------------------
+    public MessageRoutingInfo()
+    {
+        //default
+    }
+
+    public MessageRoutingInfo(MessageRoutingInfo aOriginal)
+    {
+        setSessionId(aOriginal.getSessionId());
+        setRequestId(aOriginal.getRequestId());
+        setServiceName(aOriginal.getServiceName());
+        setMethodSignature(aOriginal.getMethodSignature());
+        setTimeToLiveInMillis(aOriginal.getTimeToLiveInMillis());
+        setSent(aOriginal.getSent());
+        setUid(aOriginal.getUid());
+        setWebSocketId(aOriginal.getWebSocketId());
+        setServerId(aOriginal.getServerId());
+        setSerializerType(aOriginal.getSerializerType());
+        setResultType(aOriginal.getResultType());
+    }
 
     
     // getters & setters

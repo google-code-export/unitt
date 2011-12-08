@@ -225,7 +225,7 @@ public abstract class ServiceDelegate implements Processor<MessageRoutingInfo>
             }
 
             // execute method & apply result
-            Object[] args = getArguments( aInfo, method );
+            Object[] args = getArguments( response, method );
             if (methodPushesResults(method))
             {
                 method.invoke( getService(), args );
@@ -247,20 +247,25 @@ public abstract class ServiceDelegate implements Processor<MessageRoutingInfo>
         }
 
         // push message response into appropriate response queue
+        sendResponse(response);
+    }
+
+    protected void sendResponse(MessageResponse aResponse)
+    {
         try
         {
             //@todo: remove need for body attribute
-            MessageSerializer serializer = getSerializerRegistry().getSerializer( response.getHeader().getSerializerType() );
-            if (response.getBody() != null)
+            MessageSerializer serializer = getSerializerRegistry().getSerializer( aResponse.getHeader().getSerializerType() );
+            if (aResponse.getBody() != null)
             {
-                response.setBodyBytes(serializer.serializeBody( response.getBody() ));
-                response.setBody(null);
+                aResponse.setBodyBytes(serializer.serializeBody( aResponse.getBody() ));
+                aResponse.setBody(null);
             }
-            getDestinationQueue( aInfo ).offer( response, getQueueTimeoutInMillis(), TimeUnit.MILLISECONDS );
+            getDestinationQueue( aResponse.getHeader() ).offer( aResponse, getQueueTimeoutInMillis(), TimeUnit.MILLISECONDS );
         }
         catch ( Exception e )
         {
-            logger.error( "[" + this + "] - Could not route message response: " + aInfo, e );
+            logger.error( "[" + this + "] - Could not route message response: " + aResponse.getHeader(), e );
         }
     }
 
@@ -294,13 +299,14 @@ public abstract class ServiceDelegate implements Processor<MessageRoutingInfo>
         getCachedMethods().put( aMethodSignature, aMethod );
     }
     
-    public Object[] getArguments( MessageRoutingInfo aInfo, Method aMethod )
+    public Object[] getArguments( MessageResponse aResponse, Method aMethod )
     {
         //@todo: create callback & push into parameters
         // grab arguments & deserialize
-        SerializedMessageBody body = getBodyMap( aInfo ).remove( aInfo.getUid() );
-        MessageSerializer serializer = getSerializerRegistry().getSerializer( aInfo.getSerializerType() );
-        DeserializedMessageBody args = serializer.deserializeBody( aInfo, body.getContents() );
+        MessageRoutingInfo info = aResponse.getHeader();
+        SerializedMessageBody body = getBodyMap( info ).remove( info.getUid() );
+        MessageSerializer serializer = getSerializerRegistry().getSerializer( info.getSerializerType() );
+        DeserializedMessageBody args = serializer.deserializeBody( info, body.getContents() );
         System.out.println("Args: " + args.getServiceMethodArguments());
         if ( args != null && args.getServiceMethodArguments() != null )
         {
@@ -311,7 +317,7 @@ public abstract class ServiceDelegate implements Processor<MessageRoutingInfo>
             {
                if (i == partialResultsIndex)
                {
-                   results[i] = new PushesResultsImpl();
+                   results[i] = new PushesResultsImpl(this, aResponse);
                }
                else if (partialResultsIndex >= 0 && i > partialResultsIndex)
                {
