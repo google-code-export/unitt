@@ -53,7 +53,7 @@ public class ServiceProxyGeneratorForIOS implements CodeGenerator<ServiceProxyCo
         
         //imports
         out.append("#import <Foundation/Foundation.h>\n");
-        out.append("#import ServiceProxy.h\n");
+        out.append("#import \"ServiceProxy.h\"\n");
         out.append("\n");
         for (String importType : aConfig.getImports())
         {
@@ -66,7 +66,7 @@ public class ServiceProxyGeneratorForIOS implements CodeGenerator<ServiceProxyCo
         out.append("\n");
         
         //start 
-        out.append("@interface " + aConfig.getGeneratedClassName() + " : NSObject\n");
+        out.append("@interface " + aConfig.getGeneratedClassName() + " : ServiceProxy\n");
         
         //interface variables
         out.append("{\n");
@@ -172,6 +172,22 @@ public class ServiceProxyGeneratorForIOS implements CodeGenerator<ServiceProxyCo
                 out.append(param.getName());
             }
             out.append( ", nil]\n" );
+            if ("void".equals(operation.getReturnType()))
+            {
+                out.append("\t             returnType:nil\n");
+            }
+            else
+            {
+                if (types.isArray(operation.getReturnType()))
+                {
+                    String listType = types.getImportTypeForPlatform(types.getPrimaryListItemClass(operation.getReturnType()), PLATFORM);
+                    out.append("\t             returnType:[ReferenceType referenceWithArrayContentType:[" + listType + " class]]\n");
+                }
+                else
+                {
+                    out.append("\t             returnType:[ReferenceType referenceWithObjectType:[" + types.getImportTypeForPlatform(operation.getReturnType(), PLATFORM) + " class]]\n");
+                }
+            }
             out.append("\t             callback:aCallback];\n");
             out.append("}\n");
             out.append("\n");

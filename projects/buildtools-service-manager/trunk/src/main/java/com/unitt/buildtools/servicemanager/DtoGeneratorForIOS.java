@@ -69,7 +69,6 @@ public class DtoGeneratorForIOS implements CodeGenerator<DtoConfig>
         
         //interface variables
         out.append("{\n");
-        out.append("\t@private\n");
         for (PropertyInfo property : aConfig.getDtoProperties().values())
         {
             out.append( "\t" + types.getTypeForPlatform( property.getGetterType(), PLATFORM ) + " " + property.getId() + ";\n" );
