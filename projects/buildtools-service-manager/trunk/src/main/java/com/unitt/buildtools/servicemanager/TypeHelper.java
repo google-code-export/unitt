@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 
+//@todo: handle generics
 public class TypeHelper
 {
     protected Map<String, String> types = new HashMap<String, String>();
@@ -35,7 +36,7 @@ public class TypeHelper
         {
             case IOS:
             {
-                return getTypeForIOS( aType );
+                return getTypeForIOS( getPrimaryClass(aType) );
             }
         }
 
@@ -48,7 +49,7 @@ public class TypeHelper
         {
             case IOS:
             {
-                return getImportTypeForIOS( aType );
+                return getImportTypeForIOS( getPrimaryClass(aType) );
             }
         }
 
@@ -66,11 +67,34 @@ public class TypeHelper
         {
             case IOS:
             {
-                return doesNonPrimitiveNeedImportForIOS( aType );
+                return doesNonPrimitiveNeedImportForIOS( getPrimaryClass(aType) );
             }
         }
 
         return false;
+    }
+    
+    protected String getPrimaryClass(String aType)
+    {
+        int index = aType.indexOf("<");
+        if (index < 0)
+        {
+            return aType;
+        }
+
+        return aType.substring(0, index);
+    }
+
+    protected String getPrimaryListItemClass(String aType)
+    {
+        int startIndex = aType.indexOf("<");
+        int endIndex = aType.indexOf(">");
+        if (startIndex < 0 || endIndex < 0)
+        {
+            return aType;
+        }
+
+        return aType.substring(startIndex + 1, endIndex);
     }
 
     protected boolean doesNonPrimitiveNeedImportForIOS( String aType )
@@ -216,16 +240,17 @@ public class TypeHelper
     }
 
     @SuppressWarnings( "rawtypes" )
-    protected boolean isArray( String aType )
+    public boolean isArray( String aType )
     {
+        String type = getPrimaryClass(aType);
         try
-        {
-            Class typeClass = Class.forName( aType );
+        {;
+            Class typeClass = Class.forName( type );
             return List.class.isAssignableFrom( typeClass ) || Set.class.isAssignableFrom( typeClass ) || typeClass.isArray();
         }
         catch ( ClassNotFoundException e )
         {
-            System.err.println( "Could not find class to determine if its an array: " + aType );
+            System.err.println( "Could not find class to determine if its an array: " + type );
             e.printStackTrace();
         }
 
