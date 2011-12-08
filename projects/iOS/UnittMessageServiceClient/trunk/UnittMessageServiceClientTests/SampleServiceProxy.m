@@ -27,7 +27,8 @@
 {
     [self.client requestForService:self.serviceName 
                  methodSignature:@"sayHello#java.lang.String" 
-                 parameters:[NSArray arrayWithObjects:aMessage, nil] 
+                 parameters:[NSArray arrayWithObjects:aMessage, nil]
+                 returnType: nil
                  callback:aCallback
      ];
 }
