@@ -27,7 +27,6 @@
 		BD9AE71A13A4196300D4122D /* ServiceMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = BD9AE71813A4196300D4122D /* ServiceMessage.h */; };
 		BD9AE71B13A4196300D4122D /* ServiceMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = BD9AE71913A4196300D4122D /* ServiceMessage.m */; };
 		BD9AE71C13A4196300D4122D /* ServiceMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = BD9AE71913A4196300D4122D /* ServiceMessage.m */; };
-		BD9AE71E13A41DD400D4122D /* libUnittWebSocketClient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BD9AE71D13A41DD400D4122D /* libUnittWebSocketClient.a */; };
 		BD9AE71F13A41DD400D4122D /* libUnittWebSocketClient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BD9AE71D13A41DD400D4122D /* libUnittWebSocketClient.a */; };
 		BD9AE72213A41F3100D4122D /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD9AE72013A41F3100D4122D /* CFNetwork.framework */; };
 		BD9AE72313A41F3100D4122D /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD9AE72113A41F3100D4122D /* Security.framework */; };
@@ -48,7 +47,6 @@
 		BDC439AB141BE522002633CD /* MessageSerializerJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = BDC439A9141BE522002633CD /* MessageSerializerJSON.h */; };
 		BDC439AC141BE522002633CD /* MessageSerializerJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = BDC439AA141BE522002633CD /* MessageSerializerJSON.m */; };
 		BDC439AD141BE522002633CD /* MessageSerializerJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = BDC439AA141BE522002633CD /* MessageSerializerJSON.m */; };
-		BDC439AF141BE640002633CD /* libUnittJSONSerializer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BDC439AE141BE640002633CD /* libUnittJSONSerializer.a */; };
 		BDC439B0141BE640002633CD /* libUnittJSONSerializer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BDC439AE141BE640002633CD /* libUnittJSONSerializer.a */; };
 		BDC439B0141BE640002633CF /* PendingRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = BDC439B0141BE640002633CE /* PendingRequest.h */; };
 		BDC439B0141BE640002633D1 /* PendingRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = BDC439B0141BE640002633D0 /* PendingRequest.m */; };
@@ -176,8 +174,6 @@
 				BD9AE72213A41F3100D4122D /* CFNetwork.framework in Frameworks */,
 				BD9AE72313A41F3100D4122D /* Security.framework in Frameworks */,
 				BDAEA33F13A1A54E00E8EB9C /* Foundation.framework in Frameworks */,
-				BD9AE71E13A41DD400D4122D /* libUnittWebSocketClient.a in Frameworks */,
-				BDC439AF141BE640002633CD /* libUnittJSONSerializer.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
