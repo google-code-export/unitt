@@ -32,6 +32,9 @@
 		BD9AE72313A41F3100D4122D /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD9AE72113A41F3100D4122D /* Security.framework */; };
 		BD9AE72613A41FCA00D4122D /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD9AE72413A41FCA00D4122D /* CFNetwork.framework */; };
 		BD9AE72713A41FCA00D4122D /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD9AE72513A41FCA00D4122D /* Security.framework */; };
+		BDA0B19014959C470044F274 /* ServiceCallbackWithBlocks.h in Headers */ = {isa = PBXBuildFile; fileRef = BDA0B18E14959C470044F274 /* ServiceCallbackWithBlocks.h */; };
+		BDA0B19114959C470044F274 /* ServiceCallbackWithBlocks.m in Sources */ = {isa = PBXBuildFile; fileRef = BDA0B18F14959C470044F274 /* ServiceCallbackWithBlocks.m */; };
+		BDA0B19214959C5A0044F274 /* ServiceCallbackWithBlocks.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = BDA0B18E14959C470044F274 /* ServiceCallbackWithBlocks.h */; };
 		BDA7FF8B1437C1C200473897 /* SampleServiceProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = BDA7FF891437C1C200473897 /* SampleServiceProxy.h */; };
 		BDA7FF8C1437C1C200473897 /* SampleServiceProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = BDA7FF8A1437C1C200473897 /* SampleServiceProxy.m */; };
 		BDA7FF901437C90200473897 /* ServiceProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = BDA7FF8E1437C90200473897 /* ServiceProxy.h */; };
@@ -52,57 +55,45 @@
 		BDC439B0141BE640002633D1 /* PendingRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = BDC439B0141BE640002633D0 /* PendingRequest.m */; };
 		BDC439B0141BE640002633D3 /* ReferenceType.h in Headers */ = {isa = PBXBuildFile; fileRef = BDC439B0141BE640002633D2 /* ReferenceType.h */; };
 		BDC439B0141BE640002633D5 /* ReferenceType.m in Sources */ = {isa = PBXBuildFile; fileRef = BDC439B0141BE640002633D4 /* ReferenceType.m */; };
+		BDE528D614930FE200D8D58C /* ReferenceType.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = BDC439B0141BE640002633D2 /* ReferenceType.h */; };
+		BDE528D714930FE200D8D58C /* PendingRequest.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = BDC439B0141BE640002633CE /* PendingRequest.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		282791291476E87B00BC1CC7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 282791211476E87B00BC1CC7 /* UnittJSONSerializer.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = BD66570A138F8EDA00E6094C;
-			remoteInfo = UnittJSONSerializer;
-		};
-		2827912B1476E87B00BC1CC7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 282791211476E87B00BC1CC7 /* UnittJSONSerializer.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = BD665717138F8EDA00E6094C;
-			remoteInfo = UnittJSONSerializerTests;
-		};
-		282791421476E89900BC1CC7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2827913A1476E89900BC1CC7 /* UnittWebSocketClient.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = BD0C3248136FA7CB008B53D7;
-			remoteInfo = UnittWebSocketClient;
-		};
-		282791441476E89900BC1CC7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2827913A1476E89900BC1CC7 /* UnittWebSocketClient.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = BD0C3255136FA7CB008B53D7;
-			remoteInfo = UnittWebSocketClientTests;
-		};
-		2827915A1476E8FF00BC1CC7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 282791211476E87B00BC1CC7 /* UnittJSONSerializer.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = BD665709138F8EDA00E6094C;
-			remoteInfo = UnittJSONSerializer;
-		};
-		2827915C1476E90300BC1CC7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2827913A1476E89900BC1CC7 /* UnittWebSocketClient.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = BD0C3247136FA7CB008B53D7;
-			remoteInfo = UnittWebSocketClient;
-		};
 		BDAEA34E13A1A54E00E8EB9C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BDAEA33213A1A54E00E8EB9C /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = BDAEA33A13A1A54E00E8EB9C;
 			remoteInfo = UnittMessageServiceClient;
+		};
+		BDE528C614930F9E00D8D58C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BDE528C114930F9E00D8D58C /* UnittJSONSerializer.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BD66570A138F8EDA00E6094C;
+			remoteInfo = UnittJSONSerializer;
+		};
+		BDE528C814930F9E00D8D58C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BDE528C114930F9E00D8D58C /* UnittJSONSerializer.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BD665717138F8EDA00E6094C;
+			remoteInfo = UnittJSONSerializerTests;
+		};
+		BDE528D214930FB400D8D58C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BDE528CD14930FB400D8D58C /* UnittWebSocketClient.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BD0C3248136FA7CB008B53D7;
+			remoteInfo = UnittWebSocketClient;
+		};
+		BDE528D414930FB400D8D58C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BDE528CD14930FB400D8D58C /* UnittWebSocketClient.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BD0C3255136FA7CB008B53D7;
+			remoteInfo = UnittWebSocketClientTests;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -113,6 +104,9 @@
 			dstPath = Headers;
 			dstSubfolderSpec = 16;
 			files = (
+				BDA0B19214959C5A0044F274 /* ServiceCallbackWithBlocks.h in CopyFiles */,
+				BDE528D614930FE200D8D58C /* ReferenceType.h in CopyFiles */,
+				BDE528D714930FE200D8D58C /* PendingRequest.h in CopyFiles */,
 				2827910E1476E7F500BC1CC7 /* MessageSerializerJSON.h in CopyFiles */,
 				2827910F1476E7F500BC1CC7 /* MessageServiceClient.h in CopyFiles */,
 				282791101476E7F500BC1CC7 /* MessageRoutingInfo.h in CopyFiles */,
@@ -126,8 +120,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		282791211476E87B00BC1CC7 /* UnittJSONSerializer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = UnittJSONSerializer.xcodeproj; path = ../../UnittJSONSerializer/trunk/UnittJSONSerializer.xcodeproj; sourceTree = "<group>"; };
-		2827913A1476E89900BC1CC7 /* UnittWebSocketClient.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = UnittWebSocketClient.xcodeproj; path = ../../UnittWebSocketClient/trunk/UnittWebSocketClient.xcodeproj; sourceTree = "<group>"; };
 		BD0B94B113BBB4F800A030F6 /* MessageServiceTransport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageServiceTransport.h; sourceTree = "<group>"; };
 		BD0B94B213BBB4F800A030F6 /* MessageServiceTransport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageServiceTransport.m; sourceTree = "<group>"; };
 		BD9AE6FF13A3DDD500D4122D /* MessageServiceClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageServiceClient.h; sourceTree = "<group>"; };
@@ -142,6 +134,8 @@
 		BD9AE72113A41F3100D4122D /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		BD9AE72413A41FCA00D4122D /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		BD9AE72513A41FCA00D4122D /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		BDA0B18E14959C470044F274 /* ServiceCallbackWithBlocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceCallbackWithBlocks.h; sourceTree = "<group>"; };
+		BDA0B18F14959C470044F274 /* ServiceCallbackWithBlocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServiceCallbackWithBlocks.m; sourceTree = "<group>"; };
 		BDA7FF891437C1C200473897 /* SampleServiceProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SampleServiceProxy.h; sourceTree = "<group>"; };
 		BDA7FF8A1437C1C200473897 /* SampleServiceProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SampleServiceProxy.m; sourceTree = "<group>"; };
 		BDA7FF8E1437C90200473897 /* ServiceProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServiceProxy.h; sourceTree = "<group>"; };
@@ -164,6 +158,8 @@
 		BDC439B0141BE640002633D0 /* PendingRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PendingRequest.m; sourceTree = "<group>"; };
 		BDC439B0141BE640002633D2 /* ReferenceType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReferenceType.h; sourceTree = "<group>"; };
 		BDC439B0141BE640002633D4 /* ReferenceType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReferenceType.m; sourceTree = "<group>"; };
+		BDE528C114930F9E00D8D58C /* UnittJSONSerializer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = UnittJSONSerializer.xcodeproj; path = ../UnittJSONSerializer/UnittJSONSerializer.xcodeproj; sourceTree = "<group>"; };
+		BDE528CD14930FB400D8D58C /* UnittWebSocketClient.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = UnittWebSocketClient.xcodeproj; path = ../UnittWebSocketClient/UnittWebSocketClient.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -195,29 +191,11 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		282791221476E87B00BC1CC7 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				2827912A1476E87B00BC1CC7 /* libUnittJSONSerializer.a */,
-				2827912C1476E87B00BC1CC7 /* UnittJSONSerializerTests.octest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		2827913B1476E89900BC1CC7 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				282791431476E89900BC1CC7 /* libUnittWebSocketClient.a */,
-				282791451476E89900BC1CC7 /* UnittWebSocketClientTests.octest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		BDAEA33013A1A54E00E8EB9C = {
 			isa = PBXGroup;
 			children = (
-				2827913A1476E89900BC1CC7 /* UnittWebSocketClient.xcodeproj */,
-				282791211476E87B00BC1CC7 /* UnittJSONSerializer.xcodeproj */,
+				BDE528CD14930FB400D8D58C /* UnittWebSocketClient.xcodeproj */,
+				BDE528C114930F9E00D8D58C /* UnittJSONSerializer.xcodeproj */,
 				BDAEA34013A1A54E00E8EB9C /* UnittMessageServiceClient */,
 				BDAEA35113A1A54E00E8EB9C /* UnittMessageServiceClientTests */,
 				BDAEA33D13A1A54E00E8EB9C /* Frameworks */,
@@ -253,6 +231,8 @@
 		BDAEA34013A1A54E00E8EB9C /* UnittMessageServiceClient */ = {
 			isa = PBXGroup;
 			children = (
+				BDA0B18E14959C470044F274 /* ServiceCallbackWithBlocks.h */,
+				BDA0B18F14959C470044F274 /* ServiceCallbackWithBlocks.m */,
 				BDC439B0141BE640002633D4 /* ReferenceType.m */,
 				BDC439B0141BE640002633D2 /* ReferenceType.h */,
 				BDC439B0141BE640002633D0 /* PendingRequest.m */,
@@ -313,6 +293,24 @@
 			name = Serializers;
 			sourceTree = "<group>";
 		};
+		BDE528C214930F9E00D8D58C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BDE528C714930F9E00D8D58C /* libUnittJSONSerializer.a */,
+				BDE528C914930F9E00D8D58C /* UnittJSONSerializerTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		BDE528CE14930FB400D8D58C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BDE528D314930FB400D8D58C /* libUnittWebSocketClient.a */,
+				BDE528D514930FB400D8D58C /* UnittWebSocketClientTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -330,6 +328,7 @@
 				BDA7FF901437C90200473897 /* ServiceProxy.h in Headers */,
 				BDC439B0141BE640002633CF /* PendingRequest.h in Headers */,
 				BDC439B0141BE640002633D3 /* ReferenceType.h in Headers */,
+				BDA0B19014959C470044F274 /* ServiceCallbackWithBlocks.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -348,8 +347,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				2827915D1476E90300BC1CC7 /* PBXTargetDependency */,
-				2827915B1476E8FF00BC1CC7 /* PBXTargetDependency */,
 			);
 			name = UnittMessageServiceClient;
 			productName = UnittMessageServiceClient;
@@ -392,12 +389,12 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 282791221476E87B00BC1CC7 /* Products */;
-					ProjectRef = 282791211476E87B00BC1CC7 /* UnittJSONSerializer.xcodeproj */;
+					ProductGroup = BDE528C214930F9E00D8D58C /* Products */;
+					ProjectRef = BDE528C114930F9E00D8D58C /* UnittJSONSerializer.xcodeproj */;
 				},
 				{
-					ProductGroup = 2827913B1476E89900BC1CC7 /* Products */;
-					ProjectRef = 2827913A1476E89900BC1CC7 /* UnittWebSocketClient.xcodeproj */;
+					ProductGroup = BDE528CE14930FB400D8D58C /* Products */;
+					ProjectRef = BDE528CD14930FB400D8D58C /* UnittWebSocketClient.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -409,32 +406,32 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		2827912A1476E87B00BC1CC7 /* libUnittJSONSerializer.a */ = {
+		BDE528C714930F9E00D8D58C /* libUnittJSONSerializer.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libUnittJSONSerializer.a;
-			remoteRef = 282791291476E87B00BC1CC7 /* PBXContainerItemProxy */;
+			remoteRef = BDE528C614930F9E00D8D58C /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		2827912C1476E87B00BC1CC7 /* UnittJSONSerializerTests.octest */ = {
+		BDE528C914930F9E00D8D58C /* UnittJSONSerializerTests.octest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = UnittJSONSerializerTests.octest;
-			remoteRef = 2827912B1476E87B00BC1CC7 /* PBXContainerItemProxy */;
+			remoteRef = BDE528C814930F9E00D8D58C /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		282791431476E89900BC1CC7 /* libUnittWebSocketClient.a */ = {
+		BDE528D314930FB400D8D58C /* libUnittWebSocketClient.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libUnittWebSocketClient.a;
-			remoteRef = 282791421476E89900BC1CC7 /* PBXContainerItemProxy */;
+			remoteRef = BDE528D214930FB400D8D58C /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		282791451476E89900BC1CC7 /* UnittWebSocketClientTests.octest */ = {
+		BDE528D514930FB400D8D58C /* UnittWebSocketClientTests.octest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = UnittWebSocketClientTests.octest;
-			remoteRef = 282791441476E89900BC1CC7 /* PBXContainerItemProxy */;
+			remoteRef = BDE528D414930FB400D8D58C /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -481,6 +478,7 @@
 				BDA7FF911437C90200473897 /* ServiceProxy.m in Sources */,
 				BDC439B0141BE640002633D1 /* PendingRequest.m in Sources */,
 				BDC439B0141BE640002633D5 /* ReferenceType.m in Sources */,
+				BDA0B19114959C470044F274 /* ServiceCallbackWithBlocks.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -500,16 +498,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		2827915B1476E8FF00BC1CC7 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = UnittJSONSerializer;
-			targetProxy = 2827915A1476E8FF00BC1CC7 /* PBXContainerItemProxy */;
-		};
-		2827915D1476E90300BC1CC7 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = UnittWebSocketClient;
-			targetProxy = 2827915C1476E90300BC1CC7 /* PBXContainerItemProxy */;
-		};
 		BDAEA34F13A1A54E00E8EB9C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = BDAEA33A13A1A54E00E8EB9C /* UnittMessageServiceClient */;
