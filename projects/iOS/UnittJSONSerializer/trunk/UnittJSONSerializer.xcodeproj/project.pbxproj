@@ -258,6 +258,9 @@
 /* Begin PBXProject section */
 		BD665701138F8EDA00E6094C /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+			};
 			buildConfigurationList = BD665704138F8EDA00E6094C /* Build configuration list for PBXProject "UnittJSONSerializer" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
@@ -394,6 +397,7 @@
 				DSTROOT = /tmp/UnittJSONSerializer.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "UnittJSONSerializer/UnittJSONSerializer-Prefix.pch";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -406,6 +410,7 @@
 				DSTROOT = /tmp/UnittJSONSerializer.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "UnittJSONSerializer/UnittJSONSerializer-Prefix.pch";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -421,6 +426,7 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "UnittJSONSerializerTests/UnittJSONSerializerTests-Prefix.pch";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "UnittJSONSerializerTests/UnittJSONSerializerTests-Info.plist";
 				OTHER_LDFLAGS = (
 					"-framework",
@@ -441,6 +447,7 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "UnittJSONSerializerTests/UnittJSONSerializerTests-Prefix.pch";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "UnittJSONSerializerTests/UnittJSONSerializerTests-Info.plist";
 				OTHER_LDFLAGS = (
 					"-framework",
