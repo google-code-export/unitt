@@ -4,7 +4,7 @@
 	<groupId>com.unitt.framework</groupId>
 	<artifactId>websocket</artifactId>
 	<packaging>jar</packaging>
-	<version>0.9.2.1</version>
+	<version>0.9.3</version>
 	<name>unitt-websocket</name>
 
 	<properties>

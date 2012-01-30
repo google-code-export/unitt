@@ -265,36 +265,27 @@ public class NetworkSocket implements NetworkSocketFacade, Runnable
         {
             try
             {
-                int length = input.available();
+                byte[] readBuffer = new byte[512 * 1024];
+                int length = input.read(readBuffer);
                 if (length > 0)
                 {
-                    byte[] bytesIn = new byte[length];
-                    int read = input.read( bytesIn, 0, length );
-                    if (read < 0)
-                    {
-                        isRunning = false;
-                        //@todo: do we disconnect?
-                    }
-                    else
-                    {
-                        observer.onReceivedData( bytesIn );
-                    }
+                    //copy bytes from buffer
+                    byte[] actualBytesIn = new byte[length];
+                    System.arraycopy(readBuffer, 0, actualBytesIn, 0, length);
+
+                    //notify observer
+                    observer.onReceivedData( actualBytesIn );
                 }
                 else
                 {
-                    try
-                    {
-                        Thread.sleep( 10 );
-                    }
-                    catch ( InterruptedException e )
-                    {
-                        //do nothing, keep going
-                    }
+                    //reached EOF
+                    isRunning = false;
                 }
             }
             catch ( IOException e )
             {
                 logger.error( "An error occurred while reading data", e );
+                isRunning = false;
             }
         }
     }
