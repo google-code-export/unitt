@@ -1,10 +1,10 @@
 package com.unitt.framework.websocket;
 
 
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -12,6 +12,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import com.unitt.framework.websocket.WebSocketConnectConfig.WebSocketVersion;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -26,6 +27,8 @@ public class WebSocketHandshake
     private String                 serverSecKey;
     private byte[]                 serverHandshakeBytes;
     private String                 expectedServerSecKey;
+
+    private static org.slf4j.Logger  logger           = LoggerFactory.getLogger(WebSocketHandshake.class);
 
 
     // constructors
@@ -172,7 +175,16 @@ public class WebSocketHandshake
         // init
         Charset charset = Charset.forName( "US-ASCII" );
         setClientHandshakeBytes( aBytes );
-        String handshake = new String( aBytes, charset );
+        
+        String handshake = "";
+		try
+        {
+			handshake = new String( aBytes, charset.name() );
+		}
+        catch (UnsupportedEncodingException e)
+        {
+            logger.error("An error occurred during encoding", e);
+		}
         // make sure this is a http 1.1 GET request
         if ( handshake.startsWith( "GET" ) && handshake.contains( "HTTP/1.1" ) )
         {
@@ -294,8 +306,16 @@ public class WebSocketHandshake
         // init
         Charset charset = Charset.forName( "US-ASCII" );
         setServerHandshakeBytes( aBytes );
-
-        String handshake = new String( aBytes, charset );
+        String handshake = "";
+		try
+        {
+			handshake = new String( aBytes, charset.name() );
+		}
+        catch (UnsupportedEncodingException e)
+        {
+            logger.error("An error occurred during encoding", e);
+		}
+		
         // only allowed status is 101
         if ( handshake.contains( "HTTP/1.1 101" ) )
         {
@@ -370,17 +390,27 @@ public class WebSocketHandshake
         if ( getClientSecKey() == null )
         {
             temp = Long.toHexString( System.currentTimeMillis() );
-            setClientSecKey( new String( Base64.encodeBase64( temp.getBytes( charset ) ), charset ) );
+            try
+            {
+				setClientSecKey( new String( Base64.encodeBase64( temp.getBytes( charset.name() ) ), charset.name() ) );
+			}
+            catch (UnsupportedEncodingException e)
+            {
+                logger.error("An error occurred during encoding", e);
+			}
         }
 
         // determine server sec key
         temp = getClientSecKey() + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
         byte[] bytes = DigestUtils.sha( temp );
-        if (bytes.length > 16)
+        try
         {
-            bytes = Arrays.copyOf(bytes, 16);
-        }
-        setExpectedServerSecKey( new String( Base64.encodeBase64( bytes ), charset ) );
+			setExpectedServerSecKey( new String( Base64.encodeBase64( bytes ), charset.name() ) );
+		}
+        catch (UnsupportedEncodingException e)
+        {
+            logger.error("An error occurred during encoding", e);
+		}
     }
 
     public boolean verifyServerHandshake( byte[] aServerHandshakeBytes )
@@ -433,7 +463,14 @@ public class WebSocketHandshake
             headers.add(new HandshakeHeader( "Sec-WebSocket-Key", getClientSecKey() ));
             headers.add(new HandshakeHeader( "Sec-WebSocket-Version", getClientConfig().getWebSocketVersion().getSpecVersionValue() ));
             String handshake = buildHandshake( headers, resourcePath );
-            clientHandshakeBytes = handshake.getBytes( Charset.forName( "US-ASCII" ) );
+            try
+            {
+				clientHandshakeBytes = handshake.getBytes( "US-ASCII" );
+			}
+            catch (UnsupportedEncodingException e)
+            {
+                logger.error("An error occurred during decoding", e);
+			}
         }
 
         return clientHandshakeBytes;
@@ -457,7 +494,14 @@ public class WebSocketHandshake
             headers.add(new HandshakeHeader( "Sec-WebSocket-Extensions", createCommaDelimitedList(getServerConfig().getSelectedExtensions()) ));
             headers.add(new HandshakeHeader( "Sec-WebSocket-Accept", getExpectedServerSecKey() ));
             String handshake = buildHandshake( headers, resourcePath );
-            serverHandshakeBytes = handshake.getBytes( Charset.forName( "US-ASCII" ) );
+            try
+            {
+				serverHandshakeBytes = handshake.getBytes( "US-ASCII" );
+			}
+            catch (UnsupportedEncodingException e)
+            {
+                logger.error("An error occurred during decoding", e);
+			}
         }
 
         return serverHandshakeBytes;

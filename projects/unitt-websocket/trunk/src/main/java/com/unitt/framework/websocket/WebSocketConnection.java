@@ -3,14 +3,16 @@ package com.unitt.framework.websocket;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
-import java.util.ArrayDeque;
+//import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
@@ -40,7 +42,8 @@ public abstract class WebSocketConnection implements WebSocket, NetworkSocketObs
     private String                   closeMessage;
     private int                      closeStatus;
     private WebSocketState           state            = WebSocketState.Disconnected;
-    private Queue<WebSocketFragment> pendingFragments = new ArrayDeque<WebSocketFragment>();
+    
+    private Queue<WebSocketFragment> pendingFragments = new LinkedList<WebSocketFragment>();
     private boolean                  isClosing        = false;
 
 
@@ -706,7 +709,7 @@ public abstract class WebSocketConnection implements WebSocket, NetworkSocketObs
 
     protected void sendMessage( WebSocketFragment aFragment )
     {
-        if ( !isClosing() || aFragment.getOpCode() == MessageOpCode.CLOSE )
+        if ( !isClosing() )
         {
             try
             {
@@ -752,7 +755,14 @@ public abstract class WebSocketConnection implements WebSocket, NetworkSocketObs
                 return "";
             }
 
-            return new String( aData, utf8Charset );
+            try
+            {
+				return new String( aData, utf8Charset.name() );
+			}
+            catch (UnsupportedEncodingException e)
+            {
+				logger.error("An error occurred during encoding", e);
+			}
         }
 
         return null;
@@ -776,7 +786,14 @@ public abstract class WebSocketConnection implements WebSocket, NetworkSocketObs
                 return new byte[] {};
             }
 
-            return aData.getBytes( utf8Charset );
+            try
+            {
+				return aData.getBytes( utf8Charset.name() );
+			}
+            catch (UnsupportedEncodingException e)
+            {
+                logger.error("An error occurred during decoding", e);
+			}
         }
 
         return null;
