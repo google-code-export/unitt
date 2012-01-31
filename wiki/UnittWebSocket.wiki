@@ -7,7 +7,7 @@ The unitt-websocket project is an API that allows you to use web sockets in your
 
 = Setup Your Project =
 
-  # Include the slf4j and Apache Java commons-codec libraries. If you want to use the Java NIO version, you also need Netty.
+  # Include the slf4j and Apache Java commons-codec libraries. If you want to use the Java NIO version, you also need Netty. If you are using Android, consider using [http://www.slf4j.org/android/ SLF4J Android]. It gives you the full power of SLF4J (package filtering, priority filtering, logger pluggability and portability) and logs to the built-in Android logger.
   # Include the unitt-websocket library in your project. 
 
 If you already use Maven, then adding the dependency to your project is as simple as adding the web socket dependency to your project
