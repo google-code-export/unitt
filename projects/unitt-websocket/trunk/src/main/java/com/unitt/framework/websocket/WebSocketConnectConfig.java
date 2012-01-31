@@ -13,7 +13,7 @@ public class WebSocketConnectConfig
 {
     public enum WebSocketVersion
     {
-        Version07( "7" ), Version08( "8" ), Version10( "10" );
+        Version07( "7" ), Version08( "8" ), Version10( "8" );
 
         private String specVersionValue;
 
