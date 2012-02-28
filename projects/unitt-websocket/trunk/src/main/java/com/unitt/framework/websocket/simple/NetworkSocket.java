@@ -289,6 +289,4 @@ public class NetworkSocket implements NetworkSocketFacade, Runnable
             }
         }
     }
-    
-    
 }

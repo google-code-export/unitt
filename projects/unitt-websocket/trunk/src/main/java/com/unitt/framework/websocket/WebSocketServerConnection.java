@@ -32,8 +32,7 @@ public class WebSocketServerConnection extends WebSocketConnection
         {
             getNetwork().upgrade();
             setState( WebSocketState.Connected );
-            //@todo: handle extensions
-            sendOpenToObserver( getHandshake().getServerConfig().getSelectedProtocol(), null );
+            sendOpenToObserver( getHandshake().getClientConfig().getSelectedProtocol(), getHandshake().getClientConfig().getSelectedExtensions() );
         }
         
         super.onReceivedData( aData );
@@ -63,5 +62,11 @@ public class WebSocketServerConnection extends WebSocketConnection
             setState( WebSocketState.Disconnected );
             getNetwork().disconnect();
         }
+    }
+
+    public boolean isClient()
+    {
+        return false;
+
     }
 }

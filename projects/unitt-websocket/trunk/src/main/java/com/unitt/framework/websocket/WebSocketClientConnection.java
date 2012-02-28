@@ -67,8 +67,7 @@ public class WebSocketClientConnection extends WebSocketConnection
             {
                 getNetwork().upgrade();
                 setState( WebSocketState.Connected );
-                //@todo: handle extensions
-                sendOpenToObserver( getHandshake().getServerConfig().getSelectedProtocol(), null );
+                sendOpenToObserver( getHandshake().getServerConfig().getSelectedProtocol(), getHandshake().getServerConfig().getSelectedExtensions() );
             }
             else
             {

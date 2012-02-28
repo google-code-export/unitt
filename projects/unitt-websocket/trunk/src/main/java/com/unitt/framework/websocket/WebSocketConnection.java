@@ -66,6 +66,11 @@ public abstract class WebSocketConnection implements WebSocket, NetworkSocketObs
 
     // getters & setters
     // ---------------------------------------------------------------------------
+    public boolean isClient()
+    {
+        return true;
+    }
+
     public WebSocketConnectConfig getConnectConfig()
     {
         return connectConfig;
@@ -217,7 +222,7 @@ public abstract class WebSocketConnection implements WebSocket, NetworkSocketObs
         {
             logger.error( "An error occurred while encoding to UTF8 to send text in ping message.", e );
             sendErrorToObserver( e );
-            close( WebSocketCloseStatusInvalidUtf8, null );
+            close(WebSocket.WebSocketCloseStatusInvalidData, null );
         }
     }
 
@@ -415,7 +420,7 @@ public abstract class WebSocketConnection implements WebSocket, NetworkSocketObs
                     {
                         logger.error( "An error occurred while decoding from UTF8 to receive a text message.", e );
                         sendErrorToObserver( e );
-                        close( WebSocketCloseStatusInvalidUtf8, null );
+                        close(WebSocket.WebSocketCloseStatusInvalidData, null );
                     }
                 }
                 break;
@@ -500,7 +505,7 @@ public abstract class WebSocketConnection implements WebSocket, NetworkSocketObs
             setClosing( true );
             if ( hasInvalidUtf8 )
             {
-                close( WebSocketCloseStatusInvalidUtf8, null );
+                close(WebSocket.WebSocketCloseStatusInvalidData, null );
             }
             else
             {
@@ -521,7 +526,7 @@ public abstract class WebSocketConnection implements WebSocket, NetworkSocketObs
         {
             logger.error( "An error occurred while decoding from UTF8 to receive text in ping.", e );
             sendErrorToObserver( e );
-            close( WebSocketCloseStatusInvalidUtf8, null );
+            close(WebSocket.WebSocketCloseStatusInvalidData, null );
         }
     }
 
@@ -536,27 +541,36 @@ public abstract class WebSocketConnection implements WebSocket, NetworkSocketObs
             
             pendingFragments.offer( fragment );
         }
-        else if ( fragment != null )
+        else
         {
-            fragment.appendFragment( aData );
-            if ( fragment.canBeParsed() )
+            fragment.appendFragment(aData);
+        }
+
+        //parse content, if applicable
+        if ( fragment.canBeParsed() )
+        {
+            //client is not allowed to receive data that is masked and must fail the connection
+            if (fragment.hasMask() && isClient())
             {
-                fragment.parseContent();
+                close(WebSocket.WebSocketCloseStatusProtocolError, "Server cannot mask data.");
+                return;
+            }
+
+            //parse content
+            fragment.parseContent();
+
+            // if we have a complete fragment, handle it
+            if ( fragment.isValid() )
+            {
+                // handle complete fragment
+                handleCompleteFragment( fragment );
             }
         }
 
-
-        // if we have a complete fragment, handle it
-        if ( fragment.isValid() )
+        // if we have extra data, handle it
+        if ( fragment.getMessageLength() > 0 && aData.length > fragment.getMessageLength() )
         {
-            // handle complete fragment
-            handleCompleteFragment( fragment );
-
-            // if we have extra data, handle it
-            if ( aData.length > fragment.getMessageLength() )
-            {
-                handleMessageData( WebSocketUtil.copySubArray( aData, fragment.getMessageLength(), aData.length - fragment.getMessageLength() ) );
-            }
+            handleMessageData( WebSocketUtil.copySubArray( aData, fragment.getMessageLength(), aData.length - fragment.getMessageLength() ) );
         }
     }
 
@@ -622,7 +636,7 @@ public abstract class WebSocketConnection implements WebSocket, NetworkSocketObs
         {
             logger.error( "An error occurred while encoding UTF8 to send text in close message.", e );
             sendErrorToObserver( e );
-            close( WebSocketCloseStatusInvalidUtf8, null );
+            close(WebSocket.WebSocketCloseStatusInvalidData, null );
         }
     }
 
@@ -639,7 +653,7 @@ public abstract class WebSocketConnection implements WebSocket, NetworkSocketObs
             {
                 logger.error( "An error occurred while encoding UTF8 to send text message.", e );
                 sendErrorToObserver( e );
-                close( WebSocketCloseStatusInvalidUtf8, null );
+                close(WebSocket.WebSocketCloseStatusInvalidData, null );
             }
         }
     }
