@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -156,7 +157,7 @@ public class WebSocketHandshake
         output.append( "\r\n" );
         return output.toString();
     }
-    
+
     protected HandshakeHeader findHeader(String aCaseInsensitiveKey, List<HandshakeHeader> aHeaders)
     {
         for (HandshakeHeader header : aHeaders)
@@ -166,15 +167,29 @@ public class WebSocketHandshake
                 return header;
             }
         }
-        
+
         return null;
     }
 
+    protected List<HandshakeHeader> findHeaders(String aCaseInsensitiveKey, List<HandshakeHeader> aHeaders)
+    {
+        List<HandshakeHeader> results = new ArrayList<HandshakeHeader>();
+        for (HandshakeHeader header : aHeaders)
+        {
+            if (aCaseInsensitiveKey.equalsIgnoreCase( header.getKey() ))
+            {
+                results.add(header);
+            }
+        }
+        return results;
+    }
+
+    //@todo: send 400 error with available versions on mismatch
     protected void parseClientHandshakeBytes( byte[] aBytes )
     {
         // init
         Charset charset = Charset.forName( "US-ASCII" );
-        setClientHandshakeBytes( aBytes );
+        setClientHandshakeBytes(aBytes);
         
         String handshake = "";
 		try
@@ -194,7 +209,7 @@ public class WebSocketHandshake
             String secKey = null;
             WebSocketConnectConfig config = new WebSocketConnectConfig();
             List<HandshakeHeader> headers = parseHeaders( handshake );
-            config.setClientHeaders( headers );
+            config.setClientHeaders(headers);
             HandshakeHeader header = findHeader("Upgrade", headers);
             if (header != null && header.getValue() != null)
             {
@@ -205,33 +220,36 @@ public class WebSocketHandshake
             {
                 connect = header.getValue().equalsIgnoreCase( "upgrade" );
             }
-            header = findHeader("Sec-WebSocket-Protocol", headers);
-            if (header != null && header.getValue() != null)
+            List<HandshakeHeader> matches = findHeaders("Sec-WebSocket-Protocol", headers);
+            List<String> availableProtocols = new ArrayList<String>();
+            for (HandshakeHeader match : matches)
             {
-                // set available & selected protocols
-                List<String> availableProtocols = new ArrayList<String>();
-                String[] protocols = header.getValue().split( "," );
-                for ( String protocol : protocols )
+                if (match != null && match.getValue() != null)
                 {
-                    if ( protocol != null )
+                    // set available & selected protocols
+                    String[] protocols = match.getValue().split( "," );
+                    for ( String protocol : protocols )
                     {
-                        String cleanProtocol = protocol.trim();
-                        if ( cleanProtocol.length() > 0 )
+                        if ( protocol != null )
                         {
-                            // can we choose this protocol, if we are
-                            // missing one
-                            if ( config.getSelectedProtocol() == null && containsCaseInsensitiveValue( header.getValue(), getServerConfig().getAvailableProtocols() ) )
+                            String cleanProtocol = protocol.trim();
+                            if ( cleanProtocol.length() > 0 )
                             {
-                                config.setSelectedProtocol( cleanProtocol );
+                                // can we choose this protocol, if we are
+                                // missing one
+                                if ( config.getSelectedProtocol() == null && containsCaseInsensitiveValue(match.getValue(), getServerConfig().getAvailableProtocols()) )
+                                {
+                                    config.setSelectedProtocol( cleanProtocol );
+                                }
+                                availableProtocols.add( cleanProtocol );
                             }
-                            availableProtocols.add( cleanProtocol );
                         }
                     }
                 }
-                if ( !availableProtocols.isEmpty() )
-                {
-                    config.setAvailableProtocols( availableProtocols );
-                }
+            }
+            if ( !availableProtocols.isEmpty() )
+            {
+                config.setAvailableProtocols( availableProtocols );
             }
             header = findHeader("Sec-WebSocket-Key", headers);
             if (header != null && header.getValue() != null)
@@ -247,43 +265,36 @@ public class WebSocketHandshake
             if (header != null && header.getValue() != null)
             {
                 // @todo: perform browser resource validation
-                config.setOrigin( header.getValue() );
+                config.setOrigin(header.getValue());
+            }
+            header = findHeader("Origin", headers);
+            if (header != null && header.getValue() != null)
+            {
+                // @todo: perform browser resource validation
+                config.setOrigin(header.getValue());
             }
             header = findHeader("Host", headers);
             if (header != null && header.getValue() != null)
             {
                 config.setHost( header.getValue() );
             }
-            header = findHeader("Sec-WebSocket-Extensions", headers);
-            if (header != null && header.getValue() != null)
+            matches = findHeaders("Sec-WebSocket-Extensions", headers);
+            List<List<String>> headerExtensions = new ArrayList<List<String>>();
+            for (HandshakeHeader match : matches)
             {
-                // set available & selected protocols
-                List<String> availableExtensions = new ArrayList<String>();
-                List<String> selectedExtensions = new ArrayList<String>();
-                String[] extensions = header.getValue().split( "," );
-                for ( String extension : extensions )
+                if (match != null && match.getValue() != null)
                 {
-                    if ( extension != null )
-                    {
-                        String cleanExtension = extension.trim();
-                        if ( cleanExtension.length() > 0 )
-                        {
-                            if ( containsCaseInsensitiveValue( header.getValue(), getServerConfig().getAvailableExtensions() ) )
-                            {
-                                selectedExtensions.add( cleanExtension );
-                            }
-                            availableExtensions.add( cleanExtension );
-                        }
-                    }
+                    headerExtensions.addAll(getNestedLists(match.getValue()));
                 }
-                if ( !availableExtensions.isEmpty() )
-                {
-                    config.setAvailableProtocols( availableExtensions );
-                }
-                if ( !selectedExtensions.isEmpty() )
-                {
-                    config.setSelectedExtensions( selectedExtensions );
-                }
+            }
+            List<String> selectedExtensions = getFirstCaseInsensitiveMatch(getServerConfig().getAvailableExtensions(), headerExtensions);
+            if ( !headerExtensions.isEmpty() )
+            {
+                config.setAvailableExtensions( headerExtensions );
+            }
+            if ( selectedExtensions != null && !selectedExtensions.isEmpty() )
+            {
+                config.setSelectedExtensions( selectedExtensions );
             }
 
             // verify connect/upgrade
@@ -315,7 +326,8 @@ public class WebSocketHandshake
         {
             logger.error("An error occurred during encoding", e);
 		}
-		
+
+        //@todo: handle server 400 error and look for other versions
         // only allowed status is 101
         if ( handshake.contains( "HTTP/1.1 101" ) )
         {
@@ -350,22 +362,13 @@ public class WebSocketHandshake
             if (header != null && header.getValue() != null)
             {
                 // set available & selected protocols
-                List<String> selectedExtensions = new ArrayList<String>();
-                String[] extensions = header.getValue().split( "," );
-                for ( String extension : extensions )
+                List<String> selectedExtensions = getTrimmedValues(Arrays.asList(header.getValue().split(",")));
+                if (containsCaseInsensitiveValues(selectedExtensions, config.getAvailableExtensions()))
                 {
-                    if ( extension != null )
+                    if ( selectedExtensions != null && !selectedExtensions.isEmpty() )
                     {
-                        String cleanExtension = extension.trim();
-                        if ( cleanExtension.length() > 0 )
-                        {
-                            selectedExtensions.add( cleanExtension );
-                        }
+                        config.setSelectedExtensions( selectedExtensions );
                     }
-                }
-                if ( !selectedExtensions.isEmpty() )
-                {
-                    config.setSelectedExtensions( selectedExtensions );
                 }
             }
 
@@ -446,19 +449,29 @@ public class WebSocketHandshake
             if (headers == null)
             {
                 headers = new ArrayList<HandshakeHeader>();
-                getClientConfig().setClientHeaders( headers );
+                getClientConfig().setClientHeaders(headers);
             }
             headers.add(new HandshakeHeader( "Upgrade", "WebSocket" ));
             headers.add(new HandshakeHeader( "Connection", "Upgrade" ));
             headers.add(new HandshakeHeader( "Host", getClientConfig().getHost() ));
-            headers.add(new HandshakeHeader( "Sec-WebSocket-Origin", getClientConfig().getOrigin() ));
+            if (getClientConfig().getUseOrigin())
+            {
+                if (getClientConfig().getWebSocketVersion().equals(WebSocketVersion.Version07) || getClientConfig().getWebSocketVersion().equals(WebSocketVersion.Version08) || getClientConfig().getWebSocketVersion().equals(WebSocketVersion.Version10))
+                {
+                    headers.add(new HandshakeHeader( "Sec-WebSocket-Origin", getClientConfig().getOrigin() ));
+                }
+                else
+                {
+                    headers.add(new HandshakeHeader( "Origin", getClientConfig().getOrigin() ));
+                }
+            }
             if ( getClientConfig().getAvailableProtocols() != null )
             {
                 headers.add(new HandshakeHeader( "Sec-WebSocket-Protocol", createCommaDelimitedList( getClientConfig().getAvailableProtocols() ) ));
             }
             if ( getClientConfig().getAvailableExtensions() != null )
             {
-                headers.add(new HandshakeHeader( "Sec-WebSocket-Extensions", createCommaDelimitedList( getClientConfig().getAvailableExtensions() ) ));
+                headers.add(new HandshakeHeader( "Sec-WebSocket-Extensions", createNestedCommaDelimitedList(getClientConfig().getAvailableExtensions()) ));
             }
             headers.add(new HandshakeHeader( "Sec-WebSocket-Key", getClientSecKey() ));
             headers.add(new HandshakeHeader( "Sec-WebSocket-Version", getClientConfig().getWebSocketVersion().getSpecVersionValue() ));
@@ -516,6 +529,45 @@ public class WebSocketHandshake
 
         return aUrl.getPath();
     }
+    
+    protected List<List<String>> getNestedLists(String aValue)
+    {
+        List<List<String>> results = new ArrayList<List<String>>();
+        for (String items : aValue.split(";"))
+        {
+            List<String> resultItem = new ArrayList<String>();
+            for (String item : items.split(","))
+            {
+                 resultItem.add(item.trim());
+            }
+            if (!resultItem.isEmpty())
+            {
+                results.add(resultItem);
+            }
+        }
+        return results;
+    }
+
+    protected String createNestedCommaDelimitedList(List<List<String>> aAvailableExtensions) {
+
+        StringBuilder output = new StringBuilder();
+
+        boolean isFirst = true;
+        for ( List<String> items : aAvailableExtensions )
+        {
+            if ( isFirst )
+            {
+                isFirst = false;
+            }
+            else
+            {
+                output.append( ";" );
+            }
+            output.append( createCommaDelimitedList(items) );
+        }
+
+        return output.toString();
+    }
 
     protected String createCommaDelimitedList( List<?> aItems )
     {
@@ -549,5 +601,74 @@ public class WebSocketHandshake
         }
 
         return false;
+    }
+    
+    protected List<String> getFirstCaseInsensitiveMatch(List<List<String>> aValues, List<List<String>> aValuesToSearch)
+    {
+        for (List<String> items : aValues)
+        {
+            if (containsCaseInsensitiveValues(items, aValuesToSearch))
+            {
+                return items;
+            }
+        }
+        
+        return null;
+    }
+
+    protected boolean containsCaseInsensitiveValues( List<String> aValues, List<List<String>> aValuesToSearch )
+    {
+        if (aValues == null && aValuesToSearch == null)
+        {
+            return true;
+        }
+        else if (aValues != null && !aValues.isEmpty() && aValuesToSearch != null && !aValuesToSearch.isEmpty())
+        {
+            for ( List<String> itemToQuery : aValuesToSearch )
+            {
+                if (!listsMatchCaseInsensitiveValues(aValues, itemToQuery))
+                {
+                    return false;
+                }
+            }
+    
+            return true;
+        }
+        
+        return false;
+    }
+    
+    protected boolean listsMatchCaseInsensitiveValues(List<String> aValues, List<String> aOtherValues)
+    {
+        if (aValues != null && aOtherValues != null)
+        {
+            if (aValues.size() == aOtherValues.size())
+            {
+                for (int i = 0; i < aValues.size(); i++)
+                {
+                    if (!aValues.get(i).trim().equalsIgnoreCase(aOtherValues.get(i).trim()))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+        else if (aValues == null && aOtherValues == null)
+        {
+            return true;
+        }
+        
+        return false;
+    }
+    
+    protected List<String> getTrimmedValues(List<String> aValues)
+    {
+        List<String> results = new ArrayList<String>();
+        for (String value : aValues)
+        {
+            results.add(value.trim());
+        }
+        return results;
     }
 }

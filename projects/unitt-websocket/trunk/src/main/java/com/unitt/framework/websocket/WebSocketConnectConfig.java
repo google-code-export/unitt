@@ -3,6 +3,7 @@ package com.unitt.framework.websocket;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -13,7 +14,7 @@ public class WebSocketConnectConfig
 {
     public enum WebSocketVersion
     {
-        Version07( "7" ), Version08( "8" ), Version10( "8" );
+        Version07( "7" ), Version08( "8" ), Version10( "8" ), VersionRfc6455( "13" );
 
         private String specVersionValue;
 
@@ -44,10 +45,11 @@ public class WebSocketConnectConfig
     private URI                   url;
     private String                host;
     private String                origin;
+    private boolean               useOrigin;
     private long                  timeoutInMillis;
     private boolean               verifyTlsDomain;
     private List<String>          availableProtocols;
-    private List<String>          availableExtensions;
+    private List<List<String>>    availableExtensions;
     private List<String>          selectedExtensions;
     private List<HandshakeHeader> clientHeaders;
     private List<HandshakeHeader> serverHeaders;
@@ -56,7 +58,7 @@ public class WebSocketConnectConfig
     private int                   maxPayloadSize   = 32 * 1024;
     private String                proxyHost;
     private int                   proxyPort        = -1;
-    private WebSocketVersion      webSocketVersion = WebSocketVersion.Version07;
+    private WebSocketVersion      webSocketVersion = WebSocketVersion.VersionRfc6455;
 
 
     // constructors
@@ -157,6 +159,16 @@ public class WebSocketConnectConfig
         return availableProtocols;
     }
 
+    public boolean getUseOrigin()
+    {
+        return useOrigin;
+    }
+
+    public void setUseOrigin(boolean aUseOrigin)
+    {
+        useOrigin = aUseOrigin;
+    }
+
     public void setAvailableProtocol( String aAvailableProtocol )
     {
         availableProtocols = new ArrayList<String>();
@@ -168,12 +180,46 @@ public class WebSocketConnectConfig
         availableProtocols = aAvailableProtocols;
     }
 
-    public List<String> getAvailableExtensions()
+    public void addAvailableExtension(String aExtension)
+    {
+        if (availableExtensions == null)
+        {
+            availableExtensions = new ArrayList<List<String>>();
+        }
+        
+        //if string contains commas, split it and add individually
+        String[] items = null;
+        if (aExtension.contains(","))
+        {
+            items = aExtension.split(",");
+            for (int i = 0; i < items.length; i++)
+            {
+                items[i] = items[i].trim();
+            }
+        }
+        else
+        {
+            items = new String[] {aExtension.trim()};
+        }
+        availableExtensions.add(Arrays.asList(items));
+    }
+
+    public void addAvailableExtensions(List<String> aExtensions)
+    {
+        if (availableExtensions == null)
+        {
+            availableExtensions = new ArrayList<List<String>>();
+        }
+
+        availableExtensions.add(aExtensions);
+    }
+
+    public List<List<String>> getAvailableExtensions()
     {
         return availableExtensions;
     }
 
-    public void setAvailableExtensions( List<String> aAvailableExtensions )
+    public void setAvailableExtensions( List<List<String>> aAvailableExtensions )
     {
         availableExtensions = aAvailableExtensions;
     }
