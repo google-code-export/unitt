@@ -32,5 +32,7 @@
 - (void) testSerialize;
 - (void) testDeserializeWithStrings;
 - (void) testDeserializeWithValues;
+- (void) testDeserializeWithValuesInArray;
+- (void) testSerializePrimitiveArray;
 
 @end

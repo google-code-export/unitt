@@ -142,7 +142,9 @@
     int length = aData.count;
     for (int i = 0; i < length; i++) {
         id result = [aData objectAtIndex:i];
-        [results addObject:[self deserializeObjectFromData:result type:aClass]];
+        id object = [[[aClass alloc] init] autorelease];
+        [self.objectHandler fillObjectFromDictionary:result object:object];
+        [results addObject:object];
     }
 
     return results;
@@ -160,7 +162,9 @@
     for (int i = 0; i < length; i++) {
         id result = [aData objectAtIndex:i];
         Class type = [aClasses objectAtIndex:i];
-        [results addObject:[self deserializeObjectFromData:result type:type]];
+        id object = [[[type alloc] init] autorelease];
+        [self.objectHandler fillObjectFromDictionary:result object:object];
+        [results addObject:object];
     }
 
     return results;
@@ -193,10 +197,17 @@
     return [[self.objectHandler objectToDictionary:aObject] JSONDataWithOptions:serializeOptions error:nil];
 }
 
+// TODO: check for array of primitives before delegating to object handler
 - (NSString*) serializeToStringFromObject:(id) aObject {
     //convert the object to a JSON string
     NSError* error;
-    NSString* value = [[self.objectHandler objectToDictionary:aObject] JSONStringWithOptions:serializeOptions error:&error];
+    NSString* value = nil;
+    if ([aObject isKindOfClass:[NSArray class]]) {
+        value = [((NSArray*) aObject) JSONStringWithOptions:serializeOptions error:&error];
+    }
+    else {
+        value = [[self.objectHandler objectToDictionary:aObject] JSONStringWithOptions:serializeOptions error:&error];
+    }
     NSLog(@"Error serializing: %@", error.localizedDescription);
     return value;
 }

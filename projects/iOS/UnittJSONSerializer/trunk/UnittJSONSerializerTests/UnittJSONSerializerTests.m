@@ -66,4 +66,32 @@
     STAssertEqualObjects(result.testNumber, [NSNumber numberWithInt:102], @"Did not have the correct number value");
 }
 
+
+- (void) testDeserializeWithValuesInArray
+{
+    JSONSerializer* serializer = [[JSONSerializer serializerWithParseOptions:JSParseOptionsStrict serializeOptions:JSSerializeOptionPretty] retain];
+    NSString* serialized = @"[{\"testString\":\"testStringValue\",\"testInt\":100,\"superInt\":1001,\"testLong\":103,\"testDouble\":100.1,\"testNumber\":102,\"testDate\":1315153697500,\"testBool\":\"true\"}]";
+    NSArray* results = [serializer deserializeArrayFromType:[TestTransportObject class] string:serialized];
+    TestTransportObject* result = [results objectAtIndex:0];
+    long long longValue = 103;
+    STAssertEqualObjects(result.testString, @"testStringValue", @"Did not have the correct string value: expected=%@, actual=%@",@"testStringValue", result.testString);
+    STAssertEquals(result.testInt, 100, @"Did not have the correct int value");
+    STAssertEquals(result.superInt, 1001, @"Did not have the correct super int value");
+    STAssertTrue(result.testBool, @"Did not have the correct bool value");
+    STAssertEquals(result.testDouble, 100.1, @"Did not have the correct double value");
+    STAssertEquals(result.testLong, longValue, @"Did not have the correct long long value");
+    STAssertNotNil(result.testDate, @"Did not have a test date value");
+    STAssertEqualObjects(result.testNumber, [NSNumber numberWithInt:102], @"Did not have the correct number value");
+    [serializer release];
+}
+
+- (void) testSerializePrimitiveArray
+{
+    NSArray* deserialized = [NSArray arrayWithObjects:@"trouble", @"other", nil]; //[NSDate date]];
+    JSONSerializer* serializer = [[JSONSerializer serializerWithParseOptions:JSParseOptionsStrict serializeOptions:JSSerializeOptionPretty] retain];
+    NSString* output = [serializer serializeToStringFromObject:deserialized];
+    NSLog(@"Primitive Output:\n%@", output);
+    [serializer release];
+}
+
 @end
