@@ -36,13 +36,13 @@
 
 - (void) setTestInt:(int)aTestInt
 {
-    NSLog(@"Setting Test Int to %i", aTestInt);
+//    NSLog(@"Setting Test Int to %i", aTestInt);
     testInt = aTestInt;
 }
 
 - (void) setTestDouble:(double) aTestDouble
 {
-    NSLog(@"Setting Test Double to %f", aTestDouble);
+//    NSLog(@"Setting Test Double to %f", aTestDouble);
     testDouble = aTestDouble;
 }
 

@@ -24,6 +24,14 @@
 #pragma mark -
 
 
+@interface JSONSerializer ()
+
+- (NSArray *)deserializeArrayFromType:(Class)aClass dataArray:(NSArray *)aData;
+- (NSArray *)deserializeArrayFromTypes:(NSArray *)aClasses dataArray:(NSArray *)aData;
+- (id)deserializeObjectFromDictionary:(NSDictionary *)aData type:(Class)aClass;
+
+@end
+
 @implementation JSONSerializer
 
 @synthesize objectHandler;
@@ -52,86 +60,87 @@
     return [NSNumber numberWithLongLong:almostValue];
 }
 
-- (void) fillObjectFromData:(NSData*) aData object:(id) aObject {
-    //create dictionary from data
-    NSDictionary* data = [aData objectFromJSONDataWithParseOptions:parseOptions];
-
-    //fill object using dictionary
-    [self.objectHandler fillObjectFromDictionary:data object:aObject];
-}
-
-- (void) fillObjectFromString:(NSString*) aData object:(id) aObject {
-    //create dictionary from string
-    NSDictionary* data = [aData objectFromJSONStringWithParseOptions:parseOptions];
-
-    //fill object using dictionary
-    [self.objectHandler fillObjectFromDictionary:data object:aObject];
+- (id) deserializeObjectFromDictionary:(NSDictionary*) aData type:(Class) aClass {
+    //init
+    id result = nil;
+    Class type = nil;
+        
+        //attempt to figure out type from dictionary
+        type = [self.objectHandler readConcreteClassFromDictionary:aData];
+        if (!type) {
+            type = aClass;
+        }
+    
+        //if we don't have a type, return as a string
+        if (!type) {
+            return aData;
+        }
+    
+        //create object of the specified type
+        result = [[[type alloc] init] autorelease];
+    
+        //fill object using deserialized JSON
+        [self.objectHandler fillObjectFromDictionary:aData object:result];
+    
+        return result;
 }
 
 - (id) deserializeObjectFromData:(NSData*) aData type:(Class) aClass {
-    id result;
+    //create dictionary from string
+    id data = [aData objectFromJSONDataWithParseOptions:parseOptions];
     
-    //if not type is specified - let JSON figure it out
-    if (!aClass) {
-        result = [aData objectFromJSONDataWithParseOptions:parseOptions];
-
-        if (!result) {
-            return [[[NSString alloc] initWithData:aData encoding:NSUTF8StringEncoding] autorelease];
+    //if there is no dictionary - it must be primitive
+    if (!data) {
+        //if primitive, handle as such
+        if ([aClass isEqual:[NSDate class]])
+        {
+            return [self deserializeDateFromData:aData];
         }
-    }
-
-    //if primitive, handle as such
-    if ([aClass isEqual:[NSDate class]])
-    {
-        return [self deserializeDateFromData:aData];
-    }
-    else if ([aClass isEqual:[NSNumber class]])
-    {
-        return [self deserializeNumberFromData:aData];
-    }
-    else if ([aClass isEqual:[NSString class]])
-    {
+        else if ([aClass isEqual:[NSNumber class]])
+        {
+            return [self deserializeNumberFromData:aData];
+        }
         return [self deserializeStringFromData:aData];
     }
+    
+    //handle dictionary or array type
+    if ([data isKindOfClass:[NSDictionary class]]) {
+        return [self deserializeObjectFromDictionary:data type:aClass];
+    }
+    else if ([data isKindOfClass:[NSArray class]]) {
+        return [self deserializeArrayFromType:aClass dataArray:data];
+    }
 
-    //create object of the specified type
-    result = [[[aClass alloc] init] autorelease];
-
-    //fill object using deserialized JSON
-    [self fillObjectFromData:aData object:result];
-
-    return result;
+    return [self deserializeStringFromData:aData];
 }
 
-- (id) deserializeObjectFromString:(NSString*) aData type:(Class) aClass {
-    id result;
-
-    //if not type is specified - let JSON figure it out
-    if (!aClass) {
-        result = [aData objectFromJSONStringWithParseOptions:parseOptions];
-
-        if (!result) {
-            return aData;
+- (id) deserializeObjectFromString:(NSString*) aData type:(Class) aClass { //init
+    //create dictionary from string
+    id data = [aData objectFromJSONStringWithParseOptions:parseOptions];
+    
+    //if there is no dictionary - it must be primitive
+    if (!data) {
+        //if primitive, handle as such
+        if ([aClass isEqual:[NSDate class]])
+        {
+            return [self deserializeDateFromString:aData];
         }
+        else if ([aClass isEqual:[NSNumber class]])
+        {
+            return [self deserializeNumberFromString:aData];
+        }
+        return aData;
     }
 
-    //if primitive, handle as such
-    if ([aClass isEqual:[NSDate class]])
-    {
-        return [self deserializeDateFromString:aData];
+    //handle dictionary or array type
+    if ([data isKindOfClass:[NSDictionary class]]) {
+        return [self deserializeObjectFromDictionary:data type:aClass];
     }
-    else if ([aClass isEqual:[NSNumber class]])
-    {
-        return [self deserializeNumberFromString:aData];
+    else if ([data isKindOfClass:[NSArray class]]) {
+        return [self deserializeArrayFromType:aClass dataArray:data];
     }
 
-    //create object of the specified type
-    result = [[[aClass alloc] init] autorelease];
-
-    //fill object using deserialized JSON
-    [self fillObjectFromString:aData object:result];
-
-    return result;
+    return aData;
 }
 
 - (NSArray*) deserializeArrayFromType:(Class) aClass dataArray:(NSArray*) aData {
@@ -142,8 +151,20 @@
     int length = aData.count;
     for (int i = 0; i < length; i++) {
         id result = [aData objectAtIndex:i];
-        id object = [[[aClass alloc] init] autorelease];
-        [self.objectHandler fillObjectFromDictionary:result object:object];
+        id object = nil;
+        
+        //handle dictionary or array type
+        if ([result isKindOfClass:[NSDictionary class]]) {
+            object = [self deserializeObjectFromDictionary:result type:aClass];
+        }
+        else if ([result isKindOfClass:[NSArray class]]) {
+            object = [self deserializeArrayFromType:aClass dataArray:result];
+        }
+        else {
+            object = result;
+        }
+        
+        //add to output array
         [results addObject:object];
     }
 
@@ -162,8 +183,20 @@
     for (int i = 0; i < length; i++) {
         id result = [aData objectAtIndex:i];
         Class type = [aClasses objectAtIndex:i];
-        id object = [[[type alloc] init] autorelease];
-        [self.objectHandler fillObjectFromDictionary:result object:object];
+        id object = nil;
+
+        //handle dictionary or array type
+        if ([result isKindOfClass:[NSDictionary class]]) {
+            object = [self deserializeObjectFromDictionary:result type:type];
+        }
+        else if ([result isKindOfClass:[NSArray class]]) {
+            object = [self deserializeArrayFromType:type dataArray:result];
+        }
+        else {
+            object = result;
+        }
+
+        //add to output array
         [results addObject:object];
     }
 
@@ -208,7 +241,7 @@
     else {
         value = [[self.objectHandler objectToDictionary:aObject] JSONStringWithOptions:serializeOptions error:&error];
     }
-    NSLog(@"Error serializing: %@", error.localizedDescription);
+//    NSLog(@"Error serializing: %@", error.localizedDescription);
     return value;
 }
 
@@ -219,6 +252,13 @@
     //convert each item to dictionary
     for (id item in aObjects) {
         if ([item isKindOfClass:[NSString class]]) {
+            [arrayOfObjectDictionaries addObject:item];
+        }
+        else if ([item isKindOfClass:[NSDate class]]) {
+            NSDate* dateItem = item;
+            [arrayOfObjectDictionaries addObject:[NSNumber numberWithLongLong:(long long) [dateItem timeIntervalSince1970]]];
+        }
+        else if ([item isKindOfClass:[NSNumber class]]) {
             [arrayOfObjectDictionaries addObject:item];
         }
         else {
@@ -237,6 +277,13 @@
     //convert each item to dictionary
     for (id item in aObjects) {
         if ([item isKindOfClass:[NSString class]]) {
+            [arrayOfObjectDictionaries addObject:item];
+        }
+        else if ([item isKindOfClass:[NSDate class]]) {
+            NSDate* dateItem = item;
+            [arrayOfObjectDictionaries addObject:[NSNumber numberWithLongLong:(long long) [dateItem timeIntervalSince1970]]];
+        }
+        else if ([item isKindOfClass:[NSNumber class]]) {
             [arrayOfObjectDictionaries addObject:item];
         }
         else {

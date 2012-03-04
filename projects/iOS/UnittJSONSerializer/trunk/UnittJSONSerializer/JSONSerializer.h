@@ -80,6 +80,7 @@ typedef NSUInteger JSSerializeOptionFlags;
 - (id) deserializeDateFromString:(NSString*) aString;
 - (id) deserializeNumberFromString:(NSString*) aString;
 
+
 /**
  * Takes a JSON data stream and fills the specified object's properties with
  * its values. Only Objective-C properties of the class will be populated with the

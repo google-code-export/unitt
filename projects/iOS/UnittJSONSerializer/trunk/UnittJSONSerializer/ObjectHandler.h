@@ -50,6 +50,7 @@
 
 - (NSDictionary*) toDictionaryFromDictionary:(NSDictionary*) aDictionary;
 
+- (Class) readConcreteClassFromDictionary:(NSDictionary*) aData;
 
 + (id) objectHandlerWithFieldHandler:(FieldHandler*) aFieldHandler;
 

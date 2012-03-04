@@ -124,7 +124,7 @@
         case JSDataTypeDouble:
             if ([aValue isKindOfClass:[NSString class]]) {
                 double value = [((NSString*) aValue) doubleValue];
-                NSLog(@"parsed double value as: %f", value);
+//                NSLog(@"parsed double value as: %f", value);
                 [aInvocation setArgument:&value atIndex:2];
                 [aInvocation invoke];
             }

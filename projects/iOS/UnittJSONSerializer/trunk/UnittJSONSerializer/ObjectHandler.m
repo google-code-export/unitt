@@ -25,8 +25,6 @@
 
 - (NSDictionary*) getPropertiesForClass:(Class) aClass;
 
-- (Class) readConcreteClassFromDictionary:(NSDictionary*) aData;
-
 - (void) writeConcreteClass:(Class) aType dictionary:(NSDictionary*) aData;
 
 @end
@@ -245,7 +243,7 @@
                         isObject = true;
                         break;
                 }
-                NSLog(@"Name=%@, Datatype=%i, Char=%c", propertyInfo.name, propertyInfo.dataType, propertyAttr[1]);
+                //NSLog(@"Name=%@, Datatype=%i, Char=%c", propertyInfo.name, propertyInfo.dataType, propertyAttr[1]);
 
                 //handle custom class - if applicable
                 if (isObject) {
