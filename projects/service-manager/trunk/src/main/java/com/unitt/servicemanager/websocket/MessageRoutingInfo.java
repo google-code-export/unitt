@@ -1,6 +1,10 @@
 package com.unitt.servicemanager.websocket;
 
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.annotate.JsonValue;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -11,7 +15,13 @@ public class MessageRoutingInfo implements Serializable
     {
         Error,
         CompleteSuccess,
-        PartialSuccess
+        PartialSuccess;
+
+
+        @Override
+        public String toString() {
+           return Integer.toString(ordinal());
+        }
     }
     
     private static final long serialVersionUID = 3745930724237990205L;
@@ -155,10 +165,20 @@ public class MessageRoutingInfo implements Serializable
     {
         serializerType = aSerializerType;
     }
-    
+
+    @JsonIgnore
     public MessageResultType getResultType()
     {
         return resultType;
+    }
+
+    @JsonProperty("resultType")
+    public int getResultTypeAsInt() {
+        if (resultType != null) {
+            return getResultType().ordinal();
+        }
+
+        return -1;
     }
 
     public void setResultType( MessageResultType aResultType )
