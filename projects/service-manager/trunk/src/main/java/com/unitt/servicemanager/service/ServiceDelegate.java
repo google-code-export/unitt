@@ -2,6 +2,7 @@ package com.unitt.servicemanager.service;
 
 
 import java.lang.reflect.Method;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -229,7 +230,7 @@ public abstract class ServiceDelegate implements Processor<MessageRoutingInfo>
             if (methodPushesResults(method))
             {
                 method.invoke( getService(), args );
-                response.getHeader().setResultType( MessageResultType.PartialSuccess );
+                response = null;
             }
             else
             {
@@ -247,7 +248,9 @@ public abstract class ServiceDelegate implements Processor<MessageRoutingInfo>
         }
 
         // push message response into appropriate response queue
-        sendResponse(response);
+        if (response != null) {
+            sendResponse(response);
+        }
     }
 
     protected void sendResponse(MessageResponse aResponse)
@@ -327,6 +330,13 @@ public abstract class ServiceDelegate implements Processor<MessageRoutingInfo>
                {
                    results[i] = argValues.get(i);
                }
+                
+                //if argument should be a date - do conversion from long
+                if (aMethod.getParameterTypes()[i].equals(java.util.Date.class)) {
+                    if (results[i] instanceof Number) {
+                        results[i] = new Date(((Number) results[i]).longValue());
+                    }
+                }
             }
             return results;
         }
