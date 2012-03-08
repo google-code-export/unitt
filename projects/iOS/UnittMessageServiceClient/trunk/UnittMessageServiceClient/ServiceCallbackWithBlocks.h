@@ -20,12 +20,13 @@
 
 
 #import <Foundation/Foundation.h>
+#import "ServiceCallback.h"
 
 typedef void (^HandlesNoResult) ();
 typedef void (^HandlesResult) (id);
 typedef void (^HandlesError) (NSError*);
 
-@interface ServiceCallbackWithBlocks : NSObject {
+@interface ServiceCallbackWithBlocks : NSObject<ServiceCallback> {
     HandlesNoResult onEmptyComplete;
     HandlesResult onComplete;
     HandlesResult onPartial;

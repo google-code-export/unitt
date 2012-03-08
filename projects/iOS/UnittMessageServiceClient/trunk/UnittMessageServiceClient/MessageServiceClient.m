@@ -70,6 +70,7 @@ NSString* const UnittMessageServiceException = @"MessageServiceClientException";
             if (self.isOpen) {
                 //serialize into actual message and send
                 NSData* messageData = [self.serializer serializeMessage:message];
+//                NSLog(@"Requesting:\n%@", [[NSString alloc] initWithData:messageData encoding:NSUTF8StringEncoding]);
                 [self.transport send:messageData];
             }
             else {
@@ -88,14 +89,16 @@ NSString* const UnittMessageServiceException = @"MessageServiceClientException";
 
 - (void) responseFromService:(NSData*) aMessageData {
     if (self.serializer) {
+//        NSLog(@"Received response from service:\n%@", [[NSString alloc] initWithData:aMessageData encoding:NSUTF8StringEncoding]);
         //grab header to determine uid
         MessageRoutingInfo* header = [self.serializer deserializeMessageHeader:aMessageData];
 
         //grab callback for message
-        NSLog(@"Looking for pending request (%@) in %i requests.", header.uid, pendingRequests.count);
+//        NSLog(@"Looking for pending request (%@) in %i requests.", header.uid, pendingRequests.count);
         PendingRequest* request = [pendingRequests objectForKey:header.uid];
         if (request) {
             //deserialize back into message
+//            NSLog(@"Deserializing: \n%@", [[NSString alloc] initWithData:aMessageData encoding:NSUTF8StringEncoding]);
             ServiceMessage* messageResponse = [self.serializer deserializeMessage:aMessageData routing:header returnType:request.returnType];
 
             //leave on queue if it is not complete
@@ -129,6 +132,7 @@ NSString* const UnittMessageServiceException = @"MessageServiceClientException";
     //send all queued messages
     ServiceMessage* message = [queuedRequests dequeue];
     while (message) {
+//        NSLog(@"Serialized message:\n%@", [[NSString alloc] initWithData:[self.serializer serializeMessage:message] encoding:NSUTF8StringEncoding]);
         //serialize into actual message and send
         [self.transport send:[self.serializer serializeMessage:message]];
 
