@@ -28,7 +28,29 @@
 @synthesize onError;
 @synthesize onEmptyComplete;
 
+#pragma mark - Callback logic
+- (void)onError:(NSError *)aError {
+    self.onError(aError);
+}
 
+- (void)onComplete:(id)aResult {
+    if (aResult) {
+        self.onComplete(aResult);
+    }
+    else if (self.onEmptyComplete) {
+        self.onEmptyComplete();
+    }
+
+    //default to oncomplete
+    self.onComplete(aResult);
+}
+
+- (void)onPartial:(id)aResult {
+    self.onPartial(aResult);
+}
+
+
+#pragma mark - Lifecycle
 + (id) callbackWithOnComplete:(HandlesResult) aOnComplete onPartial:(HandlesResult) aOnPartial onError:(HandlesError) aOnError {
     return [[[[self class] alloc] initWithOnComplete:aOnComplete onPartial:aOnPartial onError:aOnError] autorelease];
 }
