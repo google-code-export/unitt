@@ -110,7 +110,22 @@
     if ([aObject isKindOfClass:[NSArray class]]) {
         NSArray* source = (NSArray*) aObject;
         for (id item in source) {
-            [temp addObject:[self objectToDictionary:item]];
+            if ([item isKindOfClass:[NSArray class]]) {
+                [temp addObject:[self toArrayFromArray:(NSArray*) item]];
+            }
+            else if ([item isKindOfClass:[NSString class]]) {
+                [temp addObject:item];
+            }
+            else if ([item isKindOfClass:[NSDate class]]) {
+                NSDate* dateItem = item;
+                [temp addObject:[NSNumber numberWithLongLong:(long long) [dateItem timeIntervalSince1970]]];
+            }
+            else if ([item isKindOfClass:[NSNumber class]]) {
+                [temp addObject:item];
+            }
+            else {
+                [temp addObject:[self objectToDictionary:item]];
+            }
         }
     }
 
