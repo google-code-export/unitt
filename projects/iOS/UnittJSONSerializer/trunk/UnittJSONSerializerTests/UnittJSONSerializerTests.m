@@ -145,4 +145,15 @@
     [serializer release];
 }
 
+- (void) testSerializeNestedPrimitiveArray
+{
+    NSArray* deserialized = [NSArray arrayWithObjects:@"trouble", @"other", [NSDate dateWithTimeIntervalSince1970:1330874917], [NSArray arrayWithObjects:@"one", @"two", nil], nil]; //[NSDate date]];
+    //NSLog(@"Apple's primitive output: %@", [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:deserialized options:nil error:nil] encoding:NSUTF8StringEncoding]);
+    JSONSerializer* serializer = [[JSONSerializer serializerWithParseOptions:JSParseOptionsStrict serializeOptions:JSSerializeOptionPretty] retain];
+    NSString* output = [serializer serializeToStringFromArray:deserialized];
+    NSString* expected = @"[\n  \"trouble\",\n  \"other\",\n  1330874917,\n  [\n    \"one\",\n   \"two\"\n  ]\n]";
+    STAssertEqualObjects(output, expected, @"Output was different than expected.");
+    [serializer release];
+}
+
 @end

@@ -87,6 +87,7 @@
 
 - (id) deserializeObjectFromData:(NSData*) aData type:(Class) aClass {
     //create dictionary from string
+    NSLog(@"Deserializing object from data: %@", [[NSString alloc] initWithData:aData encoding:NSUTF8StringEncoding]);
     id data = [aData objectFromJSONDataWithParseOptions:parseOptions];
     
     //if there is no dictionary - it must be primitive
@@ -241,7 +242,9 @@
     else {
         value = [[self.objectHandler objectToDictionary:aObject] JSONStringWithOptions:serializeOptions error:&error];
     }
-//    NSLog(@"Error serializing: %@", error.localizedDescription);
+    if (error) {
+        NSLog(@"Error serializing: %@", error.localizedDescription);
+    }
     return value;
 }
 
@@ -260,6 +263,9 @@
         }
         else if ([item isKindOfClass:[NSNumber class]]) {
             [arrayOfObjectDictionaries addObject:item];
+        }
+        else if ([item isKindOfClass:[NSArray class]]) {
+            [arrayOfObjectDictionaries addObject:[self.objectHandler toArrayFromArray:(NSArray*) item]];
         }
         else {
             [arrayOfObjectDictionaries addObject:[self.objectHandler objectToDictionary:item]];
@@ -285,6 +291,9 @@
         }
         else if ([item isKindOfClass:[NSNumber class]]) {
             [arrayOfObjectDictionaries addObject:item];
+        }
+        else if ([item isKindOfClass:[NSArray class]]) {
+            [arrayOfObjectDictionaries addObject:[self.objectHandler toArrayFromArray:(NSArray*) item]];
         }
         else {
             [arrayOfObjectDictionaries addObject:[self.objectHandler objectToDictionary:item]];
