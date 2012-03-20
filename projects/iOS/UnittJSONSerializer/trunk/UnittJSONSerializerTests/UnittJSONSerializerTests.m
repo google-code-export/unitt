@@ -24,6 +24,67 @@
 
 
 #pragma mark - Tests
+- (void) testSerializeObjectWithNestedObjectsWithPrimitiveArrays
+{
+    long long longValue = 104;
+    TestTransportObject* deserialized = [[TestTransportObject alloc] initWithTestInt:100 testDouble:102.10 testString:@"Blue" testNumber:[NSNumber numberWithInt:102] testDate:nil testBool:NO testLong:longValue supertInt:105 readOnlyInt:106];
+    TestTransportObject *child = [[TestTransportObject alloc] initWithTestInt:100 testDouble:102.10 testString:@"Blue" testNumber:[NSNumber numberWithInt:102] testDate:[NSDate dateWithTimeIntervalSince1970:1330875712] testBool:NO testLong:longValue supertInt:105 readOnlyInt:106];
+    child.testArray = [NSArray arrayWithObjects:@"one", @"two", nil];
+    deserialized.testArray = [NSArray arrayWithObjects:child,[[TestTransportObject alloc] initWithTestInt:100 testDouble:102.1 testString:@"Blue" testNumber:[NSNumber numberWithInt:102] testDate:nil testBool:NO testLong:longValue supertInt:105 readOnlyInt:106],nil];
+    JSONSerializer* serializer = [[JSONSerializer serializerWithParseOptions:JSParseOptionsStrict serializeOptions:JSSerializeOptionPretty] retain];
+    NSString* output = [serializer serializeToStringFromObject:deserialized];
+    NSString* expectedOutput = @"{\n"
+            "  \"readOnlyInt\": 106,\n"
+            "  \"superInt\": 105,\n"
+            "  \"testArray\": [\n"
+            "    {\n"
+            "      \"readOnlyInt\": 106,\n"
+            "      \"superInt\": 105,\n"
+            "      \"testArray\": [\n"
+            "        \"one\",\n"
+            "        \"two\"\n"
+            "      ],\n"
+            "      \"testBool\": \"false\",\n"
+            "      \"testDate\": 1330875712,\n"
+            "      \"testDictionary\": {\n"
+            "        \n"
+            "      },\n"
+            "      \"testDouble\": 102.09999999999999,\n"
+            "      \"testInt\": 100,\n"
+            "      \"testLong\": 104,\n"
+            "      \"testNumber\": 102,\n"
+            "      \"testString\": \"Blue\"\n"
+            "    },\n"
+            "    {\n"
+            "      \"readOnlyInt\": 106,\n"
+            "      \"superInt\": 105,\n"
+            "      \"testArray\": [\n"
+            "        \n"
+            "      ],\n"
+            "      \"testBool\": \"false\",\n"
+            "      \"testDictionary\": {\n"
+            "        \n"
+            "      },\n"
+            "      \"testDouble\": 102.09999999999999,\n"
+            "      \"testInt\": 100,\n"
+            "      \"testLong\": 104,\n"
+            "      \"testNumber\": 102,\n"
+            "      \"testString\": \"Blue\"\n"
+            "    }\n"
+            "  ],\n"
+            "  \"testBool\": \"false\",\n"
+            "  \"testDictionary\": {\n"
+            "    \n"
+            "  },\n"
+            "  \"testDouble\": 102.09999999999999,\n"
+            "  \"testInt\": 100,\n"
+            "  \"testLong\": 104,\n"
+            "  \"testNumber\": 102,\n"
+            "  \"testString\": \"Blue\"\n"
+            "}";
+    STAssertEqualObjects(output, expectedOutput, @"Output was different than expected.");
+}
+
 - (void) testSerialize
 {
     long long longValue = 104;
@@ -79,7 +140,6 @@
             "  \"testNumber\": 102,\n"
             "  \"testString\": \"Blue\"\n"
             "}";
-//    NSLog(@"TestSerialize Output:\n%@", output);
     STAssertEqualObjects(output, expectedOutput, @"Output was different than expected.");
 }
 
@@ -137,7 +197,6 @@
 - (void) testSerializePrimitiveArray
 {
     NSArray* deserialized = [NSArray arrayWithObjects:@"trouble", @"other", [NSDate dateWithTimeIntervalSince1970:1330874917], nil]; //[NSDate date]];
-    //NSLog(@"Apple's primitive output: %@", [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:deserialized options:nil error:nil] encoding:NSUTF8StringEncoding]);
     JSONSerializer* serializer = [[JSONSerializer serializerWithParseOptions:JSParseOptionsStrict serializeOptions:JSSerializeOptionPretty] retain];
     NSString* output = [serializer serializeToStringFromArray:deserialized];
     NSString* expected = @"[\n  \"trouble\",\n  \"other\",\n  1330874917\n]";
@@ -148,10 +207,17 @@
 - (void) testSerializeNestedPrimitiveArray
 {
     NSArray* deserialized = [NSArray arrayWithObjects:@"trouble", @"other", [NSDate dateWithTimeIntervalSince1970:1330874917], [NSArray arrayWithObjects:@"one", @"two", nil], nil]; //[NSDate date]];
-    //NSLog(@"Apple's primitive output: %@", [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:deserialized options:nil error:nil] encoding:NSUTF8StringEncoding]);
     JSONSerializer* serializer = [[JSONSerializer serializerWithParseOptions:JSParseOptionsStrict serializeOptions:JSSerializeOptionPretty] retain];
     NSString* output = [serializer serializeToStringFromArray:deserialized];
-    NSString* expected = @"[\n  \"trouble\",\n  \"other\",\n  1330874917,\n  [\n    \"one\",\n   \"two\"\n  ]\n]";
+    NSString* expected = @"[\n"
+            "  \"trouble\",\n"
+            "  \"other\",\n"
+            "  1330874917,\n"
+            "  [\n"
+            "    \"one\",\n"
+            "    \"two\"\n"
+            "  ]\n"
+            "]";
     STAssertEqualObjects(output, expected, @"Output was different than expected.");
     [serializer release];
 }
