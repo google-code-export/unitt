@@ -41,4 +41,7 @@
  */
 @property (nonatomic, retain) UIColor* endColor;
 
+- (void)setupGradientLayer;
+
+
 @end
