@@ -83,7 +83,7 @@
     NSData* bodyData = [aData subdataWithRange:NSMakeRange(4 + headerLength, aData.length - 4 - headerLength)];
 
     //deserialize body
-    if (aReturnType) {
+    if (aReturnType && bodyData && bodyData.length) {
         
         id body = nil;
         if (aReturnType.objectType) 
