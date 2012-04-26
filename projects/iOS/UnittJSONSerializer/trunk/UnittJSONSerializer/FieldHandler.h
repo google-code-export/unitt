@@ -25,11 +25,20 @@
 
 
 @interface FieldHandler : NSObject {
-
+    int dateMultiplier;
 }
+@property(nonatomic, assign) int dateMultiplier;
+
+
+- (NSNumber *)fromDate:(NSDate *)aDate;
+- (NSDate *)toDate:(NSNumber *)aValue;
 
 - (id) getFieldValueForInvocation:(NSInvocation*) aInvocation datatype:(JSDataType) aDataType;
-
 - (void) setFieldValueForInvocation:(NSInvocation*) aInvocation datatype:(JSDataType) aDataType value:(id) aValue;
+
+
+- (id)initWithDateMultiplier:(int)aDateMultiplier;
+- (id)fieldHandlerWithDateMultiplier:(int)aDateMultiplier;
+
 
 @end

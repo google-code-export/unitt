@@ -40,9 +40,20 @@
 
 - (void) fillPropertiesForClass:(Class) aClass;
 
+- (id)deserializefromArray:(NSArray *)aData;
+
+- (void) fillArray:(NSMutableArray *) aResult fromArray:(NSArray*) aValue;
+
+- (id)deserializeFromDictionary:(NSDictionary *)aData;
+
+
 - (void) fillObjectFromDictionary:(NSDictionary*) aData object:(id) aObject;
 
+- (NSNumber *)fromDate:(NSDate *)aDate;
+
 - (id) performSelectorSafelyForObject:(id) aObject selector:(SEL) aSelector argument:(id) argument type:(JSDataType) aType;
+
+- (NSDate *)toDate:(NSNumber *)aValue;
 
 - (NSDictionary*) objectToDictionary:(id) aObject;
 
