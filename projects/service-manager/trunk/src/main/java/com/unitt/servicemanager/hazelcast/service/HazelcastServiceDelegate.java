@@ -56,6 +56,8 @@ public class HazelcastServiceDelegate extends ServiceDelegate
         }
 
         super.initialize();
+
+        logger.debug("Started workers (" + getService() + ":" + getNumberOfWorkers() + ") using request queue: " + getRequestQueueName());
     }
 
     public void destroy()
@@ -112,7 +114,6 @@ public class HazelcastServiceDelegate extends ServiceDelegate
     {
         if ( aInfo != null )
         {
-            System.out.println("Fetching body map in delegate: " + "body:" + aInfo.getWebSocketId());
             return "body:" + aInfo.getWebSocketId();
         }
 

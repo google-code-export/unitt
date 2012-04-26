@@ -1,14 +1,14 @@
 package com.unitt.servicemanager.websocket;
 
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.annotate.JsonValue;
+import org.codehaus.jackson.annotate.*;
 
 import java.io.Serializable;
 import java.util.Date;
 
 
+@JsonTypeName("MessageRoutingInfo")
+@JsonTypeInfo(use=JsonTypeInfo.Id.NAME, include= JsonTypeInfo.As.PROPERTY, property="class")
 public class MessageRoutingInfo implements Serializable
 {
     public enum MessageResultType

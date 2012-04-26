@@ -161,7 +161,6 @@ public class HazelcastWebSocket extends MessagingWebSocket
     // ---------------------------------------------------------------------------
     public ConcurrentMap<String, SerializedMessageBody> getBodyMap()
     {
-        System.out.println("Fetching body map in websocket: " + "body:" + getSocketId());
         return getHazelcastClient().getMap( "body:" + getSocketId() );
     }
 

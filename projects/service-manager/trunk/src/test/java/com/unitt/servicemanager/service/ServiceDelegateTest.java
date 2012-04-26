@@ -25,7 +25,6 @@ public class ServiceDelegateTest
     public void setUp() throws Exception
     {
         String[] strings = new String[]{"Test", "NoTest"};
-        System.out.println("Serialized Array=" + new ObjectMapper().writeValueAsString( strings ));
         service = new MockService();
         serviceDelegate = new MockServiceDelegate( service );
         serviceDelegate.initialize();

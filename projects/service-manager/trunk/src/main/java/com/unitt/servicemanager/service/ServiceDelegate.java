@@ -310,7 +310,6 @@ public abstract class ServiceDelegate implements Processor<MessageRoutingInfo>
         SerializedMessageBody body = getBodyMap( info ).remove( info.getUid() );
         MessageSerializer serializer = getSerializerRegistry().getSerializer( info.getSerializerType() );
         DeserializedMessageBody args = serializer.deserializeBody( info, body.getContents() );
-        System.out.println("Args: " + args.getServiceMethodArguments());
         if ( args != null && args.getServiceMethodArguments() != null )
         {
             int partialResultsIndex = getIndexOfPartialResults(aMethod);
