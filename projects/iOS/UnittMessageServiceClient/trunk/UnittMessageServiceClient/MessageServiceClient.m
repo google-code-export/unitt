@@ -55,6 +55,7 @@ NSString* const UnittMessageServiceException = @"MessageServiceClientException";
     //if we do not have a transport or a serializer, raise exception
     if (self.serializer) {
         if (self.transport) {
+            NSLog(@"Routing message...");
             //create message routing info
             MessageRoutingInfo* header = [MessageRoutingInfo routingWithService:aServiceName method:aMethodSignature];
             header.timeToLiveInMillis = self.timeToLiveInMillis;
@@ -70,11 +71,12 @@ NSString* const UnittMessageServiceException = @"MessageServiceClientException";
             if (self.isOpen) {
                 //serialize into actual message and send
                 NSData* messageData = [self.serializer serializeMessage:message];
-//                NSLog(@"Requesting:\n%@", [[NSString alloc] initWithData:messageData encoding:NSUTF8StringEncoding]);
+                NSLog(@"Requesting:\n%@", [[NSString alloc] initWithData:messageData encoding:NSUTF8StringEncoding]);
                 [self.transport send:messageData];
             }
             else {
                 //queue message
+                NSLog(@"Queuing message...");
                 [queuedRequests enqueue:message];
             }
         }
@@ -89,7 +91,7 @@ NSString* const UnittMessageServiceException = @"MessageServiceClientException";
 
 - (void) responseFromService:(NSData*) aMessageData {
     if (self.serializer) {
-//        NSLog(@"Received response from service:\n%@", [[NSString alloc] initWithData:aMessageData encoding:NSUTF8StringEncoding]);
+        NSLog(@"Received response from service:\n%@", [[NSString alloc] initWithData:aMessageData encoding:NSUTF8StringEncoding]);
         //grab header to determine uid
         MessageRoutingInfo* header = [self.serializer deserializeMessageHeader:aMessageData];
 
@@ -110,9 +112,11 @@ NSString* const UnittMessageServiceException = @"MessageServiceClientException";
             }
 
             //call appropriate method on the callback
-            id <ServiceCallback> callback = request.callback;
-            if (callback) {
-                [self handleCallback:callback result:messageResponse];
+            if (messageResponse.header.resultType != MessageResultTypePartialSuccess || messageResponse.contents != nil) {
+                id <ServiceCallback> callback = request.callback;
+                if (callback) {
+                    [self handleCallback:callback result:messageResponse];
+                }
             }
         }
         else {
@@ -132,9 +136,12 @@ NSString* const UnittMessageServiceException = @"MessageServiceClientException";
     //send all queued messages
     ServiceMessage* message = [queuedRequests dequeue];
     while (message) {
+        NSData * data = [self.serializer serializeMessage:message];
 //        NSLog(@"Serialized message:\n%@", [[NSString alloc] initWithData:[self.serializer serializeMessage:message] encoding:NSUTF8StringEncoding]);
+        NSLog(@"Sending message of %i bytes", data.length);
         //serialize into actual message and send
-        [self.transport send:[self.serializer serializeMessage:message]];
+        [self.transport send:data];
+//        [self.transport send:[self.serializer serializeMessage:message]];
 
         //grab next on queue
         message = [queuedRequests dequeue];
@@ -151,7 +158,9 @@ NSString* const UnittMessageServiceException = @"MessageServiceClientException";
         case MessageResultTypeCompleteSuccess:
             [aCallback onComplete:aResult.contents];
         case MessageResultTypePartialSuccess:
-            [aCallback onPartial:aResult.contents];
+            if (aResult.contents) {
+                [aCallback onPartial:aResult.contents];
+            }
             break;
     }
 }
