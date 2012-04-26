@@ -46,7 +46,6 @@ public class JacksonJsonSerializer implements MessageSerializer
     {
         try
         {
-            System.out.println("Deserializing: " + new String(aBody));
             Object[] args = mapper.readValue( aBody, Object[].class );
             DeserializedMessageBody body = new DeserializedMessageBody();
             body.setServiceMethodArguments( Arrays.asList( args ) );
