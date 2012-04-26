@@ -21,7 +21,25 @@
 #import "FieldHandler.h"
 
 @implementation FieldHandler
+@synthesize dateMultiplier;
 
+
+#pragma mark - Conversion
+- (NSNumber*) fromDate:(NSDate*) aDate {
+    long long value = self.dateMultiplier * [aDate timeIntervalSince1970];
+    return [NSNumber numberWithLongLong:value];
+}
+
+- (NSDate*) toDate:(NSNumber*) aValue {
+    double value = [aValue doubleValue];
+    if (self.dateMultiplier != 0) {
+        value = value / self.dateMultiplier;
+    }
+    return [NSDate dateWithTimeIntervalSince1970:value];
+}
+
+
+#pragma mark - Field Handling
 - (id) getFieldValueForInvocation:(NSInvocation*) aInvocation datatype:(JSDataType) aDataType {
     switch (aDataType) {
         case JSDataTypeInt:
@@ -65,7 +83,7 @@
             [aInvocation invoke];
             [aInvocation getReturnValue:&value];
             if (value) {
-                return [NSNumber numberWithLongLong:(long long) [value timeIntervalSince1970]];
+                return [self fromDate:value];
             }
             return nil;
         }
@@ -180,13 +198,12 @@
         case JSDataTypeNSDate:
             if ([aValue isKindOfClass:[NSString class]]) {
                 double almostValue = [((NSString*) aValue) doubleValue];
-                NSDate* value = [NSDate dateWithTimeIntervalSince1970:almostValue];
+                NSDate* value = [self toDate:[NSNumber numberWithDouble:almostValue]];
                 [aInvocation setArgument:&value atIndex:2];
                 [aInvocation invoke];
             }
             else if ([aValue isKindOfClass:[NSNumber class]]) {
-                NSNumber* almostValue = (NSNumber*) aValue;
-                NSDate* value = [NSDate dateWithTimeIntervalSince1970:[almostValue doubleValue]];
+                NSDate* value = [self toDate:(NSNumber*)aValue];
                 [aInvocation setArgument:&value atIndex:2];
                 [aInvocation invoke];
             }
@@ -206,4 +223,18 @@
     }
 }
 
+
+#pragma mark - Lifecycle
+- (id)initWithDateMultiplier:(int)aDateMultiplier {
+    self = [super init];
+    if (self) {
+        dateMultiplier = aDateMultiplier;
+    }
+
+    return self;
+}
+
+- (id)fieldHandlerWithDateMultiplier:(int)aDateMultiplier {
+    return [[[self alloc] initWithDateMultiplier:aDateMultiplier] autorelease];
+}
 @end

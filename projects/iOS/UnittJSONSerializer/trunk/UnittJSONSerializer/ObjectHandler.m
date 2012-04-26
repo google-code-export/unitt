@@ -23,9 +23,9 @@
 
 @interface ObjectHandler ()
 
-- (NSDictionary*) getPropertiesForClass:(Class) aClass;
+- (NSDictionary *)getPropertiesForClass:(Class)aClass;
 
-- (void) writeConcreteClass:(Class) aType dictionary:(NSDictionary*) aData;
+- (void)writeConcreteClass:(Class)aType dictionary:(NSDictionary *)aData;
 
 @end
 
@@ -38,13 +38,57 @@
 
 
 #pragma mark Deserialize
-- (void) fillObjectFromDictionary:(NSDictionary*) aData object:(id) aObject {
+- (id)deserializefromArray:(NSArray *)aData {
+    NSMutableArray *toArray = [NSMutableArray array];
+    [self fillArray:toArray fromArray:aData];
+    return [NSArray arrayWithArray:toArray];
+
+}
+
+- (void)fillArray:(NSMutableArray *)aResult fromArray:(NSArray *)aValue {
+    for (id value in aValue) {
+        //handle custom objects
+        if ([value isKindOfClass:[NSDictionary class]]) {
+            [aResult addObject:[self deserializeFromDictionary:value]];
+        }
+        else if ([value isKindOfClass:[NSArray class]]) {
+            [aResult addObject:[self deserializefromArray:value]];
+        }
+    }
+}
+
+- (id)deserializeFromDictionary:(NSDictionary *)aData {
+    //init
+    id result = nil;
+    Class type = nil;
+
+    //attempt to figure out type from dictionary
+    type = [self readConcreteClassFromDictionary:aData];
+    if (type == nil) {
+        NSLog(@"Could not determine type from dictionary: %@", aData);
+    }
+
+    //if we don't have a type, return as a string
+    if (!type) {
+        return aData;
+    }
+
+    //create object of the specified type
+    result = [[[type alloc] init] autorelease];
+
+    //fill object using deserialized JSON
+    [self fillObjectFromDictionary:aData object:result];
+
+    return result;
+}
+
+- (void)fillObjectFromDictionary:(NSDictionary *)aData object:(id)aObject {
     //get class def
-    NSDictionary* classDef = [self getPropertiesForClass:[aObject class]];
+    NSDictionary *classDef = [self getPropertiesForClass:[aObject class]];
 
     //loop through dictionary, applying values
-    for (NSString* key in aData) {
-        JSONPropertyInfo* property = [classDef objectForKey:key];
+    for (NSString *key in aData) {
+        JSONPropertyInfo *property = [classDef objectForKey:key];
 
         //if we have the property - use it to set the property - if possible
         if (property && property.setter) {
@@ -62,6 +106,11 @@
                 newValue = [[[valueConcreteClass alloc] init] autorelease];
                 [self fillObjectFromDictionary:value object:newValue];
             }
+            else if ([value isKindOfClass:[NSArray class]]) {
+                NSMutableArray *toArray = [NSMutableArray array];
+                [self fillArray:toArray fromArray:value];
+                newValue = [NSArray arrayWithArray:toArray];
+            }
 
             //set value
             [self performSelectorSafelyForObject:aObject selector:property.setter argument:newValue type:property.dataType];
@@ -69,17 +118,21 @@
     }
 }
 
+- (NSDate *)toDate:(NSNumber *)aValue {
+    return [self.fieldHandler toDate:aValue];
+}
+
 
 #pragma mark Serialize
-- (NSDictionary*) objectToDictionary:(id) aObject {
-    NSMutableDictionary* results = [NSMutableDictionary dictionary];
+- (NSDictionary *)objectToDictionary:(id)aObject {
+    NSMutableDictionary *results = [NSMutableDictionary dictionary];
 
     //convert the object to a nested dictionary using properties
     Class type = [aObject class];
-    NSDictionary* properties = [self getPropertiesForClass:type];
+    NSDictionary *properties = [self getPropertiesForClass:type];
     if (properties) {
-        for (NSString* key in properties) {
-            JSONPropertyInfo* property = [properties objectForKey:key];
+        for (NSString *key in properties) {
+            JSONPropertyInfo *property = [properties objectForKey:key];
             if (property && property.getter) {
                 id value = [self performSelectorSafelyForObject:aObject selector:property.getter argument:nil type:property.dataType];
                 switch (property.dataType) {
@@ -104,21 +157,21 @@
     return results;
 }
 
-- (NSArray*) toArrayFromArray:(id) aObject {
-    NSMutableArray* temp = [NSMutableArray array];
+// TODO: should we also check for dictionary?
+- (NSArray *)toArrayFromArray:(id)aObject {
+    NSMutableArray *temp = [NSMutableArray array];
 
     if ([aObject isKindOfClass:[NSArray class]]) {
-        NSArray* source = (NSArray*) aObject;
+        NSArray *source = (NSArray *) aObject;
         for (id item in source) {
             if ([item isKindOfClass:[NSArray class]]) {
-                [temp addObject:[self toArrayFromArray:(NSArray*) item]];
+                [temp addObject:[self toArrayFromArray:(NSArray *) item]];
             }
             else if ([item isKindOfClass:[NSString class]]) {
                 [temp addObject:item];
             }
             else if ([item isKindOfClass:[NSDate class]]) {
-                NSDate* dateItem = item;
-                [temp addObject:[NSNumber numberWithLongLong:(long long) [dateItem timeIntervalSince1970]]];
+                [temp addObject:[self fromDate:item]];
             }
             else if ([item isKindOfClass:[NSNumber class]]) {
                 [temp addObject:item];
@@ -132,11 +185,11 @@
     return [NSArray arrayWithArray:temp];
 }
 
-- (NSDictionary*) toDictionaryFromDictionary:(id) aObject {
-    NSMutableDictionary* temp = [NSMutableDictionary dictionary];
+- (NSDictionary *)toDictionaryFromDictionary:(id)aObject {
+    NSMutableDictionary *temp = [NSMutableDictionary dictionary];
 
     if ([aObject isKindOfClass:[NSDictionary class]]) {
-        NSDictionary* source = (NSDictionary*) aObject;
+        NSDictionary *source = (NSDictionary *) aObject;
         for (id key in source) {
             id value = [self objectToDictionary:[source objectForKey:key]];
             [temp setObject:value forKey:key];
@@ -146,11 +199,15 @@
     return [NSDictionary dictionaryWithDictionary:temp];
 }
 
+- (NSNumber *)fromDate:(NSDate *)aDate {
+    return [self.fieldHandler fromDate:aDate];
+}
+
 
 #pragma mark Property Handling
-- (id) performSelectorSafelyForObject:(id) aObject selector:(SEL) aSelector argument:(id) aArgument type:(JSDataType) aType {
+- (id)performSelectorSafelyForObject:(id)aObject selector:(SEL)aSelector argument:(id)aArgument type:(JSDataType)aType {
     if (aSelector != nil && aObject != nil) {
-        NSMethodSignature* methodSig = [aObject methodSignatureForSelector:aSelector];
+        NSMethodSignature *methodSig = [aObject methodSignatureForSelector:aSelector];
         if (methodSig == nil) {
             methodSig = [[aObject class] methodSignatureForSelector:aSelector];
             if (methodSig == nil) {
@@ -158,7 +215,7 @@
             }
         }
 
-        NSInvocation* invocation = [NSInvocation invocationWithMethodSignature:methodSig];
+        NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:methodSig];
         [invocation setSelector:aSelector];
         [invocation setTarget:aObject];
         if (aArgument) {
@@ -175,7 +232,7 @@
     return nil;
 }
 
-- (JSONPropertyInfo*) getPropertyInfoForObject:(id) aObject name:(NSString*) aName {
+- (JSONPropertyInfo *)getPropertyInfoForObject:(id)aObject name:(NSString *)aName {
     Class objectClass = [aObject class];
     id value = [classDefs objectForKey:objectClass];
 
@@ -189,10 +246,10 @@
     if (value) {
         if ([value isKindOfClass:[NSDictionary class]]) {
             //get property info
-            NSDictionary* classDef = (NSDictionary*) value;
+            NSDictionary *classDef = (NSDictionary *) value;
             value = [classDef objectForKey:aName];
             if (value && [value isKindOfClass:[JSONPropertyInfo class]]) {
-                return (JSONPropertyInfo*) value;
+                return (JSONPropertyInfo *) value;
             }
         }
     }
@@ -200,41 +257,54 @@
     return nil;
 }
 
-- (Class) readConcreteClassFromDictionary:(NSDictionary*) aData {
+- (Class)readConcreteClassFromDictionary:(NSDictionary *)aData {
     //default implementation - do nothing
+    NSString *type = [aData objectForKey:@"class"];
+    if (type) {
+        Class classType = NSClassFromString(type);
+        if (classType) {
+            return classType;
+        } else {
+            NSLog(@"Could not resolve type to a class: %@", type);
+        }
+    } else {
+        NSLog(@"Missing class parameter in dictionary: %@", aData);
+    }
     return nil;
 }
 
-- (void) writeConcreteClass:(Class) aType dictionary:(NSDictionary*) aData {
-    //default implementation - do nothing
+- (void)writeConcreteClass:(Class)aType dictionary:(NSDictionary *)aData {
+    if (aType && [aData isKindOfClass:[NSMutableDictionary class]]) {
+        [((NSMutableDictionary *) aData) setObject:NSStringFromClass(aType) forKey:@"class"];
+    }
 }
 
-- (NSDictionary*) getPropertiesForClass:(Class) aClass {
-    NSDictionary* properties = [classDefs objectForKey:aClass];
+- (NSDictionary *)getPropertiesForClass:(Class)aClass {
+    NSDictionary *properties = [classDefs objectForKey:aClass];
     if (!properties) {
         [self fillPropertiesForClass:aClass];
     }
     return [classDefs objectForKey:aClass];
 }
 
-- (void) fillPropertiesForClass:(Class) aClass {
-    NSMutableDictionary* classDef = [NSMutableDictionary dictionary];
+- (void)fillPropertiesForClass:(Class)aClass {
+    NSMutableDictionary *classDef = [NSMutableDictionary dictionary];
 
     //traverse class hierarchy, creating property info
     Class classToFillFor = aClass;
     while (classToFillFor != nil && classToFillFor != [NSObject class]) {
         //loop through properties - creating metadata for getters/setters
         unsigned int outCount, i;
-        objc_property_t* properties = class_copyPropertyList(classToFillFor, &outCount);
+        objc_property_t *properties = class_copyPropertyList(classToFillFor, &outCount);
         for (i = 0; i < outCount; i++) {
             //grab property
             objc_property_t property = properties[i];
 
             if (property != NULL) {
                 //init property info
-                JSONPropertyInfo* propertyInfo = [[[JSONPropertyInfo alloc] init] autorelease];
-                const char* propertyName = property_getName(property);
-                const char* propertyAttr = property_getAttributes(property);
+                JSONPropertyInfo *propertyInfo = [[[JSONPropertyInfo alloc] init] autorelease];
+                const char *propertyName = property_getName(property);
+                const char *propertyAttr = property_getAttributes(property);
                 propertyInfo.name = [NSString stringWithCString:propertyName encoding:[NSString defaultCStringEncoding]];
 
                 //handle type
@@ -263,14 +333,14 @@
                 //handle custom class - if applicable
                 if (isObject) {
                     //determine custom class
-                    const char* typeInitialFragment = strstr(propertyAttr, "T@\"");
+                    const char *typeInitialFragment = strstr(propertyAttr, "T@\"");
                     if (typeInitialFragment != NULL) {
                         typeInitialFragment += 3;
-                        const char* typeSecondFragment = strstr(typeInitialFragment, "\",");
+                        const char *typeSecondFragment = strstr(typeInitialFragment, "\",");
                         if (typeSecondFragment != NULL && typeInitialFragment != typeSecondFragment) {
                             //we have a customer class - grab the name
                             int length = (int) (typeSecondFragment - typeInitialFragment);
-                            char* typeName = malloc(length + 1);
+                            char *typeName = malloc(length + 1);
                             memcpy( typeName, typeInitialFragment, length );
                             typeName[length] = '\0';
 
@@ -299,14 +369,14 @@
                 }
 
                 //handle custom getter
-                const char* custGetterInitialFragment = strstr(propertyAttr, ",G");
+                const char *custGetterInitialFragment = strstr(propertyAttr, ",G");
                 if (custGetterInitialFragment != NULL) {
                     custGetterInitialFragment += 2;
-                    const char* custGetterSecondFragment = strchr(custGetterInitialFragment, ',');
+                    const char *custGetterSecondFragment = strchr(custGetterInitialFragment, ',');
                     if (custGetterSecondFragment != NULL && custGetterInitialFragment != custGetterSecondFragment) {
                         //we have a customer getter, grab selector from name
                         int length = (int) (custGetterSecondFragment - custGetterInitialFragment);
-                        char* custGetterName = malloc(length + 1);
+                        char *custGetterName = malloc(length + 1);
                         memcpy( custGetterName, custGetterInitialFragment, length );
                         custGetterName[length] = '\0';
                         propertyInfo.getter = sel_getUid(custGetterName);
@@ -320,14 +390,14 @@
                 //if not readonly - handle setter
                 if (strstr(propertyAttr, ",R,") == NULL) {
                     //handle custom setter
-                    const char* custSetterInitialFragment = strstr(propertyAttr, ",S");
+                    const char *custSetterInitialFragment = strstr(propertyAttr, ",S");
                     if (custSetterInitialFragment != NULL) {
                         custSetterInitialFragment += 2;
-                        const char* custSetterSecondFragment = strchr(custSetterInitialFragment, ',');
+                        const char *custSetterSecondFragment = strchr(custSetterInitialFragment, ',');
                         if (custSetterSecondFragment != NULL && custSetterInitialFragment != custSetterSecondFragment) {
                             //we have a customer setter, grab selector from name
                             int length = (int) (custSetterSecondFragment - custSetterInitialFragment);
-                            char* custSetterName = malloc(length + 1);
+                            char *custSetterName = malloc(length + 1);
                             memcpy( custSetterName, custSetterInitialFragment, length );
                             custSetterName[length] = '\0';
                             propertyInfo.setter = sel_getUid(custSetterName);
@@ -357,15 +427,15 @@
 
 
 #pragma mark Lifecycle
-+ (id) objectHandlerWithFieldHandler:(FieldHandler*) aFieldHandler {
++ (id)objectHandlerWithFieldHandler:(FieldHandler *)aFieldHandler {
     return [[[ObjectHandler alloc] initWithWithFieldHandler:aFieldHandler] autorelease];
 }
 
-+ (id) objectHandler {
++ (id)objectHandler {
     return [[[ObjectHandler alloc] init] autorelease];
 }
 
-- (id) initWithWithFieldHandler:(FieldHandler*) aFieldHandler {
+- (id)initWithWithFieldHandler:(FieldHandler *)aFieldHandler {
     self = [super init];
     if (self) {
         fieldHandler = [aFieldHandler retain];
@@ -374,7 +444,7 @@
     return self;
 }
 
-- (id) init {
+- (id)init {
     self = [super init];
     if (self) {
         fieldHandler = [[FieldHandler alloc] init];
@@ -383,7 +453,7 @@
     return self;
 }
 
-- (void) dealloc {
+- (void)dealloc {
     [classDefs release];
     [fieldHandler release];
 

@@ -38,27 +38,6 @@
 
 
 #pragma mark Deserialize
-- (id) deserializeStringFromData:(NSData*) aData {
-    return [[[NSString alloc] initWithData:aData encoding:NSUTF8StringEncoding] autorelease];
-}
-
-- (id) deserializeDateFromData:(NSData*) aData {
-    return [self deserializeDateFromString:[[[NSString alloc] initWithData:aData encoding:NSUTF8StringEncoding] autorelease]];
-}
-
-- (id) deserializeNumberFromData:(NSData*) aData {
-    return [self deserializeNumberFromString:[[[NSString alloc] initWithData:aData encoding:NSUTF8StringEncoding] autorelease]];
-}
-
-- (id) deserializeDateFromString:(NSString*) aString {
-    double almostValue = [aString doubleValue];
-    return [NSDate dateWithTimeIntervalSince1970:almostValue];
-}
-
-- (id) deserializeNumberFromString:(NSString*) aString {
-    long long almostValue = [aString longLongValue];
-    return [NSNumber numberWithLongLong:almostValue];
-}
 
 - (id) deserializeObjectFromDictionary:(NSDictionary*) aData type:(Class) aClass {
     //init
@@ -232,6 +211,7 @@
 }
 
 // TODO: check for array of primitives before delegating to object handler
+// TODO: should we also check for dictionary?
 - (NSString*) serializeToStringFromObject:(id) aObject {
     //convert the object to a JSON string
     NSError* error;
@@ -249,59 +229,15 @@
 }
 
 - (NSData*) serializeToDataFromArray:(NSArray*) aObjects {
-    //init
-    NSMutableArray* arrayOfObjectDictionaries = [NSMutableArray array];
-
-    //convert each item to dictionary
-    for (id item in aObjects) {
-        if ([item isKindOfClass:[NSString class]]) {
-            [arrayOfObjectDictionaries addObject:item];
-        }
-        else if ([item isKindOfClass:[NSDate class]]) {
-            NSDate* dateItem = item;
-            [arrayOfObjectDictionaries addObject:[NSNumber numberWithLongLong:(long long) [dateItem timeIntervalSince1970]]];
-        }
-        else if ([item isKindOfClass:[NSNumber class]]) {
-            [arrayOfObjectDictionaries addObject:item];
-        }
-        else if ([item isKindOfClass:[NSArray class]]) {
-            [arrayOfObjectDictionaries addObject:[self.objectHandler toArrayFromArray:(NSArray*) item]];
-        }
-        else {
-            [arrayOfObjectDictionaries addObject:[self.objectHandler objectToDictionary:item]];
-        }
-    }
-
     //convert array of dictionaries to JSON data
-    return [arrayOfObjectDictionaries JSONDataWithOptions:serializeOptions error:nil];
+    NSArray* items = [self.objectHandler toArrayFromArray:aObjects];
+    return [items JSONDataWithOptions:serializeOptions error:nil];
 }
 
 - (NSString*) serializeToStringFromArray:(NSArray*) aObjects {
-    //init
-    NSMutableArray* arrayOfObjectDictionaries = [NSMutableArray array];
-
-    //convert each item to dictionary
-    for (id item in aObjects) {
-        if ([item isKindOfClass:[NSString class]]) {
-            [arrayOfObjectDictionaries addObject:item];
-        }
-        else if ([item isKindOfClass:[NSDate class]]) {
-            NSDate* dateItem = item;
-            [arrayOfObjectDictionaries addObject:[NSNumber numberWithLongLong:(long long) [dateItem timeIntervalSince1970]]];
-        }
-        else if ([item isKindOfClass:[NSNumber class]]) {
-            [arrayOfObjectDictionaries addObject:item];
-        }
-        else if ([item isKindOfClass:[NSArray class]]) {
-            [arrayOfObjectDictionaries addObject:[self.objectHandler toArrayFromArray:(NSArray*) item]];
-        }
-        else {
-            [arrayOfObjectDictionaries addObject:[self.objectHandler objectToDictionary:item]];
-        }
-    }
-
     //convert array of dictionaries to JSON data
-    return [arrayOfObjectDictionaries JSONStringWithOptions:serializeOptions error:nil];
+    NSArray* items = [self.objectHandler toArrayFromArray:aObjects];
+    return [items JSONStringWithOptions:serializeOptions error:nil];
 }
 
 
