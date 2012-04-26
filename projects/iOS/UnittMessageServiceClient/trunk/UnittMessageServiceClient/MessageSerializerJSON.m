@@ -32,6 +32,7 @@
     NSData* headerBytes = [self.serializer serializeToDataFromObject:aMessage.header];
 
     //serialize body
+    NSLog(@"Serialized header: %@", [self.serializer serializeToStringFromObject:aMessage.header]);
     NSLog(@"Serialized body (%i): %@", ((NSArray*) aMessage.contents).count, [self.serializer serializeToStringFromArray:aMessage.contents]);
     NSData* bodyBytes = [self.serializer serializeToDataFromArray:aMessage.contents];
 
