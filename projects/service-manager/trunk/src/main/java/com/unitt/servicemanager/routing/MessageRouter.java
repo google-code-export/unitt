@@ -1,16 +1,15 @@
 package com.unitt.servicemanager.routing;
 
 
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.TimeUnit;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.unitt.servicemanager.util.ValidationUtil;
 import com.unitt.servicemanager.websocket.MessageRoutingInfo;
 import com.unitt.servicemanager.worker.DelegateMaster;
 import com.unitt.servicemanager.worker.Processor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 
 public abstract class MessageRouter implements Processor<MessageRoutingInfo>
@@ -75,7 +74,6 @@ public abstract class MessageRouter implements Processor<MessageRoutingInfo>
             {
                 workers = new DelegateMaster<MessageRoutingInfo, MessageRouter>( getClass().getSimpleName(), getRoutingQueue(), this, getQueueTimeoutInMillis(), getNumberOfWorkers() );
             }
-            workers.startup();
 
             setInitialized( true );
         }
@@ -85,19 +83,34 @@ public abstract class MessageRouter implements Processor<MessageRoutingInfo>
     {
         setNumberOfWorkers( 0 );
         setQueueTimeoutInMillis( 0 );
+        workers = null;
+        setInitialized( false );
+    }
+
+    public void start() {
+        if (workers == null) {
+            if (!isInitialized()) {
+                initialize();
+            }
+            if (workers == null) {
+                throw new IllegalStateException("Missing workers. Cannot start.");
+            }
+        }
+        workers.startup();
+    }
+
+    public void stop() {
         try
         {
             if ( workers != null )
             {
                 workers.shutdown();
             }
-            workers = null;
         }
         catch ( Exception e )
         {
             logger.error( "An error occurred shutting down the workers.", e );
         }
-        setInitialized( false );
     }
 
     protected void setInitialized( boolean aIsInitialized )
