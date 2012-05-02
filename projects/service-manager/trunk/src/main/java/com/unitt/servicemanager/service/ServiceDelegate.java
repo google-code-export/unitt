@@ -1,6 +1,14 @@
 package com.unitt.servicemanager.service;
 
 
+import com.unitt.servicemanager.util.ValidationUtil;
+import com.unitt.servicemanager.websocket.*;
+import com.unitt.servicemanager.websocket.MessageRoutingInfo.MessageResultType;
+import com.unitt.servicemanager.worker.DelegateMaster;
+import com.unitt.servicemanager.worker.Processor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.HashMap;
@@ -9,20 +17,6 @@ import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.unitt.servicemanager.util.ValidationUtil;
-import com.unitt.servicemanager.websocket.DeserializedMessageBody;
-import com.unitt.servicemanager.websocket.MessageResponse;
-import com.unitt.servicemanager.websocket.MessageRoutingInfo;
-import com.unitt.servicemanager.websocket.MessageRoutingInfo.MessageResultType;
-import com.unitt.servicemanager.websocket.MessageSerializer;
-import com.unitt.servicemanager.websocket.MessageSerializerRegistry;
-import com.unitt.servicemanager.websocket.SerializedMessageBody;
-import com.unitt.servicemanager.worker.DelegateMaster;
-import com.unitt.servicemanager.worker.Processor;
 
 
 public abstract class ServiceDelegate implements Processor<MessageRoutingInfo>
@@ -102,7 +96,6 @@ public abstract class ServiceDelegate implements Processor<MessageRoutingInfo>
             {
                 workers = new DelegateMaster<MessageRoutingInfo, ServiceDelegate>( getClass().getSimpleName(), getRequestQueue(), this, getQueueTimeoutInMillis(), getNumberOfWorkers() );
             }
-            workers.startup();
 
             setInitialized( true );
         }
@@ -110,23 +103,39 @@ public abstract class ServiceDelegate implements Processor<MessageRoutingInfo>
 
     public void destroy()
     {
+        stop();
         setNumberOfWorkers( 0 );
         setQueueTimeoutInMillis( 0 );
+        setSerializers( null );
+        setService( null );
+        setInitialized( false );
+        workers = null;
+    }
+
+    public void start() {
+        if (workers == null) {
+            if (!isInitialized()) {
+                initialize();
+            }
+            if (workers == null) {
+                throw new IllegalStateException("Missing workers. Cannot start.");
+            }
+        }
+        workers.startup();
+    }
+
+    public void stop() {
         try
         {
             if ( workers != null )
             {
                 workers.shutdown();
             }
-            workers = null;
         }
         catch ( Exception e )
         {
             logger.error( "An error occurred shutting down the workers.", e );
         }
-        setSerializers( null );
-        setService( null );
-        setInitialized( false );
     }
 
     protected void setInitialized( boolean aIsInitialized )
