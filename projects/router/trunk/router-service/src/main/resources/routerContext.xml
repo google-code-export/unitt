@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:amq="http://activemq.apache.org/schema/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx" xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+    <description>
+        Spring Config
+    </description>
+
+    <!-- **************************************************************** -->
+    <!-- Cloud Framework -->
+    <!-- **************************************************************** -->
+    <!-- Hazelcast Stuff -->
+    <bean name="HazelcastClient" class="com.hazelcast.core.Hazelcast"
+          factory-method="init">
+        <constructor-arg ref="HazelcastConfig" />
+    </bean>
+
+    <bean name="HazelcastConfig" class="com.hazelcast.config.Config">
+    </bean>
+
+
+    <!-- **************************************************************** -->
+    <!-- Messaging Framework -->
+    <!-- **************************************************************** -->
+    <bean id="Router" class="com.unitt.router.RouterImpl">
+        <property name="hazelcastClient" ref="HazelcastClient"/>
+        <property name="requestQueueName" value="message-routing"/>
+        <property name="queueTimeoutInMillis" value="30000"/>
+        <property name="numberOfWorkers" value="10"/>
+    </bean>
+
+    <bean id="SerializerRegistry" class="com.unitt.servicemanager.websocket.MessageSerializerRegistry">
+        <constructor-arg>
+            <list>
+                <ref bean="JsonSerializer"/>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="JsonSerializer" class="com.unitt.servicemanager.serializer.JacksonJsonSerializer"/>
+
+</beans>
