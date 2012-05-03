@@ -1,14 +1,15 @@
 package com.unitt.servicemanager.service;
 
 
+import com.unitt.servicemanager.websocket.MessageResponse;
+import com.unitt.servicemanager.websocket.MessageRoutingInfo;
+import com.unitt.servicemanager.websocket.SerializedMessageBody;
+
+import java.lang.reflect.Method;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-
-import com.unitt.servicemanager.websocket.MessageResponse;
-import com.unitt.servicemanager.websocket.MessageRoutingInfo;
-import com.unitt.servicemanager.websocket.SerializedMessageBody;
 
 
 public class MockServiceDelegate extends ServiceDelegate
@@ -30,7 +31,7 @@ public class MockServiceDelegate extends ServiceDelegate
     }
 
     @Override
-    public Object[] getArguments( MessageRoutingInfo aInfo )
+    public Object[] getArguments( MessageResponse aResponse, Method aMethod )
     {
         return new Object[] { SERVICE_ARG_COUNT, SERVICE_ARG_VALUE };
     }

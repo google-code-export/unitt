@@ -142,4 +142,16 @@
 		</repository>
 	</repositories>
 
+
+    <distributionManagement>
+        <repository>
+            <id>unitt-google</id>
+			<url>https://unitt.googlecode.com/svn/repository</url>
+        </repository>
+        <snapshotRepository>
+            <id>unitt-google</id>
+			<url>https://unitt.googlecode.com/svn/repository</url>
+        </snapshotRepository>
+    </distributionManagement>
+
 </project>
