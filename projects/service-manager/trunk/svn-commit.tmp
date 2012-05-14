@@ -1,0 +1,5 @@
+
+--This line, and those below, will be ignored--
+
+A  + src/main/java/com/unitt/servicemanager/service/ServiceCallback.java
+D    src/main/java/com/unitt/servicemanager/service/PartialResults.java
