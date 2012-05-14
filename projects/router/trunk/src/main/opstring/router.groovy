@@ -4,8 +4,8 @@ deployment(name:'Router') {
 
     /* Declares the artifacts required for deployment. Note the 'dl'
      * classifier used for the 'download' jar */
-    artifact id:'service', 'com.unitt.router:router-service:1.0-SNAPSHOT'
-    artifact id:'service-dl', 'com.unitt.router:router-api:1.0-SNAPSHOT'
+    artifact id:'service', 'com.unitt.framework.router:router-service:1.0.0-SNAPSHOT'
+    artifact id:'service-dl', 'com.unitt.framework.router:router-api:1.0.0-SNAPSHOT'
 
     /*
      * Declare the service to be deployed. The number of instances deployed
