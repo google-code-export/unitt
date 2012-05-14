@@ -15,7 +15,7 @@
 
     <properties>
         <unitt.version>2.0.0-SNAPSHOT</unitt.version>
-        <spring.version>3.0.3.RELEASE</spring.version>
+        <spring.version>2.5.5</spring.version>
         <compiler.source>1.6</compiler.source>
         <compiler.target>1.6</compiler.target>
     </properties>
@@ -51,25 +51,7 @@
         <!-- spring -->
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-            <version>${spring.version}</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-beans</artifactId>
-            <version>${spring.version}</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version>${spring.version}</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
+            <artifactId>spring</artifactId>
             <version>${spring.version}</version>
             <type>jar</type>
         </dependency>
