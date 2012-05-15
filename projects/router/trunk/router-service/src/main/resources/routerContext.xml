@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:amq="http://activemq.apache.org/schema/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx" xsi:schemaLocation="http://www.springframework.org/schema/beans
-                        http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
     <description>
         Spring Config
@@ -10,13 +11,23 @@
     <!-- Cloud Framework -->
     <!-- **************************************************************** -->
     <!-- Hazelcast Stuff -->
-    <bean name="HazelcastClient" class="com.hazelcast.core.Hazelcast"
-          factory-method="init">
+    <bean name="HazelcastClient" class="com.hazelcast.client.HazelcastClient"
+          factory-method="newHazelcastClient">
         <constructor-arg ref="HazelcastConfig" />
     </bean>
 
-    <bean name="HazelcastConfig" class="com.hazelcast.config.Config">
+    <bean name="HazelcastConfig" class="com.hazelcast.client.ClientConfig">
+        <!--
+        <property name="groupConfig" ref="HazelcastGroupConfig"/>
+        -->
     </bean>
+
+    <!--
+    <bean name="HazelcastGroupConfig" class="com.hazelcast.config.GroupConfig">
+    <property name="name" value="dev"/>
+    <property name="password" value="dev-pass"/>
+    </bean>
+    -->
 
 
     <!-- **************************************************************** -->
