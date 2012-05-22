@@ -1,15 +1,14 @@
 package com.unitt.servicemanager.hazelcast.routing;
 
 
-import java.util.concurrent.BlockingQueue;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.hazelcast.core.HazelcastInstance;
 import com.unitt.servicemanager.routing.MessageRouter;
 import com.unitt.servicemanager.util.ValidationUtil;
 import com.unitt.servicemanager.websocket.MessageRoutingInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.concurrent.BlockingQueue;
 
 
 public class HazelcastMessageRouter extends MessageRouter
@@ -57,6 +56,8 @@ public class HazelcastMessageRouter extends MessageRouter
         }
 
         super.initialize();
+
+        logger.info("Started workers (router:" + getNumberOfWorkers() + ") using request queue: " + getRequestQueueName());
     }
 
     public boolean isInitialized()
