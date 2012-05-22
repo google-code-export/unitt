@@ -30,8 +30,13 @@
             <param name="ConversionPattern" value="%d{ABSOLUTE} %-5p [%t] %C{2} (%F:%L) - %m%n" />
         </layout>
     </appender>
+    <logger name="org.springframework">
+        <level value="WARN"/>
+        <appender-ref ref="STDERR" />
+        <appender-ref ref="STDOUT"/>
+    </logger>
     <root>
-        <priority value="warn" />
+        <priority value="WARN" />
         <appender-ref ref="STDOUT" />
         <appender-ref ref="STDERR" />
         <!-- uncomment to save to file

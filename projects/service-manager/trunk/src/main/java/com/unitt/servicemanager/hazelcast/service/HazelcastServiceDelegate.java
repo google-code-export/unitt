@@ -1,12 +1,6 @@
 package com.unitt.servicemanager.hazelcast.service;
 
 
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ConcurrentMap;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.hazelcast.core.HazelcastInstance;
 import com.unitt.servicemanager.service.ServiceDelegate;
 import com.unitt.servicemanager.util.ValidationUtil;
@@ -14,6 +8,11 @@ import com.unitt.servicemanager.websocket.MessageResponse;
 import com.unitt.servicemanager.websocket.MessageRoutingInfo;
 import com.unitt.servicemanager.websocket.MessageSerializerRegistry;
 import com.unitt.servicemanager.websocket.SerializedMessageBody;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentMap;
 
 
 public class HazelcastServiceDelegate extends ServiceDelegate
@@ -57,7 +56,7 @@ public class HazelcastServiceDelegate extends ServiceDelegate
 
         super.initialize();
 
-        logger.debug("Started workers (" + getService() + ":" + getNumberOfWorkers() + ") using request queue: " + getRequestQueueName());
+        logger.info("Started workers (" + getService() + ":" + getNumberOfWorkers() + ") using request queue: " + getRequestQueueName());
     }
 
     public void destroy()
