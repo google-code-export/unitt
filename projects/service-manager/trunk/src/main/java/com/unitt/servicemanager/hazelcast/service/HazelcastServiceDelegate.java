@@ -25,11 +25,13 @@ public class HazelcastServiceDelegate extends ServiceDelegate
     public HazelcastServiceDelegate()
     {
         // default
+        System.setProperty("hazelcast.logging.type", "slf4j");
     }
 
     public HazelcastServiceDelegate( Object aService, long aQueueTimeoutInMillis, MessageSerializerRegistry aReqistry, int aNumberOfWorkers, HazelcastInstance aHazelcastClient, String aRequestQueueName )
     {
         super( aService, aQueueTimeoutInMillis, aReqistry, aNumberOfWorkers );
+        System.setProperty("hazelcast.logging.type", "slf4j");
         setHazelcastClient( aHazelcastClient );
         setRequestQueueName( aRequestQueueName );
     }
@@ -55,7 +57,11 @@ public class HazelcastServiceDelegate extends ServiceDelegate
         }
 
         super.initialize();
+    }
 
+    @Override
+    public void start() {
+        super.start();
         logger.info("Started workers (" + getService() + ":" + getNumberOfWorkers() + ") using request queue: " + getRequestQueueName());
     }
 

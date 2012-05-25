@@ -1,20 +1,15 @@
 package com.unitt.servicemanager.hazelcast.websocket;
 
 
-import java.util.UUID;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ConcurrentMap;
-
+import com.hazelcast.core.HazelcastInstance;
+import com.unitt.servicemanager.util.ValidationUtil;
+import com.unitt.servicemanager.websocket.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hazelcast.core.HazelcastInstance;
-import com.unitt.servicemanager.util.ValidationUtil;
-import com.unitt.servicemanager.websocket.MessageRoutingInfo;
-import com.unitt.servicemanager.websocket.MessageSerializerRegistry;
-import com.unitt.servicemanager.websocket.MessagingWebSocket;
-import com.unitt.servicemanager.websocket.SerializedMessageBody;
-import com.unitt.servicemanager.websocket.ServerWebSocket;
+import java.util.UUID;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentMap;
 
 
 public class HazelcastWebSocket extends MessagingWebSocket
@@ -159,6 +154,11 @@ public class HazelcastWebSocket extends MessagingWebSocket
 
     // service logic
     // ---------------------------------------------------------------------------
+    public boolean pushHeader(MessageRoutingInfo aHeader) {
+        logger.info("Pushing Header (" + getHeaderQueueName() + "): " + aHeader);
+        return super.pushHeader(aHeader);
+    }
+
     public ConcurrentMap<String, SerializedMessageBody> getBodyMap()
     {
         return getHazelcastClient().getMap( "body:" + getSocketId() );
