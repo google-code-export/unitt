@@ -22,11 +22,13 @@ public class HazelcastMessageRouter extends MessageRouter
     public HazelcastMessageRouter()
     {
         // default
+        System.setProperty("hazelcast.logging.type", "slf4j");
     }
 
     public HazelcastMessageRouter( long aQueueTimeoutInMillis, int aNumberOfWorkers, String aRequestQueueName, HazelcastInstance aHazelcastClient )
     {
         super( aQueueTimeoutInMillis, aNumberOfWorkers );
+        System.setProperty("hazelcast.logging.type", "slf4j");
         setHazelcastClient( aHazelcastClient );
         setRequestQueueName( aRequestQueueName );
     }
@@ -56,8 +58,6 @@ public class HazelcastMessageRouter extends MessageRouter
         }
 
         super.initialize();
-
-        logger.info("Started workers (router:" + getNumberOfWorkers() + ") using request queue: " + getRequestQueueName());
     }
 
     public boolean isInitialized()
@@ -72,6 +72,13 @@ public class HazelcastMessageRouter extends MessageRouter
         setRequestQueueName( null );
 
         super.destroy();
+    }
+
+    @Override
+    public void start() {
+        super.start();
+
+        logger.info("Started workers (router:" + getNumberOfWorkers() + ") using request queue: " + getRequestQueueName());
     }
 
     protected void setInitialized( boolean aIsInitialized )
