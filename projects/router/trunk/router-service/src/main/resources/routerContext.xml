@@ -17,6 +17,7 @@
     </bean>
 
     <bean name="HazelcastConfig" class="com.hazelcast.client.ClientConfig">
+
         <!--
         <property name="groupConfig" ref="HazelcastGroupConfig"/>
         -->
