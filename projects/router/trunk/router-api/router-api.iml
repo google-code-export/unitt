@@ -36,6 +36,31 @@
     <orderEntry type="library" name="Maven: net.jini:jsk-lib:2.1" level="project" />
     <orderEntry type="library" name="Maven: net.jini:jsk-dl:2.1" level="project" />
     <orderEntry type="library" name="Maven: cglib:cglib-nodep:2.2" level="project" />
+    <orderEntry type="library" name="Maven: com.unitt.commons:foundation:2.0.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: com.unitt.framework:service-manager:1.0.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.jetty:jetty-websocket:8.0.0.M3" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.jetty:jetty-server:8.0.0.M3" level="project" />
+    <orderEntry type="library" name="Maven: org.mortbay.jetty:servlet-api:3.0.20100224" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.jetty:jetty-continuation:8.0.0.M3" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.jetty:jetty-http:8.0.0.M3" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.jetty:jetty-io:8.0.0.M3" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.jetty:jetty-util:8.0.0.M3" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.5.2" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-log4j12:1.5.2" level="project" />
+    <orderEntry type="library" name="Maven: log4j:log4j:1.2.13" level="project" />
+    <orderEntry type="library" name="Maven: com.hazelcast:hazelcast-all:2.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.jackson:jackson-core-asl:1.8.5" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.jackson:jackson-mapper-asl:1.8.5" level="project" />
+    <orderEntry type="library" name="Maven: org.rioproject:rio:4.2" level="project" />
+    <orderEntry type="library" name="Maven: org.rioproject:boot:4.2" level="project" />
+    <orderEntry type="library" name="Maven: net.jini:start:2.1" level="project" />
+    <orderEntry type="library" name="Maven: net.jini:jsk-platform:2.1" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.groovy:groovy-all:1.7.0" level="project" />
+    <orderEntry type="library" name="Maven: jline:jline:0.9.94" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-compress:1.0" level="project" />
+    <orderEntry type="library" name="Maven: net.jini:jsk-lib:2.1" level="project" />
+    <orderEntry type="library" name="Maven: net.jini:jsk-dl:2.1" level="project" />
+    <orderEntry type="library" name="Maven: cglib:cglib-nodep:2.2" level="project" />
   </component>
 </module>
 

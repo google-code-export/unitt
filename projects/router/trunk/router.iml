@@ -31,6 +31,16 @@
     <orderEntry type="library" name="Maven: net.jini:jsk-lib:2.1" level="project" />
     <orderEntry type="library" name="Maven: net.jini:jsk-dl:2.1" level="project" />
     <orderEntry type="library" name="Maven: cglib:cglib-nodep:2.2" level="project" />
+    <orderEntry type="library" name="Maven: org.rioproject:rio:4.2" level="project" />
+    <orderEntry type="library" name="Maven: org.rioproject:boot:4.2" level="project" />
+    <orderEntry type="library" name="Maven: net.jini:start:2.1" level="project" />
+    <orderEntry type="library" name="Maven: net.jini:jsk-platform:2.1" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.groovy:groovy-all:1.7.0" level="project" />
+    <orderEntry type="library" name="Maven: jline:jline:0.9.94" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-compress:1.0" level="project" />
+    <orderEntry type="library" name="Maven: net.jini:jsk-lib:2.1" level="project" />
+    <orderEntry type="library" name="Maven: net.jini:jsk-dl:2.1" level="project" />
+    <orderEntry type="library" name="Maven: cglib:cglib-nodep:2.2" level="project" />
   </component>
 </module>
 

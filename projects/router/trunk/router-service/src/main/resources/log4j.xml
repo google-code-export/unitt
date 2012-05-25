@@ -30,6 +30,11 @@
             <param name="ConversionPattern" value="%d{ABSOLUTE} %-5p [%t] %C{2} (%F:%L) - %m%n" />
         </layout>
     </appender>
+    <logger name="com.hazelcast">
+        <level value="WARN"/>
+        <appender-ref ref="STDERR" />
+        <appender-ref ref="STDOUT"/>
+    </logger>
     <logger name="com.unitt">
         <level value="INFO"/>
         <appender-ref ref="STDERR" />
