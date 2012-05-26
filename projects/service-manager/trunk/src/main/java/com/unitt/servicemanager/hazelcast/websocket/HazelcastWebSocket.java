@@ -155,7 +155,6 @@ public class HazelcastWebSocket extends MessagingWebSocket
     // service logic
     // ---------------------------------------------------------------------------
     public boolean pushHeader(MessageRoutingInfo aHeader) {
-        logger.info("Pushing Header (" + getHeaderQueueName() + "): " + aHeader);
         return super.pushHeader(aHeader);
     }
 

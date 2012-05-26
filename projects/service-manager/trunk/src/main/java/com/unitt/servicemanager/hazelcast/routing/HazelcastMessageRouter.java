@@ -117,7 +117,7 @@ public class HazelcastMessageRouter extends MessageRouter
     {
         if ( aInfo != null )
         {
-            String queueName = aInfo.getServiceName();
+            String queueName = getServiceQueueName(aInfo);
             if ( queueName != null )
             {
                 return getHazelcastClient().getQueue( queueName );

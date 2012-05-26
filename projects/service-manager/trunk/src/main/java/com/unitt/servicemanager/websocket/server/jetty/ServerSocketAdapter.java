@@ -1,18 +1,16 @@
 package com.unitt.servicemanager.websocket.server.jetty;
 
 
-import java.io.IOException;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.eclipse.jetty.websocket.WebSocket;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.unitt.servicemanager.util.ValidationUtil;
 import com.unitt.servicemanager.websocket.MessagingWebSocket;
 import com.unitt.servicemanager.websocket.MessagingWebSocketManager;
 import com.unitt.servicemanager.websocket.ServerWebSocket;
+import org.eclipse.jetty.websocket.WebSocket;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
 
 public class ServerSocketAdapter implements WebSocket, WebSocket.OnBinaryMessage, ServerWebSocket
@@ -157,7 +155,6 @@ public class ServerSocketAdapter implements WebSocket, WebSocket.OnBinaryMessage
     // ---------------------------------------------------------------------------
     public void onMessage( byte[] aData, int aOffset, int aLength )
     {
-        logger.debug("On Message of Length: " + aLength);
         if ( aData.length != aLength && aOffset != 0 )
         {
             byte[] data = new byte[aLength];
@@ -172,14 +169,12 @@ public class ServerSocketAdapter implements WebSocket, WebSocket.OnBinaryMessage
 
     public void onClose( int aCloseCode, String aMessage )
     {
-        logger.info( "Closing socket ({0}): [{1}] {2}", new Object[] { getSocket().getSocketId(), aCloseCode, aMessage } );
         getManager().destroyWebSocket( getSocket() );
         destroy();
     }
 
     public void onOpen( Connection aConnection )
     {
-        logger.debug("On Open");
         setConnection( aConnection );
         setSocket( getManager().createWebSocket(this) );
         initialize();

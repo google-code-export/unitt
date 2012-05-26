@@ -158,7 +158,6 @@ public abstract class MessageRouter implements Processor<MessageRoutingInfo>
     {
         try
         {
-            logger.info("Router processing info: " + aInfo);
             getServiceQueue( aInfo ).offer( aInfo, getQueueTimeoutInMillis(), TimeUnit.MILLISECONDS );
         }
         catch ( Exception e )
