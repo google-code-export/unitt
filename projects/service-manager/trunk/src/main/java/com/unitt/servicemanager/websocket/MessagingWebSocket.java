@@ -1,20 +1,19 @@
 package com.unitt.servicemanager.websocket;
 
 
+import com.unitt.commons.foundation.lifecycle.Destructable;
+import com.unitt.commons.foundation.lifecycle.Initializable;
+import com.unitt.servicemanager.util.ByteUtil;
+import com.unitt.servicemanager.util.ValidationUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.UUID;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.unitt.commons.foundation.lifecycle.Destructable;
-import com.unitt.commons.foundation.lifecycle.Initializable;
-import com.unitt.servicemanager.util.ByteUtil;
-import com.unitt.servicemanager.util.ValidationUtil;
 
 
 public abstract class MessagingWebSocket implements Initializable, Destructable
@@ -255,7 +254,6 @@ public abstract class MessagingWebSocket implements Initializable, Destructable
     {
         try
         {
-            logger.debug( "Pushing header: " + aHeader );
             return getHeaderQueue().offer( aHeader, getQueueTimeoutInMillis(), TimeUnit.MILLISECONDS );
         }
         catch ( Exception e )
@@ -267,7 +265,6 @@ public abstract class MessagingWebSocket implements Initializable, Destructable
 
     public void pushBody( String aUid, SerializedMessageBody aBody )
     {
-        logger.info( "Pushing body to map for key: " + aUid );
         getBodyMap().put( aUid, aBody );
     }
 

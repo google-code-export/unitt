@@ -1,16 +1,15 @@
 package com.unitt.servicemanager.websocket.server.jetty;
 
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-
+import com.unitt.servicemanager.util.ValidationUtil;
+import com.unitt.servicemanager.websocket.MessagingWebSocketManager;
 import org.eclipse.jetty.websocket.WebSocket;
 import org.eclipse.jetty.websocket.WebSocketServlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.unitt.servicemanager.util.ValidationUtil;
-import com.unitt.servicemanager.websocket.MessagingWebSocketManager;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 
 
 public class MessagingWebSocketServlet extends WebSocketServlet
@@ -39,7 +38,6 @@ public class MessagingWebSocketServlet extends WebSocketServlet
     @Override
     public WebSocket doWebSocketConnect( HttpServletRequest aRequest, String aProtocol )
     {
-        logger.debug( "Connecting web socket." );
         return new ServerSocketAdapter(aRequest, aProtocol, getFactory());
     }
     

@@ -102,7 +102,6 @@ public abstract class MessagingWebSocketManager implements Initializable, Destru
         }
         webSocket.initialize();
         getResponseQueueManager().addSocket( webSocket );
-        logger.info( "Opened socket: {0}.", webSocket.getSocketId() );
         return webSocket;
     }
 
@@ -111,7 +110,6 @@ public abstract class MessagingWebSocketManager implements Initializable, Destru
         String socketId = aWebSocket.getSocketId();
         getResponseQueueManager().removeSocket( aWebSocket );
         aWebSocket.destroy();
-        logger.info( "Closed socket: {0}", socketId );
     }
 
     protected abstract MessagingWebSocket internalCreateWebSocket( ServerWebSocket aServerWebSocket );
