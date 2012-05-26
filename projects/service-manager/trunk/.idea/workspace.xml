@@ -4,12 +4,8 @@
     <list default="true" readonly="true" id="d2819d87-a7ab-45e9-81df-f40e37bcbcb7" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/routing/HazelcastMessageRouter.java" afterPath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/routing/HazelcastMessageRouter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/websocket/HazelcastWebSocket.java" afterPath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/websocket/HazelcastWebSocket.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/routing/MessageRouter.java" afterPath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/routing/MessageRouter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/websocket/MessagingWebSocket.java" afterPath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/websocket/MessagingWebSocket.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/websocket/MessagingWebSocketManager.java" afterPath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/websocket/MessagingWebSocketManager.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/websocket/server/jetty/MessagingWebSocketServlet.java" afterPath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/websocket/server/jetty/MessagingWebSocketServlet.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/websocket/server/jetty/ServerSocketAdapter.java" afterPath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/websocket/server/jetty/ServerSocketAdapter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/service/HazelcastServiceDelegate.java" afterPath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/service/HazelcastServiceDelegate.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/websocket/HazelcastWebSocketFactory.java" afterPath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/websocket/HazelcastWebSocketFactory.java" />
     </list>
     <ignored path="service-manager.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -74,7 +70,35 @@
     <favorites_list name="service-manager" />
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf>
+      <file leaf-file-name="HazelcastMessageRouter.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/routing/HazelcastMessageRouter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="24" column="0" selection-start="746" selection-end="746" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="HazelcastServiceDelegate.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/service/HazelcastServiceDelegate.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="32" column="0" selection-start="1228" selection-end="1228" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="HazelcastWebSocketFactory.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/websocket/HazelcastWebSocketFactory.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="118" column="0" selection-start="3896" selection-end="3896" vertical-scroll-proportion="0.56437767">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -93,9 +117,6 @@
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/resources/log4j.xml" />
         <option value="$PROJECT_DIR$/src/test/resources/log4j.xml" />
-        <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/websocket/HazelcastWebSocketFactory.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/service/HazelcastServiceDelegate.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/routing/HazelcastMessageRouter.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/websocket/HazelcastWebSocket.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/routing/MessageRouter.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/service/ServiceDelegate.java" />
@@ -103,6 +124,9 @@
         <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/websocket/server/jetty/MessagingWebSocketServlet.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/websocket/MessagingWebSocketManager.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/websocket/server/jetty/ServerSocketAdapter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/routing/HazelcastMessageRouter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/service/HazelcastServiceDelegate.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/websocket/HazelcastWebSocketFactory.java" />
       </list>
     </option>
   </component>
@@ -143,7 +167,7 @@
     <option name="STATE" value="0" />
   </component>
   <component name="ProjectView">
-    <navigator currentView="ProjectPane" proportions="" version="1" splitterProportion="0.5">
+    <navigator proportions="" version="1" splitterProportion="0.5">
       <flattenPackages ProjectPane="true" />
       <showMembers />
       <showModules />
@@ -154,29 +178,7 @@
       <autoscrollFromSource />
       <sortByType />
     </navigator>
-    <panes>
-      <pane id="Scope">
-        <subPane subId="Project Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="ProjectPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="service-manager" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="PackagesPane" />
-    </panes>
+    <panes />
   </component>
   <component name="PropertiesComponent">
     <property name="GoToFile.includeJavaFiles" value="false" />
@@ -191,9 +193,9 @@
     <property name="MemberChooser.showClasses" value="true" />
     <property name="FullScreen" value="false" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="dynamic.classpath" value="false" />
-    <property name="options.searchVisible" value="true" />
     <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
+    <property name="dynamic.classpath" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -436,7 +438,11 @@
       <created>1337960952104</created>
       <updated>1337960952104</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="- removed extraneous logging">
+      <created>1338052600116</created>
+      <updated>1338052600116</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -507,7 +513,7 @@
     <option name="SHOW_VCS_ERROR_NOTIFICATIONS" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="- additional logging" />
+    <option name="LAST_COMMIT_MESSAGE" value="- removed extraneous logging" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -530,6 +536,7 @@
     <MESSAGE value="- idea project files&#10;- upgraded hazelcast" />
     <MESSAGE value="- moved log config to test resources" />
     <MESSAGE value="- additional logging" />
+    <MESSAGE value="- removed extraneous logging" />
   </component>
   <component name="VssConfiguration">
     <option name="CLIENT_PATH" value="" />
@@ -576,11 +583,6 @@
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state line="73" column="35" selection-start="2437" selection-end="2437" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/websocket/HazelcastWebSocketFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="106" column="0" selection-start="3602" selection-end="3602" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/resources/log4j.xml">
@@ -650,13 +652,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/routing/HazelcastMessageRouter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="120" column="0" selection-start="3431" selection-end="3431" vertical-scroll-proportion="0.19214587">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/websocket/HazelcastWebSocket.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="157" column="0" selection-start="5079" selection-end="5079" vertical-scroll-proportion="0.3941094">
@@ -664,9 +659,23 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/routing/HazelcastMessageRouter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="24" column="0" selection-start="746" selection-end="746" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/service/HazelcastServiceDelegate.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="79" column="4" selection-start="2573" selection-end="2573" vertical-scroll-proportion="0.025245441">
+        <state line="32" column="0" selection-start="1228" selection-end="1228" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/websocket/HazelcastWebSocketFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="118" column="0" selection-start="3896" selection-end="3896" vertical-scroll-proportion="0.56437767">
           <folding />
         </state>
       </provider>
