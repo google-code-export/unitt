@@ -22,13 +22,11 @@ public class HazelcastMessageRouter extends MessageRouter
     public HazelcastMessageRouter()
     {
         // default
-        System.setProperty("hazelcast.logging.type", "slf4j");
     }
 
     public HazelcastMessageRouter( long aQueueTimeoutInMillis, int aNumberOfWorkers, String aRequestQueueName, HazelcastInstance aHazelcastClient )
     {
         super( aQueueTimeoutInMillis, aNumberOfWorkers );
-        System.setProperty("hazelcast.logging.type", "slf4j");
         setHazelcastClient( aHazelcastClient );
         setRequestQueueName( aRequestQueueName );
     }

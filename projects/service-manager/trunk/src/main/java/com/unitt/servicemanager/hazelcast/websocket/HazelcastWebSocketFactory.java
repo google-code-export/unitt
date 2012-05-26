@@ -32,7 +32,6 @@ public class HazelcastWebSocketFactory extends MessagingWebSocketManager
     public HazelcastWebSocketFactory( MessageSerializerRegistry aSerializers, long aQueueTimeout, String aHeaderQueueName, HazelcastInstance aHazelcastClient, ResponseQueueManager aResponseQueueManager )
     {
         super( aSerializers, aResponseQueueManager );
-        System.setProperty("hazelcast.logging.type", "slf4j");
         setQueueTimeoutInMillis( aQueueTimeout );
         setHazelcastClient( aHazelcastClient );
         setHeaderQueueName( aHeaderQueueName );
