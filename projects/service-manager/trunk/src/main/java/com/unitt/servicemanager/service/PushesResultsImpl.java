@@ -3,9 +3,7 @@ package com.unitt.servicemanager.service;
 import com.unitt.servicemanager.websocket.MessageResponse;
 import com.unitt.servicemanager.websocket.MessageRoutingInfo;
 
-import java.io.Serializable;
-
-public class PushesResultsImpl<T extends Serializable> implements PushesResults<T> {
+public class PushesResultsImpl<T> implements PushesResults<T> {
     private ServiceDelegate delegate;
     private MessageResponse response;
     
