@@ -98,6 +98,12 @@ public class HazelcastServiceDelegate extends ServiceDelegate
     // service logic
     // ---------------------------------------------------------------------------
     @Override
+    public void process(MessageRoutingInfo aInfo) {
+        logger.info("Processing service method from: " + aInfo);
+        super.process(aInfo);
+    }
+
+    @Override
     public ConcurrentMap<String, SerializedMessageBody> getBodyMap( MessageRoutingInfo aInfo )
     {
         if ( aInfo != null )

@@ -2,9 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="d2819d87-a7ab-45e9-81df-f40e37bcbcb7" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/routing/HazelcastInPlaceMessageRouter.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/websocket/HazelcastWebSocketAndRouter.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/websocket/HazelcastWebSocketAndRouterFactory.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/routing/InPlaceMessageRouter.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/service/PushesResults.java" afterPath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/service/PushesResults.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/service/PushesResultsImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/service/PushesResultsImpl.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/service/HazelcastServiceDelegate.java" afterPath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/service/HazelcastServiceDelegate.java" />
     </list>
     <ignored path="service-manager.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -82,22 +85,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/test/java/com/unitt/servicemanager/service/MockServiceDelegate.java" />
-        <option value="$PROJECT_DIR$/pom.xml" />
-        <option value="$PROJECT_DIR$/src/main/resources/log4j.xml" />
-        <option value="$PROJECT_DIR$/src/test/resources/log4j.xml" />
-        <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/websocket/HazelcastWebSocket.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/routing/MessageRouter.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/service/ServiceDelegate.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/websocket/MessagingWebSocket.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/websocket/server/jetty/MessagingWebSocketServlet.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/websocket/MessagingWebSocketManager.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/websocket/server/jetty/ServerSocketAdapter.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/routing/HazelcastMessageRouter.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/service/HazelcastServiceDelegate.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/websocket/HazelcastWebSocketFactory.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/service/PushesResults.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/service/PushesResultsImpl.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/routing/InPlaceMessageRouter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/websocket/HazelcastWebSocket.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/websocket/MessagingWebSocketAndRouter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/websocket/HazelcastWebSocketAndRouter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/websocket/HazelcastWebSocketAndRouterFactory.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/routing/HazelcastInPlaceMessageRouter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/service/HazelcastServiceDelegate.java" />
       </list>
     </option>
   </component>
@@ -150,6 +153,16 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope">
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -244,14 +257,74 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="websocket" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="service-manager" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="service-manager" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="service" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="service-manager" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="service-manager" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="routing" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
+      <pane id="PackagesPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="service-manager" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -267,11 +340,17 @@
     <property name="MemberChooser.showClasses" value="true" />
     <property name="FullScreen" value="false" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="dynamic.classpath" value="false" />
-    <property name="options.searchVisible" value="true" />
     <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
+    <property name="dynamic.classpath" value="false" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.unitt.servicemanager.hazelcast.websocket" />
+      <recent name="com.unitt.servicemanager.websocket" />
+      <recent name="com.unitt.servicemanager.hazelcast.routing" />
+      <recent name="com.unitt.servicemanager.routing" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/test/resources" />
     </key>
@@ -520,11 +599,15 @@
       <created>1338052974104</created>
       <updated>1338052974104</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="- removed serializable to allow interfaces">
+      <created>1338415069119</created>
+      <updated>1338415069119</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="22" width="1440" height="874" extended-state="6" />
+    <frame x="0" y="22" width="1440" height="874" extended-state="0" />
     <editor active="false" />
     <layout>
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -591,7 +674,7 @@
     <option name="SHOW_VCS_ERROR_NOTIFICATIONS" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="- removed non-functional rio system property" />
+    <option name="LAST_COMMIT_MESSAGE" value="- removed serializable to allow interfaces" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -616,6 +699,7 @@
     <MESSAGE value="- additional logging" />
     <MESSAGE value="- removed extraneous logging" />
     <MESSAGE value="- removed non-functional rio system property" />
+    <MESSAGE value="- removed serializable to allow interfaces" />
   </component>
   <component name="VssConfiguration">
     <option name="CLIENT_PATH" value="" />
@@ -659,98 +743,84 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/worker/WorkerImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="39" column="16" selection-start="894" selection-end="894" vertical-scroll-proportion="0.96694213" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/worker/DelegateWorker.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="0" selection-start="684" selection-end="684" vertical-scroll-proportion="0.49586776" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/worker/DelegateMaster.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="41" column="33" selection-start="1234" selection-end="1234" vertical-scroll-proportion="0.9593268" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/websocket/MessagingWebSocket.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="267" column="0" selection-start="8289" selection-end="8289" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/websocket/server/jetty/MessagingWebSocketServlet.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="40" column="0" selection-start="1250" selection-end="1250" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/websocket/server/jetty/ServerSocketAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="177" column="0" selection-start="4616" selection-end="4616" vertical-scroll-proportion="0.71875" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/websocket/MessagingWebSocketManager.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="112" column="0" selection-start="3473" selection-end="3473" vertical-scroll-proportion="0.4283647" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/routing/MessageRouter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="160" column="0" selection-start="4606" selection-end="4606" vertical-scroll-proportion="0.54558206" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/websocket/HazelcastWebSocket.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="157" column="0" selection-start="5079" selection-end="5079" vertical-scroll-proportion="0.3941094" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/service/PushesResults.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="32" selection-start="105" selection-end="105" vertical-scroll-proportion="0.09917355">
-          <folding />
-        </state>
+        <state line="4" column="32" selection-start="105" selection-end="105" vertical-scroll-proportion="0.09917355" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/service/PushesResultsImpl.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="42" selection-start="557" selection-end="557" vertical-scroll-proportion="0.4090909">
-          <folding />
-        </state>
+        <state line="17" column="42" selection-start="557" selection-end="557" vertical-scroll-proportion="0.4090909" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/websocket/HazelcastWebSocketFactory.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="130" column="4" selection-start="4148" selection-end="4148" vertical-scroll-proportion="0.67180926">
-          <folding />
-        </state>
+        <state line="130" column="4" selection-start="4148" selection-end="4148" vertical-scroll-proportion="0.67180926" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/service/RemoteService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="18" selection-start="90" selection-end="90" vertical-scroll-proportion="0.09917355">
-          <folding />
-        </state>
+        <state line="4" column="18" selection-start="90" selection-end="90" vertical-scroll-proportion="0.09917355" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/service/ServiceDelegate.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="213" column="0" selection-start="6315" selection-end="6315" vertical-scroll-proportion="0.30294532">
-          <folding />
-        </state>
+        <state line="213" column="0" selection-start="6315" selection-end="6315" vertical-scroll-proportion="0.30294532" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/service/HazelcastServiceDelegate.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/worker/Processor.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="32" column="0" selection-start="1228" selection-end="1228" vertical-scroll-proportion="0.025245441">
-          <folding />
-        </state>
+        <state line="2" column="17" selection-start="59" selection-end="59" vertical-scroll-proportion="0.049586777" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/websocket/MessagingWebSocket.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="18" column="22" selection-start="562" selection-end="562" vertical-scroll-proportion="0.15629523" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/websocket/HazelcastWebSocketAndRouter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="156" column="76" selection-start="4953" selection-end="4953" vertical-scroll-proportion="3.829233" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/websocket/HazelcastWebSocket.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="19" column="35" selection-start="636" selection-end="636" vertical-scroll-proportion="0.28654125" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/routing/InPlaceMessageRouter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="45" column="0" selection-start="1319" selection-end="1319" vertical-scroll-proportion="0.9593268" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/routing/MessageRouter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="139" column="0" selection-start="4183" selection-end="4183" vertical-scroll-proportion="0.01542777" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/routing/HazelcastMessageRouter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="0" selection-start="746" selection-end="746" vertical-scroll-proportion="0.025245441">
-          <folding />
-        </state>
+        <state line="45" column="0" selection-start="1439" selection-end="1439" vertical-scroll-proportion="0.9593268" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/websocket/HazelcastWebSocketAndRouterFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="91" column="46" selection-start="3007" selection-end="3007" vertical-scroll-proportion="0.36886394" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/service/HazelcastServiceDelegate.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="101" column="61" selection-start="3041" selection-end="3041" vertical-scroll-proportion="0.37868163" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/routing/HazelcastInPlaceMessageRouter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="80" column="85" selection-start="2257" selection-end="2257" vertical-scroll-proportion="0.3553719" />
       </provider>
     </entry>
   </component>
