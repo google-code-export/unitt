@@ -1,38 +1,33 @@
 package com.unitt.servicemanager.worker;
 
 
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.TimeUnit;
-
+import com.unitt.servicemanager.routing.Pulls;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class DelegateWorker<D, P extends Processor<D>> extends WorkerImpl
-{
-    private static Logger logger = LoggerFactory.getLogger( DelegateWorker.class );
-    
-    protected Processor<D>     processor;
-    protected BlockingQueue<D> queue;
+public class DelegateWorker<D> extends WorkerImpl {
+    private static Logger logger = LoggerFactory.getLogger(DelegateWorker.class);
+
+    protected Processor<D> processor;
+    protected Pulls<D> pulls;
     protected long queueTimeOutInMillis = 10000;
 
 
     // constructors
     // ---------------------------------------------------------------------------
-    public DelegateWorker( BlockingQueue<D> aQueue, Processor<D> aProcessor )
-    {
+    public DelegateWorker(Pulls<D> aPulls, Processor<D> aProcessor) {
         super();
 
+        pulls = aPulls;
         processor = aProcessor;
-        queue = aQueue;
     }
 
-    public DelegateWorker( String aName, BlockingQueue<D> aQueue, Processor<D> aProcessor, long aQueueTimeOutInMillis )
-    {
-        super( aName );
+    public DelegateWorker(String aName, Pulls<D> aPulls, Processor<D> aProcessor, long aQueueTimeOutInMillis) {
+        super(aName);
 
         processor = aProcessor;
-        queue = aQueue;
+        pulls = aPulls;
         queueTimeOutInMillis = aQueueTimeOutInMillis;
     }
 
@@ -40,19 +35,14 @@ public class DelegateWorker<D, P extends Processor<D>> extends WorkerImpl
     // service logic
     // ---------------------------------------------------------------------------
     @Override
-    protected void internalRun()
-    {
-        try
-        {
-            D item = queue.poll( queueTimeOutInMillis, TimeUnit.MILLISECONDS );
-            if (item != null)
-            {
-                processor.process( item );
+    protected void internalRun() {
+        try {
+            D item = pulls.pull(queueTimeOutInMillis);
+            if (item != null) {
+                processor.process(item);
             }
-        }
-        catch (Exception e)
-        {
-            logger.error( "An error occurred while acquiring and processing an item on the queue.", e );
+        } catch (Exception e) {
+            logger.error("An error occurred while acquiring and processing an item.", e);
         }
     }
 }

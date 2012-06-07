@@ -1,21 +1,27 @@
 package com.unitt.servicemanager.websocket;
 
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.unitt.commons.foundation.lifecycle.Destructable;
 import com.unitt.commons.foundation.lifecycle.Initializable;
 import com.unitt.servicemanager.response.ResponseQueueManager;
+import com.unitt.servicemanager.routing.PullsBody;
+import com.unitt.servicemanager.routing.Pushes;
+import com.unitt.servicemanager.routing.PutsBody;
 import com.unitt.servicemanager.util.ValidationUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
-public abstract class MessagingWebSocketManager implements Initializable, Destructable
+public class MessagingWebSocketManager implements Initializable, Destructable
 {
     private static Logger             logger = LoggerFactory.getLogger( MessagingWebSocketManager.class );
 
     private MessageSerializerRegistry serializerRegistry;
     private ResponseQueueManager      responseQueueManager;
+    private long queueTimeoutInMillis;
+    private Pushes<MessageRoutingInfo> pushesHeader;
+    private PullsBody pullsBody;
+    private PutsBody putsBody;
     protected boolean                 isInitialized;
 
 
@@ -23,13 +29,15 @@ public abstract class MessagingWebSocketManager implements Initializable, Destru
     // ---------------------------------------------------------------------------
     public MessagingWebSocketManager()
     {
-        this( null, null );
     }
 
-    public MessagingWebSocketManager( MessageSerializerRegistry aSerializerRegistry, ResponseQueueManager aResponseQueueManager )
-    {
-        setSerializerRegistry( aSerializerRegistry );
-        setResponseQueueManager( aResponseQueueManager );
+    public MessagingWebSocketManager(MessageSerializerRegistry aSerializerRegistry, ResponseQueueManager aResponseQueueManager, long aQueueTimeoutInMillis, Pushes<MessageRoutingInfo> aPushesHeader, PullsBody aPullsBody, PutsBody aPutsBody) {
+        serializerRegistry = aSerializerRegistry;
+        responseQueueManager = aResponseQueueManager;
+        queueTimeoutInMillis = aQueueTimeoutInMillis;
+        pushesHeader = aPushesHeader;
+        pullsBody = aPullsBody;
+        putsBody = aPutsBody;
     }
 
 
@@ -43,6 +51,22 @@ public abstract class MessagingWebSocketManager implements Initializable, Destru
         if ( getResponseQueueManager() == null )
         {
             missing = ValidationUtil.appendMessage( missing, "Missing response queue manager. " );
+        }
+        if ( getQueueTimeoutInMillis() <= 0 )
+        {
+            setQueueTimeoutInMillis(30000);
+        }
+        if ( getPullsBody() == null )
+        {
+            missing = ValidationUtil.appendMessage( missing, "Missing pulls body handler. " );
+        }
+        if ( getPutsBody() == null )
+        {
+            missing = ValidationUtil.appendMessage( missing, "Missing puts body handler. " );
+        }
+        if ( getPushesHeader() == null )
+        {
+            missing = ValidationUtil.appendMessage( missing, "Missing pushes header handler. " );
         }
         if ( getSerializerRegistry() == null )
         {
@@ -77,6 +101,10 @@ public abstract class MessagingWebSocketManager implements Initializable, Destru
             getResponseQueueManager().destroy();
         }
         setResponseQueueManager( null );
+        setPullsBody(null);
+        setPushesHeader(null);
+        setPutsBody(null);
+        setQueueTimeoutInMillis(0);
         setSerializerRegistry( null );
         setInitialized( false );
     }
@@ -100,6 +128,10 @@ public abstract class MessagingWebSocketManager implements Initializable, Destru
         {
             webSocket.setServerId( getResponseQueueManager().getServerId() );
         }
+        webSocket.setPullsBody(getPullsBody());
+        webSocket.setQueueTimeoutInMillis(getQueueTimeoutInMillis());
+        webSocket.setPutsBody(getPutsBody());
+        webSocket.setPushesHeader(getPushesHeader());
         webSocket.initialize();
         getResponseQueueManager().addSocket( webSocket );
         return webSocket;
@@ -112,7 +144,9 @@ public abstract class MessagingWebSocketManager implements Initializable, Destru
         aWebSocket.destroy();
     }
 
-    protected abstract MessagingWebSocket internalCreateWebSocket( ServerWebSocket aServerWebSocket );
+    protected MessagingWebSocket internalCreateWebSocket( ServerWebSocket aServerWebSocket ) {
+        return new MessagingWebSocket();
+    }
 
 
     // getters & setters
@@ -135,5 +169,37 @@ public abstract class MessagingWebSocketManager implements Initializable, Destru
     public void setResponseQueueManager( ResponseQueueManager aResponseQueueManager )
     {
         responseQueueManager = aResponseQueueManager;
+    }
+
+    public long getQueueTimeoutInMillis() {
+        return queueTimeoutInMillis;
+    }
+
+    public void setQueueTimeoutInMillis(long aQueueTimeoutInMillis) {
+        queueTimeoutInMillis = aQueueTimeoutInMillis;
+    }
+
+    public Pushes<MessageRoutingInfo> getPushesHeader() {
+        return pushesHeader;
+    }
+
+    public void setPushesHeader(Pushes<MessageRoutingInfo> aPushesHeader) {
+        pushesHeader = aPushesHeader;
+    }
+
+    public PullsBody getPullsBody() {
+        return pullsBody;
+    }
+
+    public void setPullsBody(PullsBody aPullsBody) {
+        pullsBody = aPullsBody;
+    }
+
+    public PutsBody getPutsBody() {
+        return putsBody;
+    }
+
+    public void setPutsBody(PutsBody aPutsBody) {
+        putsBody = aPutsBody;
     }
 }
