@@ -2,12 +2,40 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="d2819d87-a7ab-45e9-81df-f40e37bcbcb7" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/routing/HazelcastInPlaceMessageRouter.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/websocket/HazelcastWebSocketAndRouter.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/websocket/HazelcastWebSocketAndRouterFactory.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/routing/InPlaceMessageRouter.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/HazelcastBodyManager.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/HazelcastRequestManager.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/HazelcastResponseManager.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/routing/HasServerId.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/routing/Pulls.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/routing/PullsBody.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/routing/Pushes.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/routing/PutsBody.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/java/com/unitt/servicemanager/service/MockBodyHandler.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/java/com/unitt/servicemanager/service/MockRequestHandler.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/java/com/unitt/servicemanager/service/MockResponseHandler.java" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/response/HazelcastResponseQueueManager.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/routing/HazelcastInPlaceMessageRouter.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/routing/HazelcastMessageRouter.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/service/HazelcastServiceDelegate.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/websocket/HazelcastWebSocket.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/websocket/HazelcastWebSocketAndRouter.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/websocket/HazelcastWebSocketAndRouterFactory.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/websocket/HazelcastWebSocketFactory.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/routing/InPlaceMessageRouter.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/routing/MessageRouter.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/response" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/routing" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/service" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/websocket" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/service/HazelcastServiceDelegate.java" afterPath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/service/HazelcastServiceDelegate.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/response/ResponseQueueManager.java" afterPath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/response/ResponseQueueManager.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/service/ServiceDelegate.java" afterPath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/service/ServiceDelegate.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/websocket/MessagingWebSocket.java" afterPath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/websocket/MessagingWebSocket.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/websocket/MessagingWebSocketManager.java" afterPath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/websocket/MessagingWebSocketManager.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/worker/DelegateMaster.java" afterPath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/worker/DelegateMaster.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/worker/DelegateWorker.java" afterPath="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/worker/DelegateWorker.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/com/unitt/servicemanager/service/MockServiceDelegate.java" afterPath="$PROJECT_DIR$/src/test/java/com/unitt/servicemanager/service/MockServiceDelegate.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/com/unitt/servicemanager/service/ServiceDelegateTest.java" afterPath="$PROJECT_DIR$/src/test/java/com/unitt/servicemanager/service/ServiceDelegateTest.java" />
     </list>
     <ignored path="service-manager.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -72,7 +100,17 @@
     <favorites_list name="service-manager" />
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf>
+      <file leaf-file-name="ServiceDelegate.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/service/ServiceDelegate.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="21" column="7" selection-start="667" selection-end="667" vertical-scroll-proportion="0.36610168">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -85,22 +123,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/service/ServiceDelegate.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/websocket/MessagingWebSocket.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/websocket/server/jetty/MessagingWebSocketServlet.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/routing/MessageRouter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/HazelcastRouting.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/HazelcastBodyManager.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/HazelcastRequestManager.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/unitt/servicemanager/service/MockBodyHandler.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/unitt/servicemanager/service/MockRequestHandler.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/unitt/servicemanager/service/MockResponseHandler.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/unitt/servicemanager/service/MockServiceDelegate.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/worker/DelegateMaster.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/unitt/servicemanager/service/ServiceDelegateTest.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/routing/HasServerId.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/HazelcastResponseManager.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/websocket/MessagingWebSocketManager.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/websocket/server/jetty/ServerSocketAdapter.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/routing/HazelcastMessageRouter.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/websocket/HazelcastWebSocketFactory.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/service/PushesResults.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/service/PushesResultsImpl.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/routing/InPlaceMessageRouter.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/websocket/HazelcastWebSocket.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/websocket/MessagingWebSocketAndRouter.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/websocket/HazelcastWebSocketAndRouter.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/websocket/HazelcastWebSocketAndRouterFactory.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/routing/HazelcastInPlaceMessageRouter.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/service/HazelcastServiceDelegate.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/websocket/MessagingWebSocket.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/response/ResponseQueueManager.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/service/ServiceDelegate.java" />
       </list>
     </option>
   </component>
@@ -146,7 +184,7 @@
       <showMembers />
       <showModules />
       <showLibraryContents />
-      <hideEmptyPackages />
+      <hideEmptyPackages ProjectPane="false" />
       <abbreviatePackageNames />
       <autoscrollToSource />
       <autoscrollFromSource />
@@ -159,6 +197,20 @@
             <PATH_ELEMENT USER_OBJECT="Root">
               <option name="myItemId" value="" />
               <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="PackagesPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="service-manager" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="service-manager" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -194,6 +246,62 @@
               <option name="myItemId" value="src" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="resources" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="service-manager" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="service-manager" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="service" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="service-manager" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="service-manager" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -232,32 +340,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="service-manager" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="service-manager" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="websocket" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -287,42 +369,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="service-manager" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="service-manager" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="routing" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="PackagesPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="service-manager" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
     </panes>
@@ -331,6 +377,7 @@
     <property name="GoToFile.includeJavaFiles" value="false" />
     <property name="OverrideImplement.combined" value="true" />
     <property name="options.splitter.main.proportions" value="0.3" />
+    <property name="recentsLimit" value="5" />
     <property name="MemberChooser.sorted" value="false" />
     <property name="options.lastSelected" value="preferences.updates" />
     <property name="GoToClass.includeJavaFiles" value="false" />
@@ -340,12 +387,13 @@
     <property name="MemberChooser.showClasses" value="true" />
     <property name="FullScreen" value="false" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="options.splitter.details.proportions" value="0.2" />
-    <property name="options.searchVisible" value="true" />
     <property name="dynamic.classpath" value="false" />
+    <property name="options.searchVisible" value="true" />
+    <property name="options.splitter.details.proportions" value="0.2" />
   </component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.unitt.servicemanager.hazelcast" />
       <recent name="com.unitt.servicemanager.hazelcast.websocket" />
       <recent name="com.unitt.servicemanager.websocket" />
       <recent name="com.unitt.servicemanager.hazelcast.routing" />
@@ -355,7 +403,35 @@
       <recent name="$PROJECT_DIR$/src/test/resources" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="JUnit.ServiceDelegateTest">
+    <configuration default="false" name="ServiceDelegateTest" type="JUnit" factoryName="JUnit" temporary="true">
+      <extension name="coverage" enabled="false" merge="false" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="com.unitt.servicemanager.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="service-manager" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="com.unitt.servicemanager.service" />
+      <option name="MAIN_CLASS_NAME" value="com.unitt.servicemanager.service.ServiceDelegateTest" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <envs />
+      <patterns />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
     <configuration default="true" type="MavenRunConfiguration" factoryName="Maven">
       <MavenSettings>
         <option name="myGeneralSettings">
@@ -505,7 +581,9 @@
         <option name="PhingTarget" enabled="false" />
       </method>
     </configuration>
-    <list size="0" />
+    <list size="1">
+      <item index="0" class="java.lang.String" itemvalue="JUnit.ServiceDelegateTest" />
+    </list>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
       <Host>localhost</Host>
       <Port>5050</Port>
@@ -603,37 +681,41 @@
       <created>1338415069119</created>
       <updated>1338415069119</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="- added in place routers">
+      <created>1338869591114</created>
+      <updated>1338869591114</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="22" width="1440" height="874" extended-state="0" />
     <editor active="false" />
     <layout>
-      <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Changes" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32802126" sideWeight="0.0" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Rio" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.5551129" sideWeight="0.0" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Rio" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32833958" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32985783" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32985783" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32934928" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27801725" sideWeight="0.6706507" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33908045" sideWeight="0.6719788" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33908045" sideWeight="0.6719788" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.27801725" sideWeight="0.6719788" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.27761838" sideWeight="0.44488713" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.6533865" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Code explorer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24928162" sideWeight="0.6701422" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Code explorer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24928162" sideWeight="0.6706507" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32934928" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32985783" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -674,7 +756,7 @@
     <option name="SHOW_VCS_ERROR_NOTIFICATIONS" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="- removed serializable to allow interfaces" />
+    <option name="LAST_COMMIT_MESSAGE" value="- moved inheritance to delegates" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -700,6 +782,8 @@
     <MESSAGE value="- removed extraneous logging" />
     <MESSAGE value="- removed non-functional rio system property" />
     <MESSAGE value="- removed serializable to allow interfaces" />
+    <MESSAGE value="- added in place routers" />
+    <MESSAGE value="- moved inheritance to delegates" />
   </component>
   <component name="VssConfiguration">
     <option name="CLIENT_PATH" value="" />
@@ -743,84 +827,108 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/unitt/servicemanager/service/MockRequestHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="18" column="0" selection-start="645" selection-end="645" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#395#415#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/unitt/servicemanager/service/MockResponseHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="12" column="35" selection-start="504" selection-end="504" vertical-scroll-proportion="0.29752067">
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#385#402#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/worker/DelegateMaster.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="92" column="68" selection-start="2580" selection-end="2580" vertical-scroll-proportion="0.23140496">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/routing/HasServerId.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="4" column="45" selection-start="152" selection-end="152" vertical-scroll-proportion="0.095744684">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/HazelcastResponseManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="15" column="109" selection-start="628" selection-end="628" vertical-scroll-proportion="0.095744684">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/websocket/server/jetty/ServerSocketAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="35" column="4" selection-start="1268" selection-end="1268" vertical-scroll-proportion="0.9570552">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/unitt/servicemanager/service/ServiceDelegateTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="50" column="8" selection-start="1683" selection-end="1683" vertical-scroll-proportion="0.4451962">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/websocket/MessageSerializer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="33" selection-start="78" selection-end="78" vertical-scroll-proportion="0.047872342">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/websocket/MessageSerializerRegistry.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="28" selection-start="186" selection-end="186" vertical-scroll-proportion="0.14361702">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/unitt/servicemanager/service/MockServiceDelegate.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="17" column="48" selection-start="644" selection-end="644" vertical-scroll-proportion="0.26018396">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/websocket/MessagingWebSocketManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="112" column="0" selection-start="3473" selection-end="3473" vertical-scroll-proportion="0.4283647" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/service/PushesResults.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="32" selection-start="105" selection-end="105" vertical-scroll-proportion="0.09917355" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/service/PushesResultsImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="42" selection-start="557" selection-end="557" vertical-scroll-proportion="0.4090909" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/websocket/HazelcastWebSocketFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="130" column="4" selection-start="4148" selection-end="4148" vertical-scroll-proportion="0.67180926" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/service/RemoteService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="18" selection-start="90" selection-end="90" vertical-scroll-proportion="0.09917355" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/service/ServiceDelegate.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="213" column="0" selection-start="6315" selection-end="6315" vertical-scroll-proportion="0.30294532" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/worker/Processor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="17" selection-start="59" selection-end="59" vertical-scroll-proportion="0.049586777" />
+        <state line="41" column="4" selection-start="1669" selection-end="1669" vertical-scroll-proportion="0.26018396">
+          <folding />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/websocket/MessagingWebSocket.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="22" selection-start="562" selection-end="562" vertical-scroll-proportion="0.15629523" />
+        <state line="47" column="4" selection-start="1770" selection-end="1770" vertical-scroll-proportion="0.8278581">
+          <folding />
+        </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/websocket/HazelcastWebSocketAndRouter.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/response/ResponseQueueManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="156" column="76" selection-start="4953" selection-end="4953" vertical-scroll-proportion="3.829233" />
+        <state line="20" column="7" selection-start="689" selection-end="689" vertical-scroll-proportion="0.14191853">
+          <folding />
+        </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/websocket/HazelcastWebSocket.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/service/ServiceDelegate.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="35" selection-start="636" selection-end="636" vertical-scroll-proportion="0.28654125" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/routing/InPlaceMessageRouter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="45" column="0" selection-start="1319" selection-end="1319" vertical-scroll-proportion="0.9593268" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/routing/MessageRouter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="139" column="0" selection-start="4183" selection-end="4183" vertical-scroll-proportion="0.01542777" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/routing/HazelcastMessageRouter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="45" column="0" selection-start="1439" selection-end="1439" vertical-scroll-proportion="0.9593268" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/websocket/HazelcastWebSocketAndRouterFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="91" column="46" selection-start="3007" selection-end="3007" vertical-scroll-proportion="0.36886394" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/service/HazelcastServiceDelegate.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="101" column="61" selection-start="3041" selection-end="3041" vertical-scroll-proportion="0.37868163" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/unitt/servicemanager/hazelcast/routing/HazelcastInPlaceMessageRouter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="80" column="85" selection-start="2257" selection-end="2257" vertical-scroll-proportion="0.3553719" />
+        <state line="21" column="7" selection-start="667" selection-end="667" vertical-scroll-proportion="0.36610168">
+          <folding />
+        </state>
       </provider>
     </entry>
   </component>

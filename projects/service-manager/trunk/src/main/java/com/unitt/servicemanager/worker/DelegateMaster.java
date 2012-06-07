@@ -1,17 +1,15 @@
 package com.unitt.servicemanager.worker;
 
-import java.util.concurrent.BlockingQueue;
-
+import com.unitt.servicemanager.routing.Pulls;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DelegateMaster<D, P extends Processor<D>>
-{
-    private static Logger logger = LoggerFactory.getLogger( DelegateMaster.class );
-    
-    protected DelegateWorker<D,P>[] workers;
-    protected Processor<D>     processor;
-    protected BlockingQueue<D> queue;
+public class DelegateMaster<D> {
+    private static Logger logger = LoggerFactory.getLogger(DelegateMaster.class);
+
+    protected DelegateWorker<D>[] workers;
+    protected Processor<D> processor;
+    protected Pulls<D> pulls;
     protected long queueTimeOutInMillis = 10000;
     protected String name = "DelegateMaster";
     protected int numberOfThreads = 10;
@@ -19,129 +17,104 @@ public class DelegateMaster<D, P extends Processor<D>>
 
     // constructors
     // ---------------------------------------------------------------------------
-    public DelegateMaster()
-    {
+    public DelegateMaster() {
         //default
     }
-    
-    public DelegateMaster( String aName, BlockingQueue<D> aQueue, Processor<D> aProcessor, long aQueueTimeOutInMillis, int aNumberOfThreads )
-    {
+
+    public DelegateMaster(String aName, Pulls<D> aPulls, Processor<D> aProcessor, long aQueueTimeOutInMillis, int aNumberOfThreads) {
         //set properties
-        if (aName != null && !aName.isEmpty())
-        {
+        if (aName != null && !aName.isEmpty()) {
             name = aName;
         }
-        queue = aQueue;
+        pulls = aPulls;
         processor = aProcessor;
-        if (aQueueTimeOutInMillis > 0)
-        {
+        if (aQueueTimeOutInMillis > 0) {
             queueTimeOutInMillis = aQueueTimeOutInMillis;
         }
-        if (aNumberOfThreads > 0)
-        {
+        if (aNumberOfThreads > 0) {
             numberOfThreads = aNumberOfThreads;
         }
     }
 
-    
+
     // getters & setters
     // ---------------------------------------------------------------------------
-    public Processor<D> getProcessor()
-    {
+    public Processor<D> getProcessor() {
         return processor;
     }
 
-    public void setProcessor( Processor<D> aProcessor )
-    {
+    public void setProcessor(Processor<D> aProcessor) {
         processor = aProcessor;
     }
 
-    public BlockingQueue<D> getQueue()
-    {
-        return queue;
+    public Pulls<D> getPulls() {
+        return pulls;
     }
 
-    public void setQueue( BlockingQueue<D> aQueue )
-    {
-        queue = aQueue;
+    public void setPulls(Pulls<D> aPulls) {
+        pulls = aPulls;
     }
 
-    public long getQueueTimeOutInMillis()
-    {
+    public long getQueueTimeOutInMillis() {
         return queueTimeOutInMillis;
     }
 
-    public void setQueueTimeOutInMillis( long aQueueTimeOutInMillis )
-    {
+    public void setQueueTimeOutInMillis(long aQueueTimeOutInMillis) {
         queueTimeOutInMillis = aQueueTimeOutInMillis;
     }
 
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
-    public void setName( String aName )
-    {
+    public void setName(String aName) {
         name = aName;
     }
 
-    public int getNumberOfThreads()
-    {
+    public int getNumberOfThreads() {
         return numberOfThreads;
     }
 
-    public void setNumberOfThreads( int aNumberOfThreads )
-    {
+    public void setNumberOfThreads(int aNumberOfThreads) {
         numberOfThreads = aNumberOfThreads;
     }
-    
-    
+
+
     // master logic
     // ---------------------------------------------------------------------------
-    @SuppressWarnings( "unchecked" )
-    public void startup()
-    {
+    @SuppressWarnings("unchecked")
+    public void startup() {
         //init
         Thread[] threads = new Thread[getNumberOfThreads()];
         workers = new DelegateWorker[getNumberOfThreads()];
-        
+
         //build threads
-        for (int i = 0; i < getNumberOfThreads(); i++)
-        {
-            workers[i] = new DelegateWorker<D,P>(getName(), getQueue(), getProcessor(), getQueueTimeOutInMillis());
+        for (int i = 0; i < getNumberOfThreads(); i++) {
+            workers[i] = new DelegateWorker<D>(getName(), getPulls(), getProcessor(), getQueueTimeOutInMillis());
             threads[i] = new Thread(workers[i], getName() + " #" + i);
         }
-        
+
         //start threads
-        for ( int i = 0; i < getNumberOfThreads(); i++ )
-        {
-            try
-            {
+        for (int i = 0; i < getNumberOfThreads(); i++) {
+            try {
                 workers[i].start();
                 threads[i].start();
-            }
-            catch ( Exception e )
-            {
-                logger.error( "Could not start worker: " + workers[i].getName(), e );
+            } catch (Exception e) {
+                logger.error("Could not start worker: " + workers[i].getName(), e);
             }
         }
     }
-    
-    public void shutdown()
-    {
+
+    public void shutdown() {
         //stop threads
-        for ( int i = 0; i < getNumberOfThreads(); i++ )
-        {
-            workers[i].stop();
+        for (int i = 0; i < getNumberOfThreads(); i++) {
+            try {
+                workers[i].stop();
+            } catch (Exception e) {
+                logger.warn("An error occurred stopping workers.", e);
+            }
         }
-        
-        //destroy threads
-        for ( int i = 0; i < getNumberOfThreads(); i++ )
-        {
-            workers[i].stop();
-        }
-        
+
         workers = null;
     }
 }

@@ -1,20 +1,15 @@
 package com.unitt.servicemanager.service;
 
-import static org.junit.Assert.fail;
-
-import java.lang.reflect.Method;
-import java.util.List;
-
+import com.unitt.servicemanager.websocket.MessageResponse;
+import com.unitt.servicemanager.websocket.MessageRoutingInfo;
+import com.unitt.servicemanager.websocket.MessageRoutingInfo.MessageResultType;
+import com.unitt.servicemanager.websocket.MessageSerializer;
 import junit.framework.Assert;
-
-import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.unitt.servicemanager.websocket.MessageResponse;
-import com.unitt.servicemanager.websocket.MessageRoutingInfo;
-import com.unitt.servicemanager.websocket.MessageRoutingInfo.MessageResultType;
+import java.lang.reflect.Method;
 
 public class ServiceDelegateTest
 {
@@ -44,32 +39,21 @@ public class ServiceDelegateTest
     {
         //create routing info
         MessageRoutingInfo routing = new MessageRoutingInfo();
+        routing.setSerializerType(MessageSerializer.SERIALIZER_TYPE_JSON);
         routing.setMethodSignature( "getNumberOfValues#int,java.lang.String" );
         routing.setServiceName( "myServiceName" );
         
         //execute service
         serviceDelegate.process( routing );
         MessageResponse response = null;
-        try
-        {
-            response = serviceDelegate.getDestinationQueue( routing ).take();
+        if (serviceDelegate.getPushesResponse() instanceof MockResponseHandler) {
+            response = ((MockResponseHandler) serviceDelegate.getPushesResponse()).pull(0);
         }
-        catch ( InterruptedException e )
-        {
-            fail( "Take was interrupted." );
-        }
-        
+
         //verify results
         Assert.assertNotNull( "Missing response", response );
         Assert.assertEquals( "Did not set the correct result type.", MessageResultType.CompleteSuccess, response.getHeader().getResultType() );
-        Assert.assertNotNull("Missing response result.", response.getBody());
-        Assert.assertTrue( "Did not create the correct result.", response.getBody() instanceof List );
-        List<String> results = (List<String>) response.getBody();
-        Assert.assertEquals( "Did not create the correct number of elements in the results list.", MockServiceDelegate.SERVICE_ARG_COUNT, results.size() );
-        for (String item : results)
-        {
-            Assert.assertEquals( "Did not create the correct element in the results list.", MockServiceDelegate.SERVICE_ARG_VALUE, item );
-        }
+        Assert.assertTrue("Missing response result.", response.getBody() != null || response.getBodyBytes() != null);
     }
 
     @Test
