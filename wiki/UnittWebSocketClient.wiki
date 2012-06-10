@@ -142,6 +142,7 @@ The client API tries to follow the client specification from javascript using Ob
         //create a connect config and set all our info here
         WebSocketConnectConfig* config = [WebSocketConnectConfig configWithURLString:@"ws://localhost:8080/testws/ws/test" origin:nil protocols:nil tlsSettings:nil headers:nil verifySecurityKey:YES extensions:nil ];
         config.closeTimeout = 15.0;
+        config.keepAlive = 15.0; //sends a ws ping every 15s to keep socket alive
 
         //open using the connect config, it will be populated with server info, such as selected protocol/etc
         ws = [[WebSocket webSocketWithConfig:config delegate:self] retain];
