@@ -65,6 +65,9 @@ public class HazelcastBodyManager implements PullsBody, PutsBody {
     // pull/put body logic
     // ---------------------------------------------------------------------------
     public SerializedMessageBody pull(MessageRoutingInfo aHeader, long aQueueTimeoutInMillis) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("Pulling body from map(" + getBodyMapName(aHeader) + ") for: " + aHeader);
+        }
         Map<String, SerializedMessageBody> map = getBodyMap(aHeader);
         if (map != null) {
             return map.get(aHeader.getUid());
@@ -73,6 +76,9 @@ public class HazelcastBodyManager implements PullsBody, PutsBody {
     }
 
     public void put(MessageRoutingInfo aHeader, SerializedMessageBody aBody, long aQueueTimeoutInMillis) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("Putting body into map(" + getBodyMapName(aHeader) + ") for: " + aHeader);
+        }
         Map<String, SerializedMessageBody> map = getBodyMap(aHeader);
         if (map != null) {
             map.put(aHeader.getUid(), aBody);
@@ -80,7 +86,11 @@ public class HazelcastBodyManager implements PullsBody, PutsBody {
     }
 
     protected Map<String, SerializedMessageBody> getBodyMap(MessageRoutingInfo aInfo) {
-        return getHazelcastClient().getMap( "body:" + aInfo.getWebSocketId() );
+        return getHazelcastClient().getMap( getBodyMapName(aInfo) );
+    }
+
+    protected String getBodyMapName(MessageRoutingInfo aInfo) {
+        return "body:" + aInfo.getWebSocketId();
     }
 
 
@@ -92,5 +102,13 @@ public class HazelcastBodyManager implements PullsBody, PutsBody {
 
     public void setHazelcastClient(HazelcastInstance aClient) {
         hazelcastClient = aClient;
+    }
+
+
+    // Object overrides
+    // ---------------------------------------------------------------------------
+    @Override
+    public String toString() {
+        return "HazelcastBodyManager{isInitialized=" + isInitialized + ", matching='body:<websocketId>'}";
     }
 }

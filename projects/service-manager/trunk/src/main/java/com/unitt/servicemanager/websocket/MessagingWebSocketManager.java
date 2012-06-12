@@ -7,6 +7,7 @@ import com.unitt.servicemanager.response.ResponseQueueManager;
 import com.unitt.servicemanager.routing.PullsBody;
 import com.unitt.servicemanager.routing.Pushes;
 import com.unitt.servicemanager.routing.PutsBody;
+import com.unitt.servicemanager.util.LifecycleHelper;
 import com.unitt.servicemanager.util.ValidationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,11 +81,13 @@ public class MessagingWebSocketManager implements Initializable, Destructable
             throw new IllegalStateException( missing );
         }
 
-        // init response queue mgr
-        if ( !getResponseQueueManager().isInitialized() )
-        {
-            getResponseQueueManager().initialize();
-        }
+        // init handlers/managers
+        LifecycleHelper.initialize(getResponseQueueManager());
+        LifecycleHelper.initialize(getPullsBody());
+        LifecycleHelper.initialize(getPushesHeader());
+        LifecycleHelper.initialize(getPutsBody());
+
+        logger.info("Started " + getClass().getSimpleName() + ": pullsBody=" + getPullsBody() + ", putsBody=" + getPutsBody() + ", pushesHeader=" + getPushesHeader() + ", responseManager=" + getResponseQueueManager());
 
         setInitialized( true );
     }
@@ -96,13 +99,13 @@ public class MessagingWebSocketManager implements Initializable, Destructable
 
     public void destroy()
     {
-        if ( getResponseQueueManager() != null )
-        {
-            getResponseQueueManager().destroy();
-        }
+        LifecycleHelper.destroy(getResponseQueueManager());
         setResponseQueueManager( null );
+        LifecycleHelper.destroy(getPullsBody());
         setPullsBody(null);
+        LifecycleHelper.destroy(getPushesHeader());
         setPushesHeader(null);
+        LifecycleHelper.destroy(getPutsBody());
         setPutsBody(null);
         setQueueTimeoutInMillis(0);
         setSerializerRegistry( null );
@@ -132,6 +135,7 @@ public class MessagingWebSocketManager implements Initializable, Destructable
         webSocket.setQueueTimeoutInMillis(getQueueTimeoutInMillis());
         webSocket.setPutsBody(getPutsBody());
         webSocket.setPushesHeader(getPushesHeader());
+        webSocket.setSerializerRegistry(getSerializerRegistry());
         webSocket.initialize();
         getResponseQueueManager().addSocket( webSocket );
         return webSocket;
@@ -139,9 +143,8 @@ public class MessagingWebSocketManager implements Initializable, Destructable
 
     public void destroyWebSocket( MessagingWebSocket aWebSocket )
     {
-        String socketId = aWebSocket.getSocketId();
         getResponseQueueManager().removeSocket( aWebSocket );
-        aWebSocket.destroy();
+        LifecycleHelper.destroy(aWebSocket);
     }
 
     protected MessagingWebSocket internalCreateWebSocket( ServerWebSocket aServerWebSocket ) {

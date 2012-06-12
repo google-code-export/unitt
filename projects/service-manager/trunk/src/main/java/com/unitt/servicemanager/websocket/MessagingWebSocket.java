@@ -54,6 +54,9 @@ public class MessagingWebSocket implements Initializable, Destructable {
         setSerializerRegistry(null);
         setServerWebSocket(null);
         setSocketId(null);
+        setPullsBody(null);
+        setPutsBody(null);
+        setPushesHeader(null);
         setQueueTimeoutInMillis(0);
     }
 
@@ -177,6 +180,10 @@ public class MessagingWebSocket implements Initializable, Destructable {
     public void send(MessageResponse aResponse) {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         try {
+            if (logger.isDebugEnabled()) {
+                logger.debug("Attempting to send response for: " + aResponse.getHeader());
+            }
+
             MessageSerializer serializer = getSerializerRegistry().getSerializer(aResponse.getHeader().getSerializerType());
             byte[] headerBytes = serializer.serializeHeader(aResponse.getHeader());
             byte[] bodyBytes = aResponse.getBodyBytes();
@@ -216,7 +223,7 @@ public class MessagingWebSocket implements Initializable, Destructable {
             // create message objects
             MessageSerializer serializer = getSerializerRegistry().getSerializer(serializerType);
             if (serializer == null) {
-                logger.debug("Could not find serializer: " + serializerType);
+                logger.warn("Could not find serializer: " + serializerType);
                 return;
             }
             MessageRoutingInfo header = serializer.deserializeHeader(headerBytes);
@@ -226,7 +233,7 @@ public class MessagingWebSocket implements Initializable, Destructable {
             SerializedMessageBody body = new SerializedMessageBody(bodyBytes);
 
             // put body bytes in map
-            pushBody(header, body);
+            putBody(header, body);
 
             // push message header into routing queue
             if (!pushHeader(header)) {
@@ -237,6 +244,9 @@ public class MessagingWebSocket implements Initializable, Destructable {
 
     public boolean pushHeader(MessageRoutingInfo aHeader) {
         try {
+            if (logger.isDebugEnabled()) {
+                logger.debug("Routing request: " + aHeader);
+            }
             getPushesHeader().push(aHeader, getQueueTimeoutInMillis());
             return true;
         } catch (Exception e) {
@@ -245,11 +255,17 @@ public class MessagingWebSocket implements Initializable, Destructable {
         return false;
     }
 
-    public void pushBody(MessageRoutingInfo aInfo, SerializedMessageBody aBody) {
+    public void putBody(MessageRoutingInfo aInfo, SerializedMessageBody aBody) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("Putting body for request: " + aInfo);
+        }
         getPutsBody().put(aInfo, aBody, getQueueTimeoutInMillis());
     }
 
     public void removeBody(MessageRoutingInfo aInfo) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("Removing body for request: " + aInfo);
+        }
         getPullsBody().pull(aInfo, getQueueTimeoutInMillis());
     }
 }
