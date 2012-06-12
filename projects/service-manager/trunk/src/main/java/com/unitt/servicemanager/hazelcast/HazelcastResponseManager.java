@@ -6,6 +6,7 @@ import com.unitt.servicemanager.routing.Pulls;
 import com.unitt.servicemanager.routing.Pushes;
 import com.unitt.servicemanager.util.ValidationUtil;
 import com.unitt.servicemanager.websocket.MessageResponse;
+import com.unitt.servicemanager.websocket.MessageRoutingInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -95,9 +96,9 @@ public class HazelcastResponseManager implements Pulls<MessageResponse>, Pushes<
     public void push(MessageResponse aResponse, long aQueueTimeoutInMillis) {
         try {
             if (logger.isDebugEnabled()) {
-                logger.debug("Pushing response into queue(" + getQueueName() + "): " + aResponse.getHeader());
+                logger.debug("Pushing response into queue(" + getQueueName(aResponse.getHeader()) + "): " + aResponse.getHeader());
             }
-            getQueue().offer(aResponse, aQueueTimeoutInMillis, TimeUnit.MILLISECONDS);
+            getQueue(aResponse.getHeader()).offer(aResponse, aQueueTimeoutInMillis, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
             //do nothing
         }
@@ -109,6 +110,14 @@ public class HazelcastResponseManager implements Pulls<MessageResponse>, Pushes<
 
     protected String getQueueName() {
         return "outgoing:" + getServerId();
+    }
+
+    protected BlockingQueue<MessageResponse> getQueue(MessageRoutingInfo aRequest) {
+        return getHazelcastClient().getQueue(getQueueName(aRequest));
+    }
+
+    protected String getQueueName(MessageRoutingInfo aRequest) {
+        return "outgoing:" + aRequest.getServerId();
     }
 
 
@@ -136,6 +145,6 @@ public class HazelcastResponseManager implements Pulls<MessageResponse>, Pushes<
 
     @Override
     public String toString() {
-        return "HazelcastResponseManager{ queueName=" + getQueueName() + ", isInitialized=" + isInitialized + ", serverId='" + serverId + '\'' + '}';
+        return "HazelcastResponseManager{ inboundQueueName=" + getQueueName() + ", outboundQueueName='outgoing:<serverId>', isInitialized=" + isInitialized + ", serverId='" + serverId + '\'' + '}';
     }
 }
