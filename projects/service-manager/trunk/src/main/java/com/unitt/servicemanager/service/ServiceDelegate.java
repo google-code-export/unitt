@@ -71,6 +71,15 @@ public class ServiceDelegate implements Processor<MessageRoutingInfo> {
             if (getSerializerRegistry() == null) {
                 missing = ValidationUtil.appendMessage(missing, "Missing serializer registry. ");
             }
+            if (getPullsBody() == null) {
+                missing = ValidationUtil.appendMessage(missing, "Missing pulls body handler. ");
+            }
+            if (getPullsRequests() == null) {
+                missing = ValidationUtil.appendMessage(missing, "Missing pulls request handler. ");
+            }
+            if (getPushesResponse() == null) {
+                missing = ValidationUtil.appendMessage(missing, "Missing pushes response handler. ");
+            }
 
             // fail out with appropriate message if missing anything
             if (missing != null) {
@@ -83,6 +92,8 @@ public class ServiceDelegate implements Processor<MessageRoutingInfo> {
             if (workers == null) {
                 workers = new DelegateMaster<MessageRoutingInfo>(getClass().getSimpleName(), getPullsRequests(), this, getQueueTimeoutInMillis(), getNumberOfWorkers());
             }
+
+            logger.info("Starting " + getNumberOfWorkers() + " workers for service \"" + getService() + "\": pullsRequest=" + getPullsRequests() + ", pullsBody=" + getPullsBody() + ", pushesResponse=" + getPushesResponse());
 
             setInitialized(true);
         }
@@ -203,6 +214,10 @@ public class ServiceDelegate implements Processor<MessageRoutingInfo> {
     // service method execution logic
     // ---------------------------------------------------------------------------
     public void process(MessageRoutingInfo aInfo) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("Processing request: " + aInfo);
+        }
+
         MessageResponse response = new MessageResponse();
         response.setHeader(aInfo);
         try {
@@ -255,6 +270,9 @@ public class ServiceDelegate implements Processor<MessageRoutingInfo> {
             if (aResponse.getBody() != null) {
                 aResponse.setBodyBytes(serializer.serializeBody(aResponse.getBody()));
                 aResponse.setBody(null);
+            }
+            if (logger.isDebugEnabled()) {
+                logger.debug("Sending response for: " + aResponse.getHeader());
             }
             getPushesResponse().push(aResponse, getQueueTimeoutInMillis());
         } catch (Exception e) {

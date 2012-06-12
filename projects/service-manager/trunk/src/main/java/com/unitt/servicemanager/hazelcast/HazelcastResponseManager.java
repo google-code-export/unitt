@@ -48,6 +48,9 @@ public class HazelcastResponseManager implements Pulls<MessageResponse>, Pushes<
                 serverId = "Unknown IP Address::" + System.currentTimeMillis();
             }
         }
+        if (getQueueName() == null) {
+            missing = ValidationUtil.appendMessage(missing, "Missing queue name. ");
+        }
 
         // fail out with appropriate message if missing anything
         if (missing != null) {
@@ -76,7 +79,13 @@ public class HazelcastResponseManager implements Pulls<MessageResponse>, Pushes<
     // ---------------------------------------------------------------------------
     public MessageResponse pull(long aQueueTimeoutInMillis) {
         try {
-            return getQueue().poll(aQueueTimeoutInMillis, TimeUnit.MILLISECONDS);
+            MessageResponse result = getQueue().poll(aQueueTimeoutInMillis, TimeUnit.MILLISECONDS);
+            if (result != null) {
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Pulled response from queue(" + getQueueName() + ")");
+                }
+            }
+            return result;
         } catch (InterruptedException e) {
             //do nothing
         }
@@ -85,6 +94,9 @@ public class HazelcastResponseManager implements Pulls<MessageResponse>, Pushes<
 
     public void push(MessageResponse aResponse, long aQueueTimeoutInMillis) {
         try {
+            if (logger.isDebugEnabled()) {
+                logger.debug("Pushing response into queue(" + getQueueName() + "): " + aResponse.getHeader());
+            }
             getQueue().offer(aResponse, aQueueTimeoutInMillis, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
             //do nothing
@@ -92,7 +104,11 @@ public class HazelcastResponseManager implements Pulls<MessageResponse>, Pushes<
     }
 
     protected BlockingQueue<MessageResponse> getQueue() {
-        return getHazelcastClient().getQueue("outgoing:" + getServerId());
+        return getHazelcastClient().getQueue(getQueueName());
+    }
+
+    protected String getQueueName() {
+        return "outgoing:" + getServerId();
     }
 
 
@@ -112,5 +128,14 @@ public class HazelcastResponseManager implements Pulls<MessageResponse>, Pushes<
 
     public void setServerId(String aServerId) {
         serverId = aServerId;
+    }
+
+
+    // Object overrides
+    // ---------------------------------------------------------------------------
+
+    @Override
+    public String toString() {
+        return "HazelcastResponseManager{ queueName=" + getQueueName() + ", isInitialized=" + isInitialized + ", serverId='" + serverId + '\'' + '}';
     }
 }

@@ -70,6 +70,9 @@ public class HazelcastRequestManager implements Pulls<MessageRoutingInfo>, Pushe
     // ---------------------------------------------------------------------------
     public MessageRoutingInfo pull(long aQueueTimeoutInMillis) {
         try {
+            if (logger.isDebugEnabled()) {
+                logger.debug("Pulling request from queue(" + getQueueName() + ")");
+            }
             return getQueue().poll(aQueueTimeoutInMillis, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
             //do nothing
@@ -79,6 +82,9 @@ public class HazelcastRequestManager implements Pulls<MessageRoutingInfo>, Pushe
 
     public void push(MessageRoutingInfo aRequest, long aQueueTimeoutInMillis) {
         try {
+            if (logger.isDebugEnabled()) {
+                logger.debug("Pushing request into queue(" + getQueueName() + "): " + aRequest);
+            }
             getQueue().offer(aRequest, aQueueTimeoutInMillis, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
             //do nothing
@@ -87,6 +93,14 @@ public class HazelcastRequestManager implements Pulls<MessageRoutingInfo>, Pushe
 
     protected BlockingQueue<MessageRoutingInfo> getQueue() {
         return getHazelcastClient().getQueue(getQueueName());
+    }
+
+
+    // Object overrides
+    // ---------------------------------------------------------------------------
+    @Override
+    public String toString() {
+        return "HazelcastRequestManager{" + "queueName='" + queueName + '\'' + ", isInitialized=" + isInitialized + '}';
     }
 
 

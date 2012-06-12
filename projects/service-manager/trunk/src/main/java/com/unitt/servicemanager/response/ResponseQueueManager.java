@@ -5,6 +5,7 @@ import com.unitt.commons.foundation.lifecycle.Destructable;
 import com.unitt.commons.foundation.lifecycle.Initializable;
 import com.unitt.servicemanager.routing.HasServerId;
 import com.unitt.servicemanager.routing.Pulls;
+import com.unitt.servicemanager.util.LifecycleHelper;
 import com.unitt.servicemanager.util.ValidationUtil;
 import com.unitt.servicemanager.websocket.MessageResponse;
 import com.unitt.servicemanager.websocket.MessagingWebSocket;
@@ -79,6 +80,7 @@ public class ResponseQueueManager implements Initializable, Destructable, Proces
             }
 
             // apply values
+            LifecycleHelper.initialize(getPullsResponse());
             if (workers == null) {
                 workers = new DelegateMaster<MessageResponse>(getClass().getSimpleName(), getPullsResponse(), this, getQueueTimeoutInMillis(), getNumberOfWorkers());
             }
@@ -86,6 +88,8 @@ public class ResponseQueueManager implements Initializable, Destructable, Proces
             if (sockets == null) {
                 sockets = new HashMap<String, MessagingWebSocket>();
             }
+
+            logger.info("Starting " + getNumberOfWorkers() + " workers for server response queue manager: server=" + getServerId() + ", pullsResponse=" + getPullsResponse());
 
             // mark as complete
             setInitialized(true);
@@ -115,6 +119,8 @@ public class ResponseQueueManager implements Initializable, Destructable, Proces
         } catch (Exception e) {
             logger.error("An error occurred shutting down the workers.", e);
         }
+        LifecycleHelper.destroy(getPullsResponse());
+        setPullsResponse(null);
         setUndeliverableMessageHandler(null);
         setInitialized(false);
     }
