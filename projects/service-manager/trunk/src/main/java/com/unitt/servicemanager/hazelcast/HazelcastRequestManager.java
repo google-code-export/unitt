@@ -91,6 +91,10 @@ public class HazelcastRequestManager implements Pulls<MessageRoutingInfo>, Pushe
         }
     }
 
+    protected BlockingQueue<MessageRoutingInfo> getQueue(MessageRoutingInfo aInfo) {
+        return getHazelcastClient().getQueue(aInfo.getServiceName());
+    }
+
     protected BlockingQueue<MessageRoutingInfo> getQueue() {
         return getHazelcastClient().getQueue(getQueueName());
     }
@@ -100,7 +104,7 @@ public class HazelcastRequestManager implements Pulls<MessageRoutingInfo>, Pushe
     // ---------------------------------------------------------------------------
     @Override
     public String toString() {
-        return "HazelcastRequestManager{" + "queueName='" + queueName + '\'' + ", isInitialized=" + isInitialized + '}';
+        return "HazelcastRequestManager{" + "pullQueue='" + queueName + "\', pushQueue='<serviceName>', isInitialized=" + isInitialized + '}';
     }
 
 
