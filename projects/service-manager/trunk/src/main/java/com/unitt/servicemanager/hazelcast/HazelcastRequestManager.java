@@ -83,16 +83,20 @@ public class HazelcastRequestManager implements Pulls<MessageRoutingInfo>, Pushe
     public void push(MessageRoutingInfo aRequest, long aQueueTimeoutInMillis) {
         try {
             if (logger.isDebugEnabled()) {
-                logger.debug("Pushing request into queue(" + getQueueName() + "): " + aRequest);
+                logger.debug("Pushing request into queue(" + getQueueName(aRequest) + "): " + aRequest);
             }
-            getQueue().offer(aRequest, aQueueTimeoutInMillis, TimeUnit.MILLISECONDS);
+            getQueue(aRequest).offer(aRequest, aQueueTimeoutInMillis, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
             //do nothing
         }
     }
 
     protected BlockingQueue<MessageRoutingInfo> getQueue(MessageRoutingInfo aInfo) {
-        return getHazelcastClient().getQueue(aInfo.getServiceName());
+        return getHazelcastClient().getQueue(getQueueName(aInfo));
+    }
+
+    protected String getQueueName(MessageRoutingInfo aInfo) {
+        return aInfo.getServiceName();
     }
 
     protected BlockingQueue<MessageRoutingInfo> getQueue() {
