@@ -80,6 +80,9 @@ public class ResponseQueueManager implements Initializable, Destructable, Proces
             }
 
             // apply values
+            if (getPullsResponse() instanceof HasServerId) {
+                ((HasServerId) getPullsResponse()).setServerId(getServerId());
+            }
             LifecycleHelper.initialize(getPullsResponse());
             if (workers == null) {
                 workers = new DelegateMaster<MessageResponse>(getClass().getSimpleName(), getPullsResponse(), this, getQueueTimeoutInMillis(), getNumberOfWorkers());
