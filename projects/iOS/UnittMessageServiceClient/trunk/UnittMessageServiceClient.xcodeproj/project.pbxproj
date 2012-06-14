@@ -59,6 +59,8 @@
 		BDC439B0141BE640002633D5 /* ReferenceType.m in Sources */ = {isa = PBXBuildFile; fileRef = BDC439B0141BE640002633D4 /* ReferenceType.m */; };
 		BDE528D614930FE200D8D58C /* ReferenceType.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = BDC439B0141BE640002633D2 /* ReferenceType.h */; };
 		BDE528D714930FE200D8D58C /* PendingRequest.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = BDC439B0141BE640002633CE /* PendingRequest.h */; };
+		BDE528D714930FE200D8D58E /* ObjectAndExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = BDE528D714930FE200D8D58D /* ObjectAndExceptionHandler.m */; };
+		BDE528D714930FE200D8D590 /* ObjectAndExceptionHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = BDE528D714930FE200D8D58F /* ObjectAndExceptionHandler.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -176,6 +178,8 @@
 		BDC439B0141BE640002633D0 /* PendingRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PendingRequest.m; sourceTree = "<group>"; };
 		BDC439B0141BE640002633D2 /* ReferenceType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReferenceType.h; sourceTree = "<group>"; };
 		BDC439B0141BE640002633D4 /* ReferenceType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReferenceType.m; sourceTree = "<group>"; };
+		BDE528D714930FE200D8D58D /* ObjectAndExceptionHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjectAndExceptionHandler.m; sourceTree = "<group>"; };
+		BDE528D714930FE200D8D58F /* ObjectAndExceptionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectAndExceptionHandler.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -323,6 +327,8 @@
 		BDC439A7141BE4F1002633CD /* Serializers */ = {
 			isa = PBXGroup;
 			children = (
+				BDE528D714930FE200D8D58F /* ObjectAndExceptionHandler.h */,
+				BDE528D714930FE200D8D58D /* ObjectAndExceptionHandler.m */,
 				BDC439A9141BE522002633CD /* MessageSerializerJSON.h */,
 				BDC439AA141BE522002633CD /* MessageSerializerJSON.m */,
 			);
@@ -347,6 +353,7 @@
 				BDC439B0141BE640002633CF /* PendingRequest.h in Headers */,
 				BDC439B0141BE640002633D3 /* ReferenceType.h in Headers */,
 				BDA0B19014959C470044F274 /* ServiceCallbackWithBlocks.h in Headers */,
+				BDE528D714930FE200D8D590 /* ObjectAndExceptionHandler.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -499,6 +506,7 @@
 				BDC439B0141BE640002633D1 /* PendingRequest.m in Sources */,
 				BDC439B0141BE640002633D5 /* ReferenceType.m in Sources */,
 				BDA0B19114959C470044F274 /* ServiceCallbackWithBlocks.m in Sources */,
+				BDE528D714930FE200D8D58E /* ObjectAndExceptionHandler.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
