@@ -74,12 +74,16 @@
     }
 
     //create object of the specified type
-    result = [[[type alloc] init] autorelease];
+    result = [self createFromClass:type];
 
     //fill object using deserialized JSON
     [self fillObjectFromDictionary:aData object:result];
 
     return result;
+}
+
+- (id) createFromClass:(Class) aClass {
+    return [[[aClass alloc] init] autorelease];
 }
 
 - (void)fillObjectFromDictionary:(NSDictionary *)aData object:(id)aObject {

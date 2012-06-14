@@ -46,6 +46,7 @@
 
 - (id)deserializeFromDictionary:(NSDictionary *)aData;
 
+- (id)createFromClass:(Class)aClass;
 
 - (void) fillObjectFromDictionary:(NSDictionary*) aData object:(id) aObject;
 
