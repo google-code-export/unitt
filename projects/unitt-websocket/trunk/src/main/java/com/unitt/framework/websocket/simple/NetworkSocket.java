@@ -1,34 +1,19 @@
 package com.unitt.framework.websocket.simple;
 
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.security.KeyManagementException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.CertificateException;
-
-import javax.net.SocketFactory;
-import javax.net.ssl.KeyManagerFactory;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocket;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManagerFactory;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.unitt.framework.websocket.NetworkSocketFacade;
 import com.unitt.framework.websocket.NetworkSocketObserver;
 import com.unitt.framework.websocket.WebSocketConnectConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.net.SocketFactory;
+import javax.net.ssl.*;
+import java.io.*;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.security.*;
+import java.security.cert.CertificateException;
 
 
 public class NetworkSocket implements NetworkSocketFacade, Runnable
@@ -284,8 +269,8 @@ public class NetworkSocket implements NetworkSocketFacade, Runnable
             }
             catch ( IOException e )
             {
-                logger.error( "An error occurred while reading data", e );
                 isRunning = false;
+                observer.onDisconnect(e);
             }
         }
     }

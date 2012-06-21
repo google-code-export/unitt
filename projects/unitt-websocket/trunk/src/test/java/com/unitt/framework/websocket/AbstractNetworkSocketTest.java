@@ -1,18 +1,18 @@
 package com.unitt.framework.websocket;
 
 
-import java.nio.charset.Charset;
-import java.util.List;
-
 import junit.framework.Assert;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 public abstract class AbstractNetworkSocketTest implements WebSocketObserver
 {
-    protected static final Charset   utf8Charset      = Charset.forName( "UTF-8" );
+    private static final Logger logger = LoggerFactory.getLogger(AbstractNetworkSocketTest.class);
     protected static final String prefix = "Message: ";
     
     protected WebSocket ws;
@@ -61,33 +61,33 @@ public abstract class AbstractNetworkSocketTest implements WebSocketObserver
     // ---------------------------------------------------------------------------
     public void onBinaryMessage( byte[] aMessage )
     {
-        System.out.println("On Binary Message: " + aMessage.length);
+        logger.info("On Binary Message: " + aMessage.length);
     }
 
     public void onClose( int aStatusCode, String aMessage, Exception aException )
     {
-        System.out.println("On Close: status=" + aStatusCode + ", message=" + aMessage + ", exception=" + aException);
+        logger.info("On Close: status=" + aStatusCode + ", message=" + aMessage + ", exception=" + aException);
     }
 
     public void onError( Exception aException )
     {
-        System.out.println("On error: " + aException);
+        logger.info("On error: " + aException);
     }
 
     public void onOpen( String aProtocol, List<String> aExtensions )
     {
-        System.out.println("On Open");
+        logger.info("On Open");
         ws.sendMessage( smallMessage );
     }
 
     public void onPong( String aMessage )
     {
-        System.out.println("On Pong: " + aMessage);
+        logger.info("On Pong: " + aMessage);
     }
 
     public void onTextMessage( String aMessage )
     {
-        System.out.println("On Text Message: " + aMessage);
+        logger.info("On Text Message: " + aMessage);
         response = aMessage;
         if (!testedSingleFragment)
         {

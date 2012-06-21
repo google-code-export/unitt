@@ -1,14 +1,12 @@
 package com.unitt.framework.websocket;
 
 
-import java.nio.charset.Charset;
-
-import junit.framework.Assert;
-
-import org.junit.Test;
-
 import com.unitt.framework.websocket.WebSocketFragment.MessageOpCode;
 import com.unitt.framework.websocket.WebSocketFragment.PayloadType;
+import junit.framework.Assert;
+import org.junit.Test;
+
+import java.nio.charset.Charset;
 
 
 public class WebSocketTest
@@ -38,7 +36,8 @@ public class WebSocketTest
     public void testUnmaskedText()
     {
         byte[] bytes = new byte[] { new Integer(0x81).byteValue(), 0x05, 0x48, 0x65, 0x6c, 0x6c, 0x6f };
-        WebSocketFragment fragment = new WebSocketFragment( bytes );
+        WebSocketFragment fragment = new WebSocketFragment();
+        fragment.setFragment(bytes);
         Assert.assertTrue( "Did not set final bit.", fragment.isFinal() );
         Assert.assertEquals( "Did not find the correct payloadtype.", PayloadType.TEXT, fragment.getPayloadType() );
         Assert.assertTrue( "Did have a mask.", !fragment.hasMask() );
@@ -50,7 +49,8 @@ public class WebSocketTest
     public void testMaskedText()
     {
       byte[] sample = {new Integer(0x81).byteValue(), new Integer(0x85).byteValue(), 0x37, new Integer(0xfa).byteValue(), 0x21, 0x3d, 0x7f, new Integer(0x9f).byteValue(), 0x4d, 0x51, 0x58};
-      WebSocketFragment fragment = new WebSocketFragment( sample );
+        WebSocketFragment fragment = new WebSocketFragment();
+        fragment.setFragment(sample);
       Assert.assertTrue("Did not set final bit.", fragment.isFinal());
       Assert.assertEquals("Did not find the correct payloadtype.", PayloadType.TEXT, fragment.getPayloadType() );
       Assert.assertTrue("Did not find the correct has mask value.", fragment.hasMask());
@@ -86,14 +86,16 @@ public class WebSocketTest
     public void testFragmentedText()
     {
         byte[] firstSample = {0x01, 0x03, 0x48, 0x65, 0x6c};
-        WebSocketFragment firstFragment = new WebSocketFragment(firstSample);
+        WebSocketFragment firstFragment = new WebSocketFragment();
+        firstFragment.setFragment(firstSample);
         Assert.assertTrue("Did set final bit.", !firstFragment.isFinal());
         Assert.assertEquals("Did not find the correct payloadtype.", PayloadType.TEXT, firstFragment.getPayloadType());
         Assert.assertEquals("Did not set op code to text", MessageOpCode.TEXT, firstFragment.getOpCode());
         Assert.assertTrue("Did not find the correct has mask value.", !firstFragment.hasMask());
         Assert.assertNotNull( "Did not build any payload data", firstFragment.getPayloadData());
         byte[] secondSample = {new Integer(0x80).byteValue(), 0x02, 0x6c, 0x6f};
-        WebSocketFragment secondFragment = new WebSocketFragment(secondSample);
+        WebSocketFragment secondFragment = new WebSocketFragment();
+        secondFragment.setFragment(secondSample);
         Assert.assertTrue("Did not set final bit.", secondFragment.isFinal());
         Assert.assertEquals("Did not set op code to continuation", MessageOpCode.CONTINUATION, secondFragment.getOpCode());
         Assert.assertTrue("Did not find the correct has mask value.", !secondFragment.hasMask());
@@ -106,7 +108,8 @@ public class WebSocketTest
     public void testUnmaskedBinary()
     {
         byte[] sample = {new Integer(0x82).byteValue(), 0x7E, 0x01, 0x00};
-        WebSocketFragment fragment = new WebSocketFragment(sample);
+        WebSocketFragment fragment = new WebSocketFragment();
+        fragment.setFragment(sample);
         Assert.assertTrue("Did not set final bit.", fragment.isFinal());
         Assert.assertEquals("Did not find the correct payloadtype.", PayloadType.BINARY, fragment.getPayloadType());
         Assert.assertTrue("Did not find the correct has mask value.", !fragment.hasMask());
