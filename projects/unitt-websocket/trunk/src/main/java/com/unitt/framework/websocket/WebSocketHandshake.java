@@ -1,19 +1,15 @@
 package com.unitt.framework.websocket;
 
 
+import com.unitt.framework.websocket.WebSocketConnectConfig.WebSocketVersion;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.slf4j.LoggerFactory;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.codec.digest.DigestUtils;
-
-import com.unitt.framework.websocket.WebSocketConnectConfig.WebSocketVersion;
-import org.slf4j.LoggerFactory;
+import java.util.*;
 
 
 /**
@@ -392,10 +388,12 @@ public class WebSocketHandshake
         // determine client sec key, if it doesnt exist
         if ( getClientSecKey() == null )
         {
-            temp = Long.toHexString( System.currentTimeMillis() );
+            //temp = Long.toString(System.currentTimeMillis()); //Long.toHexString( System.currentTimeMillis() );
             try
             {
-				setClientSecKey( new String( Base64.encodeBase64( temp.getBytes( charset.name() ) ), charset.name() ) );
+                byte[] bytes = new byte[16];
+                new Random().nextBytes(bytes);
+				setClientSecKey( new String( Base64.encodeBase64( bytes ), charset.name() ) );
 			}
             catch (UnsupportedEncodingException e)
             {

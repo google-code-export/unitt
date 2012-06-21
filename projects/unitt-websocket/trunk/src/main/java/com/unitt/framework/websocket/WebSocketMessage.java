@@ -1,13 +1,13 @@
 package com.unitt.framework.websocket;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**
@@ -47,7 +47,7 @@ public class WebSocketMessage
     {
         try
         {
-            System.out.println("Getting data from " + fragments.size() + " fragments");
+            logger.debug("Getting data from " + fragments.size() + " fragments");
             ByteArrayOutputStream output = new ByteArrayOutputStream();
             for ( WebSocketFragment fragment : fragments )
             {

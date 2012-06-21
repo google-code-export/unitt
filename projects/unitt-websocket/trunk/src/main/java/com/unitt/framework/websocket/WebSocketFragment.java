@@ -1,6 +1,9 @@
 package com.unitt.framework.websocket;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.nio.ByteBuffer;
 import java.util.Random;
 
@@ -10,6 +13,8 @@ import java.util.Random;
  */
 public class WebSocketFragment
 {
+    private static Logger logger = LoggerFactory.getLogger(WebSocketFragment.class);
+
     public enum MessageOpCode
     {
         ILLEGAL( -1 ), CONTINUATION( 0x0 ), TEXT( 0x1 ), BINARY( 0x2 ), CLOSE( 0x8 ), PING( 0x9 ), PONG( 0xA );
@@ -40,6 +45,9 @@ public class WebSocketFragment
     private static Random randomizer = new Random();
 
     private boolean       isFinal;
+    private boolean       isRSV1;
+    private boolean       isRSV2;
+    private boolean       isRSV3;
     private int           mask;
     private int           payloadStart;
     private int           payloadLength;
@@ -63,15 +71,9 @@ public class WebSocketFragment
         buildFragment();
     }
 
-    public WebSocketFragment( byte[] aFragment )
+    public WebSocketFragment()
     {
         setOpCode( MessageOpCode.ILLEGAL );
-        setFragment( aFragment );
-        parseHeader();
-        if ( getMessageLength() <= getFragment().length )
-        {
-            parseContent();
-        }
     }
 
 
@@ -85,6 +87,30 @@ public class WebSocketFragment
     public void setFinal( boolean aIsFinal )
     {
         isFinal = aIsFinal;
+    }
+
+    public boolean isRSV1() {
+        return isRSV1;
+    }
+
+    public void setRSV1(boolean aRSV1) {
+        isRSV1 = aRSV1;
+    }
+
+    public boolean isRSV2() {
+        return isRSV2;
+    }
+
+    public void setRSV2(boolean aRSV2) {
+        isRSV2 = aRSV2;
+    }
+
+    public boolean isRSV3() {
+        return isRSV3;
+    }
+
+    public void setRSV3(boolean aRSV3) {
+        isRSV3 = aRSV3;
     }
 
     public int getMask()
@@ -198,9 +224,12 @@ public class WebSocketFragment
 
     public boolean isValid()
     {
-        if ( getMessageLength() > 0 && fragment != null )
+        if ( getMessageLength() > 0)
         {
-            return getPayloadStart() + getPayloadLength() == fragment.length;
+             if ( payloadData != null ) {
+                 return payloadData.length == payloadLength;
+             }
+             return getPayloadStart() + getPayloadLength() == fragment.length;
         }
 
         return false;
@@ -239,21 +268,49 @@ public class WebSocketFragment
 
     // content logic
     // ---------------------------------------------------------------------------
-    public void parseHeader()
+    public void parseHeader() {
+        parseHeader(null, 0);
+    }
+
+    public boolean parseHeader(byte[] aData, int aOffset)
     {
         // get header data bits
         int bufferLength = 14;
-        if ( getFragment() != null && getFragment().length < bufferLength )
-        {
-            bufferLength = getFragment().length;
+
+        byte[] data = aData;
+
+        //do we have an existing fragment to work with
+        if (getFragment() != null) {
+            if (getFragment().length >= bufferLength) {
+                data = getFragment();
+            } else {
+                byte[] both;
+                if ((aData != null ? aData.length : 0) - aOffset >= bufferLength - getFragment().length) {
+                    both = WebSocketUtil.appendPartialArray(getFragment(), aData, aOffset, bufferLength - getFragment().length);
+                } else {
+                    both = WebSocketUtil.appendArray(getFragment(), aData);
+                }
+                data = both;
+            }
         }
-        byte[] buffer = WebSocketUtil.copySubArray( getFragment(), 0, bufferLength );
+
+        if ( data != null && data.length - aOffset < bufferLength )
+        {
+            bufferLength = data.length - aOffset;
+        }
+        if (bufferLength < 0 || data == null) {
+            return false;
+        }
+        byte[] buffer = WebSocketUtil.copySubArray( data, 0, bufferLength );
 
         // determine opcode
         if ( bufferLength > 0 )
         {
             int index = 0;
-            setFinal( ( buffer[index] & 0x80 ) != 0 );
+            setFinal((buffer[index] & 0x80) != 0);
+            setRSV1((buffer[index] & 0x40) != 0);
+            setRSV2((buffer[index] & 0x20) != 0);
+            setRSV3( ( buffer[index] & 0x20 ) != 0 );
             setOpCode( buffer[index++] & 0x0F );
 
             // handle data depending on opcode
@@ -280,7 +337,7 @@ public class WebSocketFragment
                     // exit if we are missing bytes
                     if ( bufferLength < 4 )
                     {
-                        return;
+                        return false;
                     }
 
                     dataLength = new Integer( WebSocketUtil.convertBytesToShort( buffer, index ) ).longValue();
@@ -291,11 +348,11 @@ public class WebSocketFragment
                     // exit if we are missing bytes
                     if ( bufferLength < 10 )
                     {
-                        return;
+                        return false;
                     }
 
-                    index += 8;
                     dataLength = WebSocketUtil.convertBytesToLong( buffer, index );
+                    index += 8;
                 }
 
                 // if applicable, set mask value
@@ -304,7 +361,7 @@ public class WebSocketFragment
                     // exit if we are missing bytes
                     if ( bufferLength < index + 4 )
                     {
-                        return;
+                        return false;
                     }
 
                     // grab mask
@@ -318,8 +375,11 @@ public class WebSocketFragment
                     throw new IllegalArgumentException( "Implementation does not support payload lengths in excess of " + Integer.MAX_VALUE + ": " + dataLength );
                 }
                 payloadLength = dataLength.intValue();
+                return true;
             }
         }
+
+        return false;
     }
 
     public void parseContent()
@@ -334,12 +394,6 @@ public class WebSocketFragment
             else
             {
                 setPayloadData( WebSocketUtil.copySubArray( getFragment(), getPayloadStart(), getPayloadLength() ) );
-            }
-
-            // trim fragment, if necessary
-            if ( getFragment() != null && getFragment().length > getMessageLength() )
-            {
-                setFragment( WebSocketUtil.copySubArray( getFragment(), 0, getMessageLength() ) );
             }
         }
     }

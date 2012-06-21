@@ -5,7 +5,7 @@ package com.unitt.framework.websocket;
  */
 public class WebSocketUtil
 {
-    public static void printBytes(byte[] aData)
+    public static String getBytesPrintedOutput(byte[] aData)
     {
         StringBuffer out = new StringBuffer("Bytes: ");
         
@@ -22,11 +22,34 @@ public class WebSocketUtil
             out.append("null");
         }
         
-        System.out.println(out.toString());
+        return out.toString();
+    }
+
+    public static int getIndexOf(byte[] aToSearchIn, byte[] aToSearchFor) {
+        int matchingIndexInSearchFor = 0;
+        for (int i = 0; i < aToSearchIn.length; i++) {
+            if (aToSearchIn[i] == aToSearchFor[matchingIndexInSearchFor]) {
+                matchingIndexInSearchFor++;
+                if (matchingIndexInSearchFor >= aToSearchFor.length) {
+                    int result = i - aToSearchFor.length + 1;
+                    if (result >= 0) {
+                        return result;
+                    }
+                }
+            } else {
+                matchingIndexInSearchFor = 0;
+            }
+        }
+
+        return -1;
     }
     
     public static byte[] copySubArray( byte[] aArray, int aStart, int aLength )
     {
+        if (aArray == null) {
+            return new byte[0];
+        }
+
         int actualLength = aLength;
 
         // if the specified length is too big, trim
@@ -43,10 +66,31 @@ public class WebSocketUtil
 
     public static byte[] appendArray( byte[] aOriginal, byte[] aAdditional )
     {
-        byte[] results = new byte[aOriginal.length + aAdditional.length];
+        int originalLength = aOriginal != null ? aOriginal.length : 0;
+        int additionalLength = aAdditional != null ? aAdditional.length : 0;
+        byte[] results = new byte[originalLength + additionalLength];
 
-        System.arraycopy( aOriginal, 0, results, 0, aOriginal.length );
-        System.arraycopy( aAdditional, 0, results, aOriginal.length, aAdditional.length );
+        if (aOriginal != null) {
+            System.arraycopy( aOriginal, 0, results, 0, originalLength );
+        }
+        if (aAdditional != null) {
+            System.arraycopy( aAdditional, 0, results, originalLength, additionalLength );
+        }
+
+        return results;
+    }
+
+    public static byte[] appendPartialArray( byte[] aOriginal, byte[] aAdditional, int aAdditionalStart, int aAdditionalLength )
+    {
+        int originalLength = aOriginal != null ? aOriginal.length : 0;
+        byte[] results = new byte[originalLength + aAdditionalLength];
+
+        if (aOriginal != null) {
+            System.arraycopy( aOriginal, 0, results, 0, originalLength );
+        }
+        if (aAdditional != null) {
+            System.arraycopy( aAdditional, aAdditionalStart, results, originalLength, aAdditionalLength );
+        }
 
         return results;
     }
@@ -75,7 +119,7 @@ public class WebSocketUtil
             // shift byte to correct location
             int bitsToShift = ( aLength - count++ ) * 8;
             long mask = 0xFF;
-            long byteValue = aBytes[i];
+            long byteValue = aBytes[i];  //aBytes.length > i ? aBytes[i] : 0;
             if ( bitsToShift > 0 )
             {
                 byteValue = byteValue << bitsToShift;
