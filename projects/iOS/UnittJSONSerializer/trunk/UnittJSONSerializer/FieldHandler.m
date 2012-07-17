@@ -21,21 +21,33 @@
 #import "FieldHandler.h"
 
 @implementation FieldHandler
+
+
 @synthesize dateMultiplier;
+@synthesize dateFormatter;
+@synthesize dateStoredAs;
 
 
 #pragma mark - Conversion
-- (NSNumber*) fromDate:(NSDate*) aDate {
+- (NSNumber*) fromDateToNumber:(NSDate*) aDate {
     long long value = self.dateMultiplier * [aDate timeIntervalSince1970];
     return [NSNumber numberWithLongLong:value];
 }
 
-- (NSDate*) toDate:(NSNumber*) aValue {
+- (NSDate*) toDateFromNumber:(NSNumber*) aValue {
     double value = [aValue doubleValue];
     if (self.dateMultiplier != 0) {
         value = value / self.dateMultiplier;
     }
     return [NSDate dateWithTimeIntervalSince1970:value];
+}
+
+- (NSString*) fromDateToString:(NSDate*) aDate {
+    return [self.dateFormatter stringFromDate:aDate];
+}
+
+- (NSDate*) toDateFromString:(NSString*) aValue {
+    return [self.dateFormatter dateFromString:aValue];
 }
 
 
@@ -83,7 +95,12 @@
             [aInvocation invoke];
             [aInvocation getReturnValue:&value];
             if (value) {
-                return [self fromDate:value];
+                switch (self.dateStoredAs) {
+                    case JSDateStoredAsNumber:
+                        return [self fromDateToNumber: value];
+                    case JSDateStoredAsString:
+                        return [self fromDateToString:value];
+                }
             }
             return nil;
         }
@@ -197,13 +214,27 @@
             break;
         case JSDataTypeNSDate:
             if ([aValue isKindOfClass:[NSString class]]) {
-                double almostValue = [((NSString*) aValue) doubleValue];
-                NSDate* value = [self toDate:[NSNumber numberWithDouble:almostValue]];
+                NSDate* value = nil;
+                double almostValue = 0;
+                switch (self.dateStoredAs) {
+                    case JSDateStoredAsNumber:
+                        almostValue = [((NSString*) aValue) doubleValue];
+                        value = [self toDateFromNumber:[NSNumber numberWithDouble:almostValue]];
+                        break;
+                    case JSDateStoredAsString:
+                        value = [self toDateFromString:(NSString*) aValue];
+                        break;
+                }
                 [aInvocation setArgument:&value atIndex:2];
                 [aInvocation invoke];
             }
             else if ([aValue isKindOfClass:[NSNumber class]]) {
-                NSDate* value = [self toDate:(NSNumber*)aValue];
+                NSDate* value = nil;
+                switch (self.dateStoredAs) {
+                    case JSDateStoredAsNumber:
+                        value = [self toDateFromNumber:(NSNumber*) aValue];
+                        break;
+                }
                 [aInvocation setArgument:&value atIndex:2];
                 [aInvocation invoke];
             }
@@ -225,8 +256,21 @@
 
 
 #pragma mark - Lifecycle
-- (id)initWithDateMultiplier:(int)aDateMultiplier {
+- (id)init {
     self = [super init];
+    if (self) {
+        dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss Z"];
+        dateFormatter.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
+        dateFormatter.locale = [[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"] autorelease];
+        dateMultiplier = 1000;
+    }
+
+    return self;
+}
+
+- (id)initWithDateMultiplier:(int)aDateMultiplier {
+    self = [self init];
     if (self) {
         dateMultiplier = aDateMultiplier;
     }
@@ -234,7 +278,27 @@
     return self;
 }
 
-- (id)fieldHandlerWithDateMultiplier:(int)aDateMultiplier {
-    return [[[self alloc] initWithDateMultiplier:aDateMultiplier] autorelease];
+- (id)initWithDateFormatter:(NSDateFormatter*) aDateFormatter {
+    self = [self init];
+    if (self) {
+        self.dateFormatter = aDateFormatter;
+    }
+
+    return self;
 }
+
+- (id)fieldHandlerWithDateMultiplier:(int)aDateMultiplier {
+    return [[[FieldHandler alloc] initWithDateMultiplier:aDateMultiplier] autorelease];
+}
+
+- (id)fieldHandlerWithDateFormatter:(NSDateFormatter*) aDateFormatter {
+    return [[[FieldHandler alloc] initWithDateFormatter:aDateFormatter] autorelease];
+}
+
+- (void)dealloc {
+    self.dateFormatter = nil;
+    [super dealloc];
+}
+
+
 @end

@@ -122,10 +122,6 @@
     }
 }
 
-- (NSDate *)toDate:(NSNumber *)aValue {
-    return [self.fieldHandler toDate:aValue];
-}
-
 
 #pragma mark Serialize
 - (NSDictionary *)objectToDictionary:(id)aObject {
@@ -175,7 +171,14 @@
                 [temp addObject:item];
             }
             else if ([item isKindOfClass:[NSDate class]]) {
-                [temp addObject:[self fromDate:item]];
+                switch (self.fieldHandler.dateStoredAs) {
+                    case JSDateStoredAsNumber:
+                        [temp addObject:[self.fieldHandler fromDateToNumber:(NSDate*) item]];
+                        break;
+                    case JSDateStoredAsString:
+                        [temp addObject:[self.fieldHandler fromDateToString:(NSDate*) item]];
+                        break;
+                }
             }
             else if ([item isKindOfClass:[NSNumber class]]) {
                 [temp addObject:item];
@@ -201,10 +204,6 @@
     }
 
     return [NSDictionary dictionaryWithDictionary:temp];
-}
-
-- (NSNumber *)fromDate:(NSDate *)aDate {
-    return [self.fieldHandler fromDate:aDate];
 }
 
 

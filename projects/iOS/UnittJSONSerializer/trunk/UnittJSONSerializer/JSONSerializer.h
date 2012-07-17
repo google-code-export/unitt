@@ -82,24 +82,6 @@ typedef NSUInteger JSSerializeOptionFlags;
 
 
 /**
- * Takes a JSON data stream and fills the specified object's properties with
- * its values. Only Objective-C properties of the class will be populated with the
- * appropriate data whose property names are the unicode equivalent of the keys
- * in the JSON data. This is a deep deserialization process that does not handle
- * circular references.
- */
-- (void) fillObjectFromData:(NSData*) aData object:(id) aObject;
-
-/**
- * Takes a JSON unicode string and fills the specified object's properties with
- * its values. Only Objective-C properties of the class will be populated with the
- * appropriate data whose property names are the unicode equivalent of the keys
- * in the JSON data. This is a deep deserialization process that does not handle
- * circular references.
- */
-- (void) fillObjectFromString:(NSString*) aData object:(id) aObject;
-
-/**
  * Takes a JSON data stream and deserializes it into an object of the specified 
  * type. Only Objective-C properties of the class will be populated with the
  * appropriate data whose property names are the unicode equivalent of the keys

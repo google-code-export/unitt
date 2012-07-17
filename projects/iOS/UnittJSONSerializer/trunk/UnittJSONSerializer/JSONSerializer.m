@@ -38,7 +38,6 @@
 
 
 #pragma mark Deserialize
-
 - (id) deserializeObjectFromDictionary:(NSDictionary*) aData type:(Class) aClass {
     //init
     id result = nil;
@@ -62,6 +61,30 @@
         [self.objectHandler fillObjectFromDictionary:aData object:result];
     
         return result;
+}
+
+- (id) deserializeStringFromData:(NSData*) aData {
+    return [[[NSString alloc] initWithData:aData encoding:NSUTF8StringEncoding] autorelease];
+}
+
+- (id) deserializeDateFromData:(NSData*) aData {
+    return [self deserializeDateFromString:[[[NSString alloc] initWithData:aData encoding:NSUTF8StringEncoding] autorelease]];
+}
+
+- (id) deserializeNumberFromData:(NSData*) aData {
+    return [self deserializeNumberFromString:[[[NSString alloc] initWithData:aData encoding:NSUTF8StringEncoding] autorelease]];
+}
+
+- (id) deserializeDateFromString:(NSString*) aString {
+    return [self.objectHandler.fieldHandler toDateFromString:aString];
+}
+
+- (id) deserializeNumberFromString:(NSString*) aString {
+    if ([aString rangeOfString:@"."].length != 0) {
+        return [NSNumber numberWithDouble:[aString doubleValue]];
+    } else {
+        return [NSNumber numberWithInt:[aString intValue]];
+    }
 }
 
 - (id) deserializeObjectFromData:(NSData*) aData type:(Class) aClass {

@@ -24,14 +24,28 @@
 #import "JSONPropertyInfo.h"
 
 
+enum {
+    JSDateStoredAsNumber = 0, //default
+    JSDateStoredAsString = 1
+};
+typedef NSUInteger JSDateStoredAsFlags;
+
+
 @interface FieldHandler : NSObject {
     int dateMultiplier;
+    NSDateFormatter* dateFormatter;
+    JSDateStoredAsFlags dateStoredAs;
 }
+
 @property(nonatomic, assign) int dateMultiplier;
+@property(nonatomic, assign) JSDateStoredAsFlags dateStoredAs;
+@property(retain) NSDateFormatter* dateFormatter;
 
 
-- (NSNumber *)fromDate:(NSDate *)aDate;
-- (NSDate *)toDate:(NSNumber *)aValue;
+- (NSNumber *)fromDateToNumber:(NSDate *)aDate;
+- (NSDate *)toDateFromNumber:(NSNumber *)aValue;
+- (NSString *)fromDateToString:(NSDate *)aDate;
+- (NSDate *)toDateFromString:(NSString *)aValue;
 
 - (id) getFieldValueForInvocation:(NSInvocation*) aInvocation datatype:(JSDataType) aDataType;
 - (void) setFieldValueForInvocation:(NSInvocation*) aInvocation datatype:(JSDataType) aDataType value:(id) aValue;
