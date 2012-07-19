@@ -52,7 +52,10 @@ typedef NSUInteger JSDateStoredAsFlags;
 
 
 - (id)initWithDateMultiplier:(int)aDateMultiplier;
-- (id)fieldHandlerWithDateMultiplier:(int)aDateMultiplier;
++ (id)fieldHandlerWithDateMultiplier:(int)aDateMultiplier;
+
+- (id)initWithDateFormatter:(NSDateFormatter*) aDateFormatter;
++ (id)fieldHandlerWithDateFormatter:(NSDateFormatter*) aDateFormatter;
 
 
 @end
