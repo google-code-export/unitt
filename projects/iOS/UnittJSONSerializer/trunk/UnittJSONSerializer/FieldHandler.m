@@ -287,11 +287,11 @@
     return self;
 }
 
-- (id)fieldHandlerWithDateMultiplier:(int)aDateMultiplier {
++ (id)fieldHandlerWithDateMultiplier:(int)aDateMultiplier {
     return [[[FieldHandler alloc] initWithDateMultiplier:aDateMultiplier] autorelease];
 }
 
-- (id)fieldHandlerWithDateFormatter:(NSDateFormatter*) aDateFormatter {
++ (id)fieldHandlerWithDateFormatter:(NSDateFormatter*) aDateFormatter {
     return [[[FieldHandler alloc] initWithDateFormatter:aDateFormatter] autorelease];
 }
 
