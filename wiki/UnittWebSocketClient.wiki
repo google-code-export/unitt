@@ -144,11 +144,16 @@ The client API tries to follow the client specification from javascript using Ob
         config.closeTimeout = 15.0;
         config.keepAlive = 15.0; //sends a ws ping every 15s to keep socket alive
 
+        //setup dispatch queue for delegate logic (not required, the websocket will create its own if not supplied)
+        dispatch_queue_t delegateQueue = dispatch_queue_create("myWebSocketQueue", NULL);
+
         //open using the connect config, it will be populated with server info, such as selected protocol/etc
-        ws = [[WebSocket webSocketWithConfig:config delegate:self] retain];
+        ws = [[WebSocket webSocketWithConfig:config queue:delegateQueue delegate:self] retain];
+
+        //release queue, it is retained by the web socket
+        dispatch_release(delegateQueue);
     }
-    return self;
-    
+    return self;    
 }
 
 - (void)dealloc 
@@ -174,11 +179,11 @@ MyWebSocket* myWS = [[MyWebSocket alloc] init];
 
 
 = More Info =
-  * Check out the [http://code.google.com/p/unitt/source/browse/projects/iOS/UnittWebSocketClient/tags/0.9.4/UnittWebSocketClient/WebSocket.h WebSocket.h] for more information on how to use these classes.
+  * Check out the [http://code.google.com/p/unitt/source/browse/projects/iOS/UnittWebSocketClient/tags/1.0.0/UnittWebSocketClient/WebSocket.h WebSocket.h] for more information on how to use these classes.
   * For more information on web sockets, see [http://en.wikipedia.org/wiki/WebSockets Wikipedia]
 
 = Sample Code =
-You can check out the [http://code.google.com/p/unitt/source/browse/projects/iOS/UnittWebSocketClient/tags/1.0.0-RC/UnittWebSocketClientTests/UnittWebSocketClientTests.m UnittWebSocketClientTests] class for sample code on connecting and talking to a web socket. You can also run your own server for the test using the [http://code.google.com/p/unitt/source/browse/projects#projects%2FiOS%2Ftestws%2Ftrunk testws] project. To start the server using maven type "mvn jetty:run" at the command line.
+You can check out the [http://code.google.com/p/unitt/source/browse/projects/iOS/UnittWebSocketClient/tags/1.0.0/UnittWebSocketClientTests/UnittWebSocketClientTests.m UnittWebSocketClientTests] class for sample code on connecting and talking to a web socket. You can also run your own server for the test using the [http://code.google.com/p/unitt/source/browse/projects#projects%2FiOS%2Ftestws%2Ftrunk testws] project. To start the server using maven type "mvn jetty:run" at the command line.
 
 == !WebSocket v00 ==
 !WebSocket00.h is based on an earlier specification that was not as clear on how binary messages were handled. Therefore, this class only supports UTF8 text messages, so there is only send: and didReceiveMessage: instead of the text/binary variants. If you need the hixie76 keys, you can set the useKeys property to true. Otherwise, everything should just work. You can check out the [http://code.google.com/p/unitt/source/browse/projects/iOS/UnittWebSocketClient/tags/1.0.0-RC/UnittWebSocketClientTests/UnittWebSocketClient00Tests.m UnittWebSocketClient00Tests] class for sample code for more info on using this version. This version is deprecated in the library and will not be updated as the specification is now 13 versions ahead of this. Contributions to the code will be reviewed and accepted, but there is no planned development due to its incompatibility with the current version of the specification.
